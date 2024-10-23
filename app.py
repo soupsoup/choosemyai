@@ -36,5 +36,7 @@ with app.app_context():
 
     db.create_all()
 
-# Import routes after db initialization to avoid circular imports
+# Import and register blueprints
 from routes import *  # noqa: F401,E402
+from api import api  # Import the API blueprint
+app.register_blueprint(api)  # Register the API blueprint
