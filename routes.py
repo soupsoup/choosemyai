@@ -2,28 +2,49 @@ from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import current_user, login_required
 from app import app, db
 from models import Category, Tool, Comment, ToolVote, CommentVote
-from sqlalchemy import desc, func
+from sqlalchemy import desc, func, or_
 from auth import auth
 
 app.register_blueprint(auth)
 
 @app.route('/')
 def index():
+    # Get filter parameters
+    search_query = request.args.get('search', '').strip()
+    category_id = request.args.get('category')
     sort_by = request.args.get('sort', 'votes')
-    categories = Category.query.all()
     
+    # Base query for approved tools
+    query = Tool.query.filter_by(is_approved=True)
+    
+    # Apply search filter if provided
+    if search_query:
+        query = query.filter(
+            or_(
+                Tool.name.ilike(f'%{search_query}%'),
+                Tool.description.ilike(f'%{search_query}%')
+            )
+        )
+    
+    # Apply category filter if provided
+    if category_id:
+        try:
+            category_id = int(category_id)
+            query = query.filter_by(category_id=category_id)
+        except (ValueError, TypeError):
+            pass
+    
+    # Apply sorting
     if sort_by == 'votes':
-        tools = Tool.query\
-            .filter_by(is_approved=True)\
-            .join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
-            .group_by(Tool.id)\
-            .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))\
-            .all()
+        query = query.join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
+                    .group_by(Tool.id)\
+                    .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))
     else:  # sort by date
-        tools = Tool.query\
-            .filter_by(is_approved=True)\
-            .order_by(desc(Tool.created_at))\
-            .all()
+        query = query.order_by(desc(Tool.created_at))
+    
+    # Execute query
+    tools = query.all()
+    categories = Category.query.all()
     
     return render_template('index.html', categories=categories, tools=tools)
 
@@ -31,20 +52,26 @@ def index():
 def category(category_id):
     category = Category.query.get_or_404(category_id)
     sort_by = request.args.get('sort', 'votes')
+    search_query = request.args.get('search', '').strip()
+    
+    query = Tool.query.filter_by(category_id=category_id, is_approved=True)
+    
+    if search_query:
+        query = query.filter(
+            or_(
+                Tool.name.ilike(f'%{search_query}%'),
+                Tool.description.ilike(f'%{search_query}%')
+            )
+        )
     
     if sort_by == 'votes':
-        tools = Tool.query\
-            .filter_by(category_id=category_id, is_approved=True)\
-            .join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
-            .group_by(Tool.id)\
-            .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))\
-            .all()
+        query = query.join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
+                    .group_by(Tool.id)\
+                    .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))
     else:  # sort by date
-        tools = Tool.query\
-            .filter_by(category_id=category_id, is_approved=True)\
-            .order_by(desc(Tool.created_at))\
-            .all()
+        query = query.order_by(desc(Tool.created_at))
     
+    tools = query.all()
     return render_template('category.html', category=category, tools=tools)
 
 @app.route('/tool/<int:tool_id>')

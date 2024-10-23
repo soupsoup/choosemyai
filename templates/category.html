@@ -6,19 +6,25 @@
     <p class="lead">{{ category.description }}</p>
 </div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div class="btn-group">
-        <a href="{{ url_for('category', category_id=category.id, sort='votes') }}" 
-           class="btn btn-secondary {% if request.args.get('sort') != 'date' %}active{% endif %}">
-            Sort by Votes
-        </a>
-        <a href="{{ url_for('category', category_id=category.id, sort='date') }}" 
-           class="btn btn-secondary {% if request.args.get('sort') == 'date' %}active{% endif %}">
-            Sort by Date
-        </a>
+<div class="row mb-4">
+    <div class="col-md-6">
+        <form method="GET" class="d-flex gap-2">
+            <input type="text" class="form-control" name="search" 
+                   value="{{ request.args.get('search', '') }}" placeholder="Search in this category...">
+            <select class="form-select" name="sort" style="width: auto;">
+                <option value="votes" {% if request.args.get('sort') != 'date' %}selected{% endif %}>
+                    Sort by Votes
+                </option>
+                <option value="date" {% if request.args.get('sort') == 'date' %}selected{% endif %}>
+                    Sort by Date
+                </option>
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
     </div>
 </div>
 
+{% if tools %}
 <div class="row row-cols-1 row-cols-md-2 g-4">
     {% for tool in tools %}
     <div class="col">
@@ -42,4 +48,7 @@
     </div>
     {% endfor %}
 </div>
+{% else %}
+<div class="alert alert-info">No tools found in this category matching your criteria.</div>
+{% endif %}
 {% endblock %}
