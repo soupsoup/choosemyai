@@ -295,10 +295,6 @@ def moderate_tools():
     
     # Add debug logging for tools
     for tool in pending_tools:
-        print(f'Tool ID: {tool.id}')
-        print(f'Image URL: {tool.image_url}')
-        print(f'YouTube URL: {tool.youtube_url}')
-        
         app.logger.info(f'Processing pending tool - ID: {tool.id}, Name: {tool.name}')
         app.logger.info(f'Image URL: {tool.image_url}')
         app.logger.info(f'YouTube URL: {tool.youtube_url}')
