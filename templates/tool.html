@@ -18,8 +18,8 @@
                    onclick="vote('tool', {{ tool.id }}, -1)"></i>
             </div>
         </div>
-        <p class="card-text">{{ tool.description }}</p>
-        <a href="{{ tool.url }}" class="btn btn-primary" target="_blank">
+        <div class="card-text mt-3">{{ tool.description|safe }}</div>
+        <a href="{{ tool.url }}" class="btn btn-primary mt-3" target="_blank">
             Visit Tool Website
         </a>
     </div>
@@ -30,7 +30,7 @@
         <h3>Add a Comment</h3>
         <form action="{{ url_for('add_comment', tool_id=tool.id) }}" method="POST">
             <div class="mb-3">
-                <textarea class="form-control" name="content" rows="3" required></textarea>
+                <textarea class="form-control rich-text-editor" name="content" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit Comment</button>
         </form>
@@ -56,7 +56,7 @@
         {% for comment in comments %}
         <div class="comment">
             <div class="d-flex justify-content-between align-items-start">
-                <p>{{ comment.content }}</p>
+                <div class="comment-content">{{ comment.content|safe }}</div>
                 <div class="vote-container">
                     <i class="fa-solid fa-arrow-up vote-arrow" 
                        onclick="vote('comment', {{ comment.id }}, 1)"></i>

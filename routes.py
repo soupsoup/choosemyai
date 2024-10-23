@@ -4,6 +4,17 @@ from app import app, db
 from models import Category, Tool, Comment, ToolVote, CommentVote
 from sqlalchemy import desc, func, or_
 from auth import auth
+import bleach
+
+# Configure bleach with allowed tags and attributes
+ALLOWED_TAGS = [
+    'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'ul', 'ol', 'li', 'a', 'blockquote', 'code', 'pre'
+]
+ALLOWED_ATTRIBUTES = {
+    'a': ['href', 'title'],
+    '*': ['class']
+}
 
 app.register_blueprint(auth)
 
@@ -104,7 +115,9 @@ def tool(tool_id):
 def add_comment(tool_id):
     content = request.form.get('content')
     if content:
-        comment = Comment(content=content, tool_id=tool_id, user_id=current_user.id)
+        # Sanitize the HTML content
+        clean_content = bleach.clean(content, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+        comment = Comment(content=clean_content, tool_id=tool_id, user_id=current_user.id)
         db.session.add(comment)
         db.session.commit()
     return redirect(url_for('tool', tool_id=tool_id))
@@ -147,9 +160,16 @@ def vote_comment(comment_id, value):
 @login_required
 def submit_tool():
     if request.method == 'POST':
+        # Sanitize the HTML content
+        clean_description = bleach.clean(
+            request.form['description'],
+            tags=ALLOWED_TAGS,
+            attributes=ALLOWED_ATTRIBUTES
+        )
+        
         tool = Tool(
             name=request.form['name'],
-            description=request.form['description'],
+            description=clean_description,
             url=request.form['url'],
             category_id=request.form['category'],
             user_id=current_user.id,

@@ -7,6 +7,18 @@
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+        selector: '.rich-text-editor',
+        plugins: 'link lists',
+        toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright | bullist numlist | link',
+        menubar: false,
+        height: 250,
+        skin: 'oxide-dark',
+        content_css: 'dark'
+      });
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
