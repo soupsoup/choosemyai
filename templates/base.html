@@ -14,6 +14,7 @@
             --bs-secondary: {{ appearance_settings.secondary_color }};
             --bs-body-bg: {{ appearance_settings.background_color }};
             --bs-navbar-bg: {{ appearance_settings.header_background }};
+            --bs-body-color: {{ appearance_settings.font_color }};
             --bs-font-sans-serif: {{ appearance_settings.font_family }};
         }
         .navbar { 
@@ -21,6 +22,7 @@
         }
         body {
             font-family: var(--bs-font-sans-serif);
+            color: var(--bs-body-color);
         }
     </style>
     {% endif %}

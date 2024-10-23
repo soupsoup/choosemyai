@@ -20,6 +20,7 @@ def appearance():
         settings.background_color = request.form.get('background_color', settings.background_color)
         settings.header_background = request.form.get('header_background', settings.header_background)
         settings.font_family = request.form.get('font_family', settings.font_family)
+        settings.font_color = request.form.get('font_color', settings.font_color)
         
         db.session.commit()
         flash('Appearance settings updated successfully!', 'success')

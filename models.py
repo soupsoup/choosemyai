@@ -73,6 +73,7 @@ class AppearanceSettings(db.Model):
     primary_color = db.Column(db.String(7), default='#0d6efd')  # Bootstrap primary color
     secondary_color = db.Column(db.String(7), default='#6c757d')  # Bootstrap secondary color
     background_color = db.Column(db.String(7), default='#212529')  # Bootstrap dark background
+    font_color = db.Column(db.String(7), default='#ffffff')  # Default font color
     font_family = db.Column(db.Text, default='system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif')
     header_background = db.Column(db.String(7), default='#212529')  # Bootstrap dark navbar background
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

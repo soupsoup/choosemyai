@@ -46,6 +46,19 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <label for="font_color" class="form-label">Font Color</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color" 
+                                       id="font_color" name="font_color" 
+                                       value="{{ settings.font_color }}">
+                                <input type="text" class="form-control" 
+                                       value="{{ settings.font_color }}" 
+                                       data-color-input="font_color" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="header_background" class="form-label">Header Background</label>
                             <div class="input-group">
                                 <input type="color" class="form-control form-control-color" 
@@ -56,27 +69,27 @@
                                        data-color-input="header_background" readonly>
                             </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="font_family" class="form-label">Font Family</label>
-                        <select class="form-select" id="font_family" name="font_family">
-                            <option value="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif"
-                                    {% if settings.font_family.startswith('system-ui') %}selected{% endif %}>
-                                System Default
-                            </option>
-                            <option value="'Roboto', sans-serif"
-                                    {% if settings.font_family == "'Roboto', sans-serif" %}selected{% endif %}>
-                                Roboto
-                            </option>
-                            <option value="'Open Sans', sans-serif"
-                                    {% if settings.font_family == "'Open Sans', sans-serif" %}selected{% endif %}>
-                                Open Sans
-                            </option>
-                            <option value="'Lato', sans-serif"
-                                    {% if settings.font_family == "'Lato', sans-serif" %}selected{% endif %}>
-                                Lato
-                            </option>
-                        </select>
+                        <div class="col-md-6">
+                            <label for="font_family" class="form-label">Font Family</label>
+                            <select class="form-select" id="font_family" name="font_family">
+                                <option value="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif"
+                                        {% if settings.font_family.startswith('system-ui') %}selected{% endif %}>
+                                    System Default
+                                </option>
+                                <option value="'Roboto', sans-serif"
+                                        {% if settings.font_family == "'Roboto', sans-serif" %}selected{% endif %}>
+                                    Roboto
+                                </option>
+                                <option value="'Open Sans', sans-serif"
+                                        {% if settings.font_family == "'Open Sans', sans-serif" %}selected{% endif %}>
+                                    Open Sans
+                                </option>
+                                <option value="'Lato', sans-serif"
+                                        {% if settings.font_family == "'Lato', sans-serif" %}selected{% endif %}>
+                                    Lato
+                                </option>
+                            </select>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
