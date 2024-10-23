@@ -1,9 +1,10 @@
 from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import current_user, login_required
 from app import app, db
-from models import Category, Tool, Comment, ToolVote, CommentVote
+from models import Category, Tool, Comment, ToolVote, CommentVote, AppearanceSettings
 from sqlalchemy import desc, func, or_
 from auth import auth
+from admin import admin
 import bleach
 
 # Configure bleach with allowed tags and attributes
@@ -17,6 +18,11 @@ ALLOWED_ATTRIBUTES = {
 }
 
 app.register_blueprint(auth)
+app.register_blueprint(admin)
+
+@app.context_processor
+def inject_appearance_settings():
+    return {'appearance_settings': AppearanceSettings.get_settings()}
 
 @app.route('/')
 def index():

@@ -7,6 +7,23 @@
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    {% if appearance_settings %}
+    <style>
+        :root {
+            --bs-primary: {{ appearance_settings.primary_color }};
+            --bs-secondary: {{ appearance_settings.secondary_color }};
+            --bs-body-bg: {{ appearance_settings.background_color }};
+            --bs-navbar-bg: {{ appearance_settings.header_background }};
+            --bs-font-sans-serif: {{ appearance_settings.font_family }};
+        }
+        .navbar { 
+            background-color: var(--bs-navbar-bg) !important;
+        }
+        body {
+            font-family: var(--bs-font-sans-serif);
+        }
+    </style>
+    {% endif %}
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -27,6 +44,11 @@
                     {% if current_user.is_moderator %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('moderate_tools') }}">Moderate Tools</a>
+                    </li>
+                    {% endif %}
+                    {% if current_user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin.appearance') }}">Appearance Settings</a>
                     </li>
                     {% endif %}
                     {% endif %}

@@ -1,12 +1,17 @@
 from app import app, db
-from models import Category, Tool, User
+from models import Category, Tool, User, AppearanceSettings
 
 def seed_data():
     # Clear existing data
     Tool.query.delete()
     Category.query.delete()
     User.query.delete()
+    AppearanceSettings.query.delete()
     db.session.commit()  # Commit the deletions first
+    
+    # Create default appearance settings
+    settings = AppearanceSettings()
+    db.session.add(settings)
     
     # Create a moderator user
     moderator = User()
@@ -15,7 +20,17 @@ def seed_data():
     moderator.is_moderator = True
     moderator.set_password("moderator123")
     db.session.add(moderator)
-    db.session.commit()  # Commit to get the user ID
+
+    # Create an admin user
+    admin = User()
+    admin.username = "admin"
+    admin.email = "admin@example.com"
+    admin.is_moderator = True
+    admin.is_admin = True
+    admin.set_password("admin123")
+    db.session.add(admin)
+    
+    db.session.commit()  # Commit to get the user IDs
     
     # Create categories
     categories = {
