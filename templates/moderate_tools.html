@@ -13,35 +13,59 @@
                 <h6 class="card-subtitle mb-2 text-body-secondary">
                     Category: {{ tool.category.name }} | Submitted by: {{ tool.author.username }}
                 </h6>
-                <div class="card-text">{{ tool.description|safe }}</div>
-                <p><strong>URL:</strong> <a href="{{ tool.url }}" target="_blank" rel="noopener noreferrer">{{ tool.url }}</a></p>
+                <div class="card-text mb-3">{{ tool.description|safe }}</div>
                 
-                <div class="media-preview">
-                    {% if tool.image_url %}
-                    <div class="mb-3">
-                        <p><strong>Image URL:</strong> <a href="{{ tool.image_url }}" target="_blank">{{ tool.image_url }}</a></p>
+                <p class="mb-3">
+                    <strong>URL:</strong> 
+                    <a href="{{ tool.url }}" target="_blank" class="text-break">{{ tool.url }}</a>
+                </p>
+                
+                {% if tool.image_url %}
+                <div class="mb-4">
+                    <p class="mb-2">
+                        <strong>Image URL:</strong> 
+                        <a href="{{ tool.image_url }}" target="_blank" class="text-break">{{ tool.image_url }}</a>
+                    </p>
+                    <div class="border rounded p-3">
                         <img src="{{ tool.image_url }}" 
                              alt="{{ tool.name }}" 
-                             class="img-fluid rounded" 
-                             style="max-height: 300px; width: auto;">
+                             class="img-fluid"
+                             style="max-height: 300px; width: auto;"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="alert alert-warning" style="display: none;">Failed to load image</div>
                     </div>
-                    {% endif %}
-                    
-                    {% if tool.youtube_url %}
-                    <div class="mb-3">
-                        <p><strong>YouTube URL:</strong> <a href="{{ tool.youtube_url }}" target="_blank">{{ tool.youtube_url }}</a></p>
-                        {% if tool.youtube_embed_url %}
-                        <div class="ratio ratio-16x9 mb-3">
+                </div>
+                {% endif %}
+                
+                {% if tool.youtube_url %}
+                <div class="mb-4">
+                    <p class="mb-2">
+                        <strong>YouTube URL:</strong> 
+                        <a href="{{ tool.youtube_url }}" target="_blank" class="text-break">{{ tool.youtube_url }}</a>
+                    </p>
+                    {% if tool.youtube_embed_url %}
+                    <div class="border rounded p-3">
+                        <div class="ratio ratio-16x9">
                             <iframe src="{{ tool.youtube_embed_url }}"
                                     title="YouTube video player"
                                     frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowfullscreen></iframe>
                         </div>
-                        {% endif %}
                     </div>
+                    {% else %}
+                    <div class="alert alert-warning">Invalid YouTube URL format</div>
                     {% endif %}
                 </div>
+                {% endif %}
+
+                {% if debug %}
+                <div class="debug-info" style="display: none;">
+                    <pre>Image URL: {{ tool.image_url|default('None') }}
+YouTube URL: {{ tool.youtube_url|default('None') }}
+YouTube Embed URL: {{ tool.youtube_embed_url|default('None') }}</pre>
+                </div>
+                {% endif %}
                 
                 <div class="btn-group mt-3">
                     <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='approve') }}" 
