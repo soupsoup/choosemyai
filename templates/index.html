@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Categories</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                {% for category in categories %}
+                <a href="{{ url_for('category', category_id=category.id) }}" 
+                   class="list-group-item list-group-item-action">
+                    {{ category.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>All AI Tools</h2>
+            <div class="btn-group">
+                <a href="{{ url_for('index', sort='votes') }}" 
+                   class="btn btn-secondary {% if request.args.get('sort') != 'date' %}active{% endif %}">
+                    Sort by Votes
+                </a>
+                <a href="{{ url_for('index', sort='date') }}" 
+                   class="btn btn-secondary {% if request.args.get('sort') == 'date' %}active{% endif %}">
+                    Sort by Date
+                </a>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for tool in tools %}
+            <div class="col">
+                <div class="card h-100 tool-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tool.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">
+                            {{ tool.category.name }}
+                        </h6>
+                        <p class="card-text">{{ tool.description[:150] }}...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="vote-container">
+                                <i class="fa-solid fa-arrow-up vote-arrow" 
+                                   onclick="vote('tool', {{ tool.id }}, 1)"></i>
+                                <span id="tool-{{ tool.id }}-votes">{{ tool.vote_count }}</span>
+                                <i class="fa-solid fa-arrow-down vote-arrow" 
+                                   onclick="vote('tool', {{ tool.id }}, -1)"></i>
+                            </div>
+                            <a href="{{ url_for('tool', tool_id=tool.id) }}" 
+                               class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

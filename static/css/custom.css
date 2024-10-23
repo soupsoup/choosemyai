@@ -1,0 +1,22 @@
+.vote-arrow {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.vote-arrow:hover {
+    color: var(--bs-primary);
+}
+
+.tool-card {
+    transition: transform 0.2s;
+}
+
+.tool-card:hover {
+    transform: translateY(-2px);
+}
+
+.comment {
+    border-left: 3px solid var(--bs-border-color);
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
