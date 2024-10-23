@@ -1,10 +1,21 @@
 from app import app, db
-from models import Category, Tool
+from models import Category, Tool, User
 
 def seed_data():
     # Clear existing data
     Tool.query.delete()
     Category.query.delete()
+    User.query.delete()
+    db.session.commit()  # Commit the deletions first
+    
+    # Create a moderator user
+    moderator = User()
+    moderator.username = "moderator"
+    moderator.email = "moderator@example.com"
+    moderator.is_moderator = True
+    moderator.set_password("moderator123")
+    db.session.add(moderator)
+    db.session.commit()  # Commit to get the user ID
     
     # Create categories
     categories = {
@@ -17,13 +28,15 @@ def seed_data():
     
     category_objects = {}
     for name, description in categories.items():
-        cat = Category(name=name, description=description)
+        cat = Category()
+        cat.name = name
+        cat.description = description
         db.session.add(cat)
+        db.session.commit()  # Commit each category to get its ID
         category_objects[name] = cat
     
     # Create tools
     tools = [
-        # Text Generation
         {
             'category': 'Text Generation',
             'name': 'ChatGPT',
@@ -36,7 +49,6 @@ def seed_data():
             'description': 'AI assistant capable of complex analysis, writing, and coding with high accuracy and detailed responses.',
             'url': 'https://claude.ai'
         },
-        # Image Generation
         {
             'category': 'Image Generation',
             'name': 'DALL-E',
@@ -48,55 +60,17 @@ def seed_data():
             'name': 'Midjourney',
             'description': 'AI art generator known for high-quality, artistic image creation from text descriptions.',
             'url': 'https://www.midjourney.com'
-        },
-        # Code Assistant
-        {
-            'category': 'Code Assistant',
-            'name': 'GitHub Copilot',
-            'description': 'AI pair programmer that suggests code completions in real-time across multiple programming languages.',
-            'url': 'https://github.com/features/copilot'
-        },
-        {
-            'category': 'Code Assistant',
-            'name': 'Tabnine',
-            'description': 'AI code completion tool that learns your coding patterns to provide accurate suggestions.',
-            'url': 'https://www.tabnine.com'
-        },
-        # Data Analysis
-        {
-            'category': 'Data Analysis',
-            'name': 'Obviously AI',
-            'description': 'No-code AI platform for predictive analytics and automated machine learning.',
-            'url': 'https://www.obviously.ai'
-        },
-        {
-            'category': 'Data Analysis',
-            'name': 'DataRobot',
-            'description': 'Enterprise AI platform for automated machine learning and predictive modeling.',
-            'url': 'https://www.datarobot.com'
-        },
-        # Chat Bots
-        {
-            'category': 'Chat Bots',
-            'name': 'BotPress',
-            'description': 'Open-source platform for building, deploying, and managing conversational AI assistants.',
-            'url': 'https://botpress.com'
-        },
-        {
-            'category': 'Chat Bots',
-            'name': 'Rasa',
-            'description': 'Open source machine learning framework for automated text and voice-based conversations.',
-            'url': 'https://rasa.com'
         }
     ]
     
     for tool_data in tools:
-        tool = Tool(
-            name=tool_data['name'],
-            description=tool_data['description'],
-            url=tool_data['url'],
-            category=category_objects[tool_data['category']]
-        )
+        tool = Tool()
+        tool.name = tool_data['name']
+        tool.description = tool_data['description']
+        tool.url = tool_data['url']
+        tool.category_id = category_objects[tool_data['category']].id
+        tool.user_id = moderator.id
+        tool.is_approved = True
         db.session.add(tool)
     
     db.session.commit()

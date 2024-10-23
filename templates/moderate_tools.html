@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Moderate Tools</h2>
+
+{% if tools %}
+<div class="row row-cols-1 g-4">
+    {% for tool in tools %}
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ tool.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">
+                    Category: {{ tool.category.name }} | Submitted by: {{ tool.author.username }}
+                </h6>
+                <p class="card-text">{{ tool.description }}</p>
+                <p><strong>URL:</strong> <a href="{{ tool.url }}" target="_blank">{{ tool.url }}</a></p>
+                <div class="btn-group">
+                    <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='approve') }}" 
+                       class="btn btn-success">Approve</a>
+                    <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='reject') }}" 
+                       class="btn btn-danger">Reject</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">No tools pending moderation.</div>
+{% endif %}
+{% endblock %}
