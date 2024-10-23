@@ -152,6 +152,49 @@ def tool(tool_id):
     
     return render_template('tool.html', tool=tool, comments=comments)
 
+@app.route('/tool/<int:tool_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_tool(tool_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tool = Tool.query.get_or_404(tool_id)
+    
+    if request.method == 'POST':
+        image_url = request.form.get('image_url', '').strip()
+        youtube_url = request.form.get('youtube_url', '').strip()
+        
+        if image_url and not is_valid_image_url(image_url):
+            flash('Invalid image URL. Please provide a URL ending with .jpg, .jpeg, .png, .gif, or .webp', 'danger')
+            categories = Category.query.all()
+            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+            
+        if youtube_url and not is_valid_youtube_url(youtube_url):
+            flash('Invalid YouTube URL. Please provide a valid YouTube video URL', 'danger')
+            categories = Category.query.all()
+            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+        
+        clean_description = bleach.clean(
+            request.form['description'],
+            tags=ALLOWED_TAGS,
+            attributes=ALLOWED_ATTRIBUTES
+        )
+        
+        tool.name = request.form['name']
+        tool.description = clean_description
+        tool.url = request.form['url']
+        tool.image_url = image_url or None
+        tool.youtube_url = youtube_url or None
+        tool.category_id = request.form['category']
+        
+        db.session.commit()
+        flash('Tool updated successfully!', 'success')
+        return redirect(url_for('tool', tool_id=tool.id))
+    
+    categories = Category.query.all()
+    return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+
 @app.route('/tool/<int:tool_id>/comment', methods=['POST'])
 @login_required
 def add_comment(tool_id):

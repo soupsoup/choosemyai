@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">Edit Tool</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Tool Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ tool.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="6" required>{{ tool.description }}</textarea>
+                        <small class="text-muted">Basic HTML formatting is allowed (e.g., &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;)</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="url" class="form-label">Website URL</label>
+                        <input type="url" class="form-control" id="url" name="url" value="{{ tool.url }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Image URL (optional)</label>
+                        <input type="url" class="form-control" id="image_url" name="image_url" 
+                               value="{{ tool.image_url or '' }}" placeholder="Enter URL of an image that represents your tool">
+                        <small class="text-muted">Provide a URL to an image that showcases your tool</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="youtube_url" class="form-label">YouTube Video URL (optional)</label>
+                        <input type="url" class="form-control" id="youtube_url" name="youtube_url" 
+                               value="{{ tool.youtube_url or '' }}" placeholder="Enter YouTube video URL">
+                        <small class="text-muted">Add a YouTube video demonstrating your tool</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" {% if category.id == tool.category_id %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{{ url_for('tool', tool_id=tool.id) }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
