@@ -10,12 +10,21 @@
                     Category: {{ tool.category.name }}
                 </h6>
             </div>
-            <div class="vote-container">
-                <i class="fa-solid fa-arrow-up vote-arrow" 
-                   onclick="vote('tool', {{ tool.id }}, 1)"></i>
-                <span id="tool-{{ tool.id }}-votes">{{ tool.vote_count }}</span>
-                <i class="fa-solid fa-arrow-down vote-arrow" 
-                   onclick="vote('tool', {{ tool.id }}, -1)"></i>
+            <div class="d-flex align-items-start gap-3">
+                <div class="vote-container">
+                    <i class="fa-solid fa-arrow-up vote-arrow" 
+                       onclick="vote('tool', {{ tool.id }}, 1)"></i>
+                    <span id="tool-{{ tool.id }}-votes">{{ tool.vote_count }}</span>
+                    <i class="fa-solid fa-arrow-down vote-arrow" 
+                       onclick="vote('tool', {{ tool.id }}, -1)"></i>
+                </div>
+                {% if current_user.is_moderator %}
+                <a href="{{ url_for('remove_tool', tool_id=tool.id) }}" 
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to permanently remove this tool?');">
+                    Remove Tool
+                </a>
+                {% endif %}
             </div>
         </div>
         
@@ -29,11 +38,13 @@
         <div class="card-text mt-3">{{ tool.description|safe }}</div>
         
         {% if tool.youtube_embed_url %}
-        <div class="mt-4 mb-4 ratio ratio-16x9">
-            <iframe src="{{ tool.youtube_embed_url }}" 
-                    title="YouTube video player" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen></iframe>
+        <div class="mt-4 mb-4">
+            <div class="ratio ratio-16x9">
+                <iframe src="{{ tool.youtube_embed_url }}" 
+                        title="YouTube video player" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+            </div>
         </div>
         {% endif %}
         

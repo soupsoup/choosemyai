@@ -282,3 +282,17 @@ def moderate_tool(tool_id, action):
     
     db.session.commit()
     return redirect(url_for('moderate_tools'))
+
+@app.route('/remove-tool/<int:tool_id>')
+@login_required
+def remove_tool(tool_id):
+    if not current_user.is_moderator:
+        flash('Access denied. Moderator rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tool = Tool.query.get_or_404(tool_id)
+    db.session.delete(tool)
+    db.session.commit()
+    
+    flash('Tool has been permanently removed.', 'success')
+    return redirect(url_for('index'))
