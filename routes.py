@@ -9,6 +9,9 @@ import bleach
 import re
 import logging
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+
 # Configure bleach with allowed tags and attributes
 ALLOWED_TAGS = [
     'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -39,21 +42,38 @@ def is_valid_image_url(url):
     image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
     return url.lower().endswith(image_extensions)
 
+def validate_media_urls(tool):
+    """Validate and log media URLs for a tool"""
+    issues = []
+    
+    if tool.image_url:
+        app.logger.info(f'Validating image URL for tool {tool.id}: {tool.image_url}')
+        if not is_valid_image_url(tool.image_url):
+            issues.append(f'Invalid image URL format: {tool.image_url}')
+            app.logger.warning(f'Invalid image URL format for tool {tool.id}: {tool.image_url}')
+    
+    if tool.youtube_url:
+        app.logger.info(f'Validating YouTube URL for tool {tool.id}: {tool.youtube_url}')
+        if not is_valid_youtube_url(tool.youtube_url):
+            issues.append(f'Invalid YouTube URL format: {tool.youtube_url}')
+            app.logger.warning(f'Invalid YouTube URL format for tool {tool.id}: {tool.youtube_url}')
+        else:
+            app.logger.info(f'Generated YouTube embed URL: {tool.youtube_embed_url}')
+    
+    return issues
+
 @app.context_processor
 def inject_appearance_settings():
     return {'appearance_settings': AppearanceSettings.get_settings()}
 
 @app.route('/')
 def index():
-    # Get filter parameters
     search_query = request.args.get('search', '').strip()
     category_id = request.args.get('category')
     sort_by = request.args.get('sort', 'votes')
     
-    # Base query for approved tools
     query = Tool.query.filter_by(is_approved=True)
     
-    # Apply search filter if provided
     if search_query:
         query = query.filter(
             or_(
@@ -62,7 +82,6 @@ def index():
             )
         )
     
-    # Apply category filter if provided
     if category_id:
         try:
             category_id = int(category_id)
@@ -70,15 +89,13 @@ def index():
         except (ValueError, TypeError):
             pass
     
-    # Apply sorting
     if sort_by == 'votes':
         query = query.join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
                     .group_by(Tool.id)\
                     .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))
-    else:  # sort by date
+    else:
         query = query.order_by(desc(Tool.created_at))
     
-    # Execute query
     tools = query.all()
     categories = Category.query.all()
     
@@ -104,7 +121,7 @@ def category(category_id):
         query = query.join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
                     .group_by(Tool.id)\
                     .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))
-    else:  # sort by date
+    else:
         query = query.order_by(desc(Tool.created_at))
     
     tools = query.all()
@@ -127,7 +144,7 @@ def tool(tool_id):
             .group_by(Comment.id)\
             .order_by(desc(func.coalesce(func.sum(CommentVote.value), 0)))\
             .all()
-    else:  # sort by date
+    else:
         comments = Comment.query\
             .filter_by(tool_id=tool_id)\
             .order_by(desc(Comment.created_at))\
@@ -140,7 +157,6 @@ def tool(tool_id):
 def add_comment(tool_id):
     content = request.form.get('content')
     if content:
-        # Sanitize the HTML content
         clean_content = bleach.clean(content, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
         comment = Comment(content=clean_content, tool_id=tool_id, user_id=current_user.id)
         db.session.add(comment)
@@ -188,7 +204,6 @@ def submit_tool():
         image_url = request.form.get('image_url', '').strip()
         youtube_url = request.form.get('youtube_url', '').strip()
         
-        # Validate URLs
         if image_url and not is_valid_image_url(image_url):
             flash('Invalid image URL. Please provide a URL ending with .jpg, .jpeg, .png, .gif, or .webp', 'danger')
             categories = Category.query.all()
@@ -199,7 +214,6 @@ def submit_tool():
             categories = Category.query.all()
             return render_template('submit_tool.html', categories=categories)
         
-        # Sanitize the HTML content
         clean_description = bleach.clean(
             request.form['description'],
             tags=ALLOWED_TAGS,
@@ -236,12 +250,18 @@ def moderate_tools():
     
     pending_tools = Tool.query.filter_by(is_approved=False).order_by(Tool.created_at.desc()).all()
     
-    # Add debug logging for pending tools
     for tool in pending_tools:
-        app.logger.info(f'Pending tool - ID: {tool.id}, Name: {tool.name}')
+        app.logger.info(f'Processing pending tool - ID: {tool.id}, Name: {tool.name}')
         app.logger.info(f'Image URL: {tool.image_url}')
         app.logger.info(f'YouTube URL: {tool.youtube_url}')
-        app.logger.info(f'YouTube Embed URL: {tool.youtube_embed_url}')
+        
+        if tool.youtube_url:
+            app.logger.info(f'YouTube Embed URL: {tool.youtube_embed_url}')
+        
+        issues = validate_media_urls(tool)
+        if issues:
+            for issue in issues:
+                app.logger.warning(f'Tool {tool.id} - {issue}')
     
     return render_template('moderate_tools.html', tools=pending_tools)
 

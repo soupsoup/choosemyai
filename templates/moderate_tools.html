@@ -19,28 +19,39 @@
                 {% if tool.image_url %}
                 <div class="mb-3">
                     <p><strong>Image URL:</strong> {{ tool.image_url }}</p>
-                    <img src="{{ tool.image_url }}" 
-                         alt="{{ tool.name }}" 
-                         class="img-fluid rounded" 
-                         style="max-height: 300px; width: auto;"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <div class="alert alert-danger" style="display: none;">Failed to load image</div>
+                    <div class="media-container">
+                        <img src="{{ tool.image_url }}" 
+                             alt="{{ tool.name }}" 
+                             class="img-fluid rounded" 
+                             style="max-height: 300px; width: auto;"
+                             onerror="handleMediaError(this, 'image')">
+                        <div class="alert alert-danger media-error" style="display: none;">
+                            Failed to load image. Please verify the URL is correct and accessible.
+                        </div>
+                    </div>
                 </div>
                 {% endif %}
                 
                 {% if tool.youtube_url %}
                 <div class="mb-3">
                     <p><strong>YouTube URL:</strong> {{ tool.youtube_url }}</p>
-                    {% if tool.youtube_embed_url %}
-                    <div class="ratio ratio-16x9">
-                        <iframe src="{{ tool.youtube_embed_url }}"
-                                title="YouTube video player"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
+                    <div class="media-container">
+                        {% if tool.youtube_embed_url %}
+                        <div class="ratio ratio-16x9">
+                            <iframe src="{{ tool.youtube_embed_url }}"
+                                    title="YouTube video player"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                    onerror="handleMediaError(this.parentElement, 'video')"
+                                    onload="handleMediaLoad(this.parentElement, 'video')"></iframe>
+                        </div>
+                        <div class="alert alert-danger media-error" style="display: none;">
+                            Failed to load YouTube video. Please verify the URL is correct and the video is available.
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning">Invalid YouTube URL format or video ID not found</div>
+                        {% endif %}
                     </div>
-                    {% else %}
-                    <div class="alert alert-warning">Invalid YouTube URL format</div>
-                    {% endif %}
                 </div>
                 {% endif %}
                 
@@ -58,4 +69,34 @@
 {% else %}
 <div class="alert alert-info">No tools pending moderation.</div>
 {% endif %}
+
+<script>
+function handleMediaError(element, type) {
+    console.error(`Failed to load ${type}:`, element.src);
+    element.style.display = 'none';
+    const container = element.closest('.media-container');
+    const errorDiv = container.querySelector('.media-error');
+    if (errorDiv) {
+        errorDiv.style.display = 'block';
+    }
+}
+
+function handleMediaLoad(element, type) {
+    console.log(`Successfully loaded ${type}:`, element.querySelector('iframe')?.src);
+    const container = element.closest('.media-container');
+    const errorDiv = container.querySelector('.media-error');
+    if (errorDiv) {
+        errorDiv.style.display = 'none';
+    }
+}
+
+// Log all media URLs on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('img[src]');
+    const iframes = document.querySelectorAll('iframe[src]');
+    
+    images.forEach(img => console.log('Image URL:', img.src));
+    iframes.forEach(iframe => console.log('YouTube URL:', iframe.src));
+});
+</script>
 {% endblock %}
