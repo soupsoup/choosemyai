@@ -6,6 +6,7 @@ from sqlalchemy import desc, func, or_
 from auth import auth
 from admin import admin
 import bleach
+import re
 
 # Configure bleach with allowed tags and attributes
 ALLOWED_TAGS = [
@@ -19,6 +20,23 @@ ALLOWED_ATTRIBUTES = {
 
 app.register_blueprint(auth)
 app.register_blueprint(admin)
+
+def is_valid_youtube_url(url):
+    if not url:
+        return True
+    youtube_regex = (
+        r'^(?:https?:\/\/)?'
+        r'(?:www\.)?'
+        r'(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|'
+        r'youtu\.be\/)([a-zA-Z0-9_-]{11})$'
+    )
+    return bool(re.match(youtube_regex, url))
+
+def is_valid_image_url(url):
+    if not url:
+        return True
+    image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
+    return url.lower().endswith(image_extensions)
 
 @app.context_processor
 def inject_appearance_settings():
@@ -166,6 +184,20 @@ def vote_comment(comment_id, value):
 @login_required
 def submit_tool():
     if request.method == 'POST':
+        image_url = request.form.get('image_url', '').strip()
+        youtube_url = request.form.get('youtube_url', '').strip()
+        
+        # Validate URLs
+        if image_url and not is_valid_image_url(image_url):
+            flash('Invalid image URL. Please provide a URL ending with .jpg, .jpeg, .png, .gif, or .webp', 'danger')
+            categories = Category.query.all()
+            return render_template('submit_tool.html', categories=categories)
+            
+        if youtube_url and not is_valid_youtube_url(youtube_url):
+            flash('Invalid YouTube URL. Please provide a valid YouTube video URL', 'danger')
+            categories = Category.query.all()
+            return render_template('submit_tool.html', categories=categories)
+        
         # Sanitize the HTML content
         clean_description = bleach.clean(
             request.form['description'],
@@ -177,6 +209,8 @@ def submit_tool():
             name=request.form['name'],
             description=clean_description,
             url=request.form['url'],
+            image_url=image_url or None,
+            youtube_url=youtube_url or None,
             category_id=request.form['category'],
             user_id=current_user.id,
             is_approved=False

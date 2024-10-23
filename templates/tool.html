@@ -18,7 +18,25 @@
                    onclick="vote('tool', {{ tool.id }}, -1)"></i>
             </div>
         </div>
+        
+        {% if tool.image_url %}
+        <div class="mt-3 mb-3">
+            <img src="{{ tool.image_url }}" alt="{{ tool.name }}" class="img-fluid rounded" 
+                 style="max-height: 400px; width: auto;">
+        </div>
+        {% endif %}
+        
         <div class="card-text mt-3">{{ tool.description|safe }}</div>
+        
+        {% if tool.youtube_embed_url %}
+        <div class="mt-4 mb-4 ratio ratio-16x9">
+            <iframe src="{{ tool.youtube_embed_url }}" 
+                    title="YouTube video player" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen></iframe>
+        </div>
+        {% endif %}
+        
         <a href="{{ tool.url }}" class="btn btn-primary mt-3" target="_blank">
             Visit Tool Website
         </a>

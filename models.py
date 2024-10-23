@@ -3,6 +3,7 @@ from app import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
+import re
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +32,8 @@ class Tool(db.Model):
     name = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
     url = db.Column(db.String(500), nullable=False)
+    image_url = db.Column(db.String(500))  # Optional image URL
+    youtube_url = db.Column(db.String(500))  # Optional YouTube video URL
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -41,6 +44,25 @@ class Tool(db.Model):
     @property
     def vote_count(self):
         return db.session.query(db.func.sum(ToolVote.value)).filter(ToolVote.tool_id == self.id).scalar() or 0
+    
+    @property
+    def youtube_embed_url(self):
+        if not self.youtube_url:
+            return None
+        
+        # Extract video ID from various YouTube URL formats
+        youtube_regex = (
+            r'(?:https?:\/\/)?'
+            r'(?:www\.)?'
+            r'(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|'
+            r'youtu\.be\/)([a-zA-Z0-9_-]{11})'
+        )
+        
+        match = re.search(youtube_regex, self.youtube_url)
+        if match:
+            video_id = match.group(1)
+            return f'https://www.youtube.com/embed/{video_id}'
+        return None
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
