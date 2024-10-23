@@ -16,44 +16,32 @@
                 <div class="card-text">{{ tool.description|safe }}</div>
                 <p><strong>URL:</strong> <a href="{{ tool.url }}" target="_blank" rel="noopener noreferrer">{{ tool.url }}</a></p>
                 
-                {% if tool.image_url %}
-                <div class="mb-3">
-                    <p><strong>Image URL:</strong> {{ tool.image_url }}</p>
-                    <div class="media-container">
+                <div class="media-preview">
+                    {% if tool.image_url %}
+                    <div class="mb-3">
+                        <p><strong>Image URL:</strong> <a href="{{ tool.image_url }}" target="_blank">{{ tool.image_url }}</a></p>
                         <img src="{{ tool.image_url }}" 
                              alt="{{ tool.name }}" 
                              class="img-fluid rounded" 
-                             style="max-height: 300px; width: auto;"
-                             onerror="handleMediaError(this, 'image')">
-                        <div class="alert alert-danger media-error" style="display: none;">
-                            Failed to load image. Please verify the URL is correct and accessible.
-                        </div>
+                             style="max-height: 300px; width: auto;">
                     </div>
-                </div>
-                {% endif %}
-                
-                {% if tool.youtube_url %}
-                <div class="mb-3">
-                    <p><strong>YouTube URL:</strong> {{ tool.youtube_url }}</p>
-                    <div class="media-container">
+                    {% endif %}
+                    
+                    {% if tool.youtube_url %}
+                    <div class="mb-3">
+                        <p><strong>YouTube URL:</strong> <a href="{{ tool.youtube_url }}" target="_blank">{{ tool.youtube_url }}</a></p>
                         {% if tool.youtube_embed_url %}
-                        <div class="ratio ratio-16x9">
+                        <div class="ratio ratio-16x9 mb-3">
                             <iframe src="{{ tool.youtube_embed_url }}"
                                     title="YouTube video player"
+                                    frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                                    onerror="handleMediaError(this.parentElement, 'video')"
-                                    onload="handleMediaLoad(this.parentElement, 'video')"></iframe>
+                                    allowfullscreen></iframe>
                         </div>
-                        <div class="alert alert-danger media-error" style="display: none;">
-                            Failed to load YouTube video. Please verify the URL is correct and the video is available.
-                        </div>
-                        {% else %}
-                        <div class="alert alert-warning">Invalid YouTube URL format or video ID not found</div>
                         {% endif %}
                     </div>
+                    {% endif %}
                 </div>
-                {% endif %}
                 
                 <div class="btn-group mt-3">
                     <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='approve') }}" 
@@ -69,34 +57,4 @@
 {% else %}
 <div class="alert alert-info">No tools pending moderation.</div>
 {% endif %}
-
-<script>
-function handleMediaError(element, type) {
-    console.error(`Failed to load ${type}:`, element.src);
-    element.style.display = 'none';
-    const container = element.closest('.media-container');
-    const errorDiv = container.querySelector('.media-error');
-    if (errorDiv) {
-        errorDiv.style.display = 'block';
-    }
-}
-
-function handleMediaLoad(element, type) {
-    console.log(`Successfully loaded ${type}:`, element.querySelector('iframe')?.src);
-    const container = element.closest('.media-container');
-    const errorDiv = container.querySelector('.media-error');
-    if (errorDiv) {
-        errorDiv.style.display = 'none';
-    }
-}
-
-// Log all media URLs on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const images = document.querySelectorAll('img[src]');
-    const iframes = document.querySelectorAll('iframe[src]');
-    
-    images.forEach(img => console.log('Image URL:', img.src));
-    iframes.forEach(iframe => console.log('YouTube URL:', iframe.src));
-});
-</script>
 {% endblock %}
