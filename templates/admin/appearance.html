@@ -72,20 +72,20 @@
                         <div class="col-md-6">
                             <label for="font_family" class="form-label">Font Family</label>
                             <select class="form-select" id="font_family" name="font_family">
-                                <option value="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif"
+                                <option value="system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Noto Sans, Liberation Sans, Arial, sans-serif"
                                         {% if settings.font_family.startswith('system-ui') %}selected{% endif %}>
                                     System Default
                                 </option>
-                                <option value="'Roboto', sans-serif"
-                                        {% if settings.font_family == "'Roboto', sans-serif" %}selected{% endif %}>
+                                <option value="Roboto, sans-serif"
+                                        {% if settings.font_family == "Roboto, sans-serif" %}selected{% endif %}>
                                     Roboto
                                 </option>
-                                <option value="'Open Sans', sans-serif"
-                                        {% if settings.font_family == "'Open Sans', sans-serif" %}selected{% endif %}>
+                                <option value="Open Sans, sans-serif"
+                                        {% if settings.font_family == "Open Sans, sans-serif" %}selected{% endif %}>
                                     Open Sans
                                 </option>
-                                <option value="'Lato', sans-serif"
-                                        {% if settings.font_family == "'Lato', sans-serif" %}selected{% endif %}>
+                                <option value="Lato, sans-serif"
+                                        {% if settings.font_family == "Lato, sans-serif" %}selected{% endif %}>
                                     Lato
                                 </option>
                             </select>
@@ -104,6 +104,10 @@ document.querySelectorAll('input[type="color"]').forEach(input => {
         const textInput = document.querySelector(`[data-color-input="${e.target.id}"]`);
         textInput.value = e.target.value;
     });
+});
+
+document.getElementById('font_family').addEventListener('change', () => {
+    setTimeout(() => location.reload(), 500);
 });
 </script>
 {% endblock %}
