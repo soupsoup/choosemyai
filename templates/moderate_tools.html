@@ -9,58 +9,61 @@
     <div class="col">
         <div class="card">
             <div class="card-body">
-                <!-- Debug Info Section -->
-                <div class="debug-info mb-3" style="background: #2d2d2d; padding: 10px; border-radius: 4px;">
-                    <p class="mb-1"><strong>Debug Info:</strong></p>
-                    <p class="mb-1">Image URL: {{ tool.image_url|default('None', true) }}</p>
-                    <p class="mb-0">YouTube URL: {{ tool.youtube_url|default('None', true) }}</p>
-                </div>
-
                 <h5 class="card-title">{{ tool.name }}</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">
                     Category: {{ tool.category.name }} | Submitted by: {{ tool.author.username }}
                 </h6>
                 <div class="card-text mb-3">{{ tool.description|safe }}</div>
                 
+                <!-- Debug info section -->
+                <div class="debug-info bg-dark p-2 mb-3">
+                    <pre>Image URL: {{ tool.image_url }}
+YouTube URL: {{ tool.youtube_url }}</pre>
+                </div>
+                
+                <!-- Media section -->
+                <div class="media-section">
+                    <!-- Image display -->
+                    {% if tool.image_url %}
+                    <div class="mb-4">
+                        <h6>Tool Image:</h6>
+                        <p class="text-muted">{{ tool.image_url }}</p>
+                        <div class="border rounded p-3">
+                            <img src="{{ tool.image_url }}" 
+                                 alt="Tool image" 
+                                 class="img-fluid">
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- YouTube display -->
+                    {% if tool.youtube_url %}
+                    <div class="mb-4">
+                        <h6>YouTube Video:</h6>
+                        <p class="text-muted">{{ tool.youtube_url }}</p>
+                        {% if tool.youtube_embed_url %}
+                        <div class="border rounded p-3">
+                            <div class="ratio ratio-16x9">
+                                <iframe src="{{ tool.youtube_embed_url }}"
+                                        title="YouTube video player"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-danger">Error: Could not generate embed URL from {{ tool.youtube_url }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                
                 <p class="mb-3">
                     <strong>URL:</strong> 
                     <a href="{{ tool.url }}" target="_blank" class="text-break">{{ tool.url }}</a>
                 </p>
 
-                {% if tool.image_url %}
-                <div class="mb-4">
-                    <h6>Tool Image:</h6>
-                    <p class="text-muted">{{ tool.image_url }}</p>
-                    <div class="border rounded p-3">
-                        <img src="{{ tool.image_url }}" 
-                             alt="Tool image" 
-                             class="img-fluid"
-                             style="max-width: 100%; height: auto;">
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if tool.youtube_url %}
-                <div class="mb-4">
-                    <h6>YouTube Video:</h6>
-                    <p class="text-muted">{{ tool.youtube_url }}</p>
-                    {% if tool.youtube_embed_url %}
-                    <div class="border rounded p-3">
-                        <div class="ratio ratio-16x9">
-                            <iframe src="{{ tool.youtube_embed_url }}"
-                                    title="YouTube video player"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen></iframe>
-                        </div>
-                    </div>
-                    {% else %}
-                    <p class="text-danger">Error: Could not generate embed URL from {{ tool.youtube_url }}</p>
-                    {% endif %}
-                </div>
-                {% endif %}
-
-                <div class="btn-group mt-3">
+                <div class="btn-group">
                     <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='approve') }}" 
                        class="btn btn-success">Approve</a>
                     <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='reject') }}" 
