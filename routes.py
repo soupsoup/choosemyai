@@ -7,6 +7,7 @@ from auth import auth
 from admin import admin
 import bleach
 import re
+import logging
 
 # Configure bleach with allowed tags and attributes
 ALLOWED_TAGS = [
@@ -217,6 +218,9 @@ def submit_tool():
         )
         db.session.add(tool)
         db.session.commit()
+        
+        app.logger.info(f'New tool submitted - ID: {tool.id}, Name: {tool.name}, Image URL: {tool.image_url}, YouTube URL: {tool.youtube_url}')
+        
         flash('Tool submitted successfully! It will be visible after moderation.', 'success')
         return redirect(url_for('index'))
     
@@ -231,6 +235,14 @@ def moderate_tools():
         return redirect(url_for('index'))
     
     pending_tools = Tool.query.filter_by(is_approved=False).order_by(Tool.created_at.desc()).all()
+    
+    # Add debug logging for pending tools
+    for tool in pending_tools:
+        app.logger.info(f'Pending tool - ID: {tool.id}, Name: {tool.name}')
+        app.logger.info(f'Image URL: {tool.image_url}')
+        app.logger.info(f'YouTube URL: {tool.youtube_url}')
+        app.logger.info(f'YouTube Embed URL: {tool.youtube_embed_url}')
+    
     return render_template('moderate_tools.html', tools=pending_tools)
 
 @app.route('/moderate-tool/<int:tool_id>/<action>')
