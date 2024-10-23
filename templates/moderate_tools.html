@@ -18,20 +18,23 @@
                     <!-- Image display -->
                     {% if tool.image_url %}
                     <div class="mb-4">
-                        <h6>Tool Image:</h6>
+                        <h6>Tool Image Preview:</h6>
+                        <p class="text-muted">{{ tool.image_url }}</p>
                         <div class="border rounded p-3">
-                            <img src="{{ url_for('static', filename=tool.image_url) if tool.image_url.startswith('uploads/') else tool.image_url }}" 
+                            <img src="{{ tool.image_url }}" 
                                  alt="Tool image" 
                                  class="img-fluid"
-                                 onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/placeholder.png') }}'; this.classList.add('error-image');">
+                                 style="max-height: 400px; width: auto;">
                         </div>
                     </div>
                     {% endif %}
                     
                     <!-- YouTube display -->
-                    {% if tool.youtube_url and tool.youtube_embed_url %}
+                    {% if tool.youtube_url %}
                     <div class="mb-4">
-                        <h6>YouTube Video:</h6>
+                        <h6>YouTube Video Preview:</h6>
+                        <p class="text-muted">{{ tool.youtube_url }}</p>
+                        {% if tool.youtube_embed_url %}
                         <div class="border rounded p-3">
                             <div class="ratio ratio-16x9">
                                 <iframe src="{{ tool.youtube_embed_url }}"
@@ -41,6 +44,9 @@
                                         allowfullscreen></iframe>
                             </div>
                         </div>
+                        {% else %}
+                        <p class="text-danger">Error: Could not generate embed URL from the provided YouTube URL</p>
+                        {% endif %}
                     </div>
                     {% endif %}
                 </div>
