@@ -5,6 +5,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 import re
 
+# Association table for Tool-Category many-to-many relationship
+tool_categories = db.Table('tool_categories',
+    db.Column('tool_id', db.Integer, db.ForeignKey('tool.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('category_id', db.Integer, db.ForeignKey('category.id', ondelete='CASCADE'), primary_key=True)
+)
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -25,21 +31,21 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
-    tools = db.relationship('Tool', backref='category', lazy=True)
 
 class Tool(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
     url = db.Column(db.String(500), nullable=False)
-    image_url = db.Column(db.String(500))  # Optional image URL
-    youtube_url = db.Column(db.String(500))  # Optional YouTube video URL
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    image_url = db.Column(db.String(500))
+    youtube_url = db.Column(db.String(500))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    comments = db.relationship('Comment', backref='tool', lazy=True)
-    votes = db.relationship('ToolVote', backref='tool', lazy='dynamic')
+    comments = db.relationship('Comment', backref='tool', lazy=True, cascade='all, delete-orphan')
+    votes = db.relationship('ToolVote', backref='tool', lazy='dynamic', cascade='all, delete-orphan')
     is_approved = db.Column(db.Boolean, default=False)
+    categories = db.relationship('Category', secondary=tool_categories, lazy='subquery',
+                               backref=db.backref('tools', lazy=True))
 
     @property
     def vote_count(self):
@@ -50,7 +56,6 @@ class Tool(db.Model):
         if not self.youtube_url:
             return None
         
-        # Extract video ID from various YouTube URL formats
         youtube_regex = (
             r'(?:https?:\/\/)?'
             r'(?:www\.)?'
@@ -70,7 +75,7 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    votes = db.relationship('CommentVote', backref='comment', lazy='dynamic')
+    votes = db.relationship('CommentVote', backref='comment', lazy='dynamic', cascade='all, delete-orphan')
 
     @property
     def vote_count(self):
@@ -92,12 +97,12 @@ class CommentVote(db.Model):
 
 class AppearanceSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    primary_color = db.Column(db.String(7), default='#0d6efd')  # Bootstrap primary color
-    secondary_color = db.Column(db.String(7), default='#6c757d')  # Bootstrap secondary color
-    background_color = db.Column(db.String(7), default='#212529')  # Bootstrap dark background
-    font_color = db.Column(db.String(7), default='#ffffff')  # Default font color
+    primary_color = db.Column(db.String(7), default='#0d6efd')
+    secondary_color = db.Column(db.String(7), default='#6c757d')
+    background_color = db.Column(db.String(7), default='#212529')
+    font_color = db.Column(db.String(7), default='#ffffff')
     font_family = db.Column(db.Text, default='system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif')
-    header_background = db.Column(db.String(7), default='#212529')  # Bootstrap dark navbar background
+    header_background = db.Column(db.String(7), default='#212529')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod

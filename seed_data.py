@@ -50,28 +50,28 @@ def seed_data():
         db.session.commit()  # Commit each category to get its ID
         category_objects[name] = cat
     
-    # Create tools
+    # Create tools with multiple categories
     tools = [
         {
-            'category': 'Text Generation',
+            'categories': ['Text Generation', 'Chat Bots'],
             'name': 'ChatGPT',
             'description': 'Advanced language model for generating human-like text, writing assistance, and creative content generation.',
             'url': 'https://chat.openai.com'
         },
         {
-            'category': 'Text Generation',
+            'categories': ['Text Generation', 'Chat Bots', 'Code Assistant'],
             'name': 'Claude',
             'description': 'AI assistant capable of complex analysis, writing, and coding with high accuracy and detailed responses.',
             'url': 'https://claude.ai'
         },
         {
-            'category': 'Image Generation',
+            'categories': ['Image Generation'],
             'name': 'DALL-E',
             'description': 'Creates detailed images from natural language descriptions, capable of generating unique artistic content.',
             'url': 'https://labs.openai.com'
         },
         {
-            'category': 'Image Generation',
+            'categories': ['Image Generation'],
             'name': 'Midjourney',
             'description': 'AI art generator known for high-quality, artistic image creation from text descriptions.',
             'url': 'https://www.midjourney.com'
@@ -83,9 +83,9 @@ def seed_data():
         tool.name = tool_data['name']
         tool.description = tool_data['description']
         tool.url = tool_data['url']
-        tool.category_id = category_objects[tool_data['category']].id
         tool.user_id = moderator.id
         tool.is_approved = True
+        tool.categories = [category_objects[cat_name] for cat_name in tool_data['categories']]
         db.session.add(tool)
     
     db.session.commit()

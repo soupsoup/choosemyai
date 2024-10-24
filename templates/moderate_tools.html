@@ -9,7 +9,11 @@
             <div class="card-body">
                 <h5 class="card-title">{{ tool.name }}</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">
-                    Category: {{ tool.category.name }} | Submitted by: {{ tool.author.username }}
+                    Categories: 
+                    {% for category in tool.categories %}
+                    <span class="badge bg-secondary">{{ category.name }}</span>
+                    {% endfor %}
+                    | Submitted by: {{ tool.author.username }}
                 </h6>
                 <div class="card-text mb-3">{{ tool.description|safe }}</div>
                 

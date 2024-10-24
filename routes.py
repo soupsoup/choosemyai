@@ -85,7 +85,7 @@ def index():
     if category_id:
         try:
             category_id = int(category_id)
-            query = query.filter_by(category_id=category_id)
+            query = query.join(Tool.categories).filter(Category.id == category_id)
         except (ValueError, TypeError):
             pass
     
@@ -107,7 +107,7 @@ def category(category_id):
     sort_by = request.args.get('sort', 'votes')
     search_query = request.args.get('search', '').strip()
     
-    query = Tool.query.filter_by(category_id=category_id, is_approved=True)
+    query = Tool.query.join(Tool.categories).filter(Category.id == category_id, Tool.is_approved == True)
     
     if search_query:
         query = query.filter(
@@ -150,50 +150,15 @@ def tool(tool_id):
             .order_by(desc(Comment.created_at))\
             .all()
     
-    return render_template('tool.html', tool=tool, comments=comments)
-
-@app.route('/tool/<int:tool_id>/edit', methods=['GET', 'POST'])
-@login_required
-def edit_tool(tool_id):
-    if not current_user.is_admin:
-        flash('Access denied. Admin rights required.', 'danger')
-        return redirect(url_for('index'))
+    similar_tools = Tool.query\
+        .join(Tool.categories)\
+        .filter(Tool.id != tool_id, Tool.is_approved == True, Category.id.in_([c.id for c in tool.categories]))\
+        .group_by(Tool.id)\
+        .order_by(desc(func.count(Category.id)))\
+        .limit(5)\
+        .all()
     
-    tool = Tool.query.get_or_404(tool_id)
-    
-    if request.method == 'POST':
-        image_url = request.form.get('image_url', '').strip()
-        youtube_url = request.form.get('youtube_url', '').strip()
-        
-        if image_url and not is_valid_image_url(image_url):
-            flash('Invalid image URL. Please provide a URL ending with .jpg, .jpeg, .png, .gif, or .webp', 'danger')
-            categories = Category.query.all()
-            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
-            
-        if youtube_url and not is_valid_youtube_url(youtube_url):
-            flash('Invalid YouTube URL. Please provide a valid YouTube video URL', 'danger')
-            categories = Category.query.all()
-            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
-        
-        clean_description = bleach.clean(
-            request.form['description'],
-            tags=ALLOWED_TAGS,
-            attributes=ALLOWED_ATTRIBUTES
-        )
-        
-        tool.name = request.form['name']
-        tool.description = clean_description
-        tool.url = request.form['url']
-        tool.image_url = image_url or None
-        tool.youtube_url = youtube_url or None
-        tool.category_id = request.form['category']
-        
-        db.session.commit()
-        flash('Tool updated successfully!', 'success')
-        return redirect(url_for('tool', tool_id=tool.id))
-    
-    categories = Category.query.all()
-    return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+    return render_template('tool.html', tool=tool, comments=comments, similar_tools=similar_tools)
 
 @app.route('/tool/<int:tool_id>/comment', methods=['POST'])
 @login_required
@@ -201,7 +166,10 @@ def add_comment(tool_id):
     content = request.form.get('content')
     if content:
         clean_content = bleach.clean(content, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
-        comment = Comment(content=clean_content, tool_id=tool_id, user_id=current_user.id)
+        comment = Comment()
+        comment.content = clean_content
+        comment.tool_id = tool_id
+        comment.user_id = current_user.id
         db.session.add(comment)
         db.session.commit()
     return redirect(url_for('tool', tool_id=tool_id))
@@ -216,7 +184,10 @@ def vote_tool(tool_id, value):
     if existing_vote:
         existing_vote.value = value
     else:
-        vote = ToolVote(tool_id=tool_id, user_id=current_user.id, value=value)
+        vote = ToolVote()
+        vote.tool_id = tool_id
+        vote.user_id = current_user.id
+        vote.value = value
         db.session.add(vote)
     
     db.session.commit()
@@ -233,7 +204,10 @@ def vote_comment(comment_id, value):
     if existing_vote:
         existing_vote.value = value
     else:
-        vote = CommentVote(comment_id=comment_id, user_id=current_user.id, value=value)
+        vote = CommentVote()
+        vote.comment_id = comment_id
+        vote.user_id = current_user.id
+        vote.value = value
         db.session.add(vote)
     
     db.session.commit()
@@ -246,6 +220,12 @@ def submit_tool():
     if request.method == 'POST':
         image_url = request.form.get('image_url', '').strip()
         youtube_url = request.form.get('youtube_url', '').strip()
+        category_ids = request.form.getlist('categories')
+        
+        if not category_ids:
+            flash('Please select at least one category', 'danger')
+            categories = Category.query.all()
+            return render_template('submit_tool.html', categories=categories)
         
         if image_url and not is_valid_image_url(image_url):
             flash('Invalid image URL. Please provide a URL ending with .jpg, .jpeg, .png, .gif, or .webp', 'danger')
@@ -263,20 +243,23 @@ def submit_tool():
             attributes=ALLOWED_ATTRIBUTES
         )
         
-        tool = Tool(
-            name=request.form['name'],
-            description=clean_description,
-            url=request.form['url'],
-            image_url=image_url or None,
-            youtube_url=youtube_url or None,
-            category_id=request.form['category'],
-            user_id=current_user.id,
-            is_approved=False
-        )
+        tool = Tool()
+        tool.name = request.form['name']
+        tool.description = clean_description
+        tool.url = request.form['url']
+        tool.image_url = image_url or None
+        tool.youtube_url = youtube_url or None
+        tool.user_id = current_user.id
+        tool.is_approved = False
+        
+        # Add selected categories
+        selected_categories = Category.query.filter(Category.id.in_(category_ids)).all()
+        tool.categories = selected_categories
+        
         db.session.add(tool)
         db.session.commit()
         
-        app.logger.info(f'New tool submitted - ID: {tool.id}, Name: {tool.name}, Image URL: {tool.image_url}, YouTube URL: {tool.youtube_url}')
+        app.logger.info(f'New tool submitted - ID: {tool.id}, Name: {tool.name}, Categories: {[c.name for c in tool.categories]}')
         
         flash('Tool submitted successfully! It will be visible after moderation.', 'success')
         return redirect(url_for('index'))
@@ -296,6 +279,7 @@ def moderate_tools():
     # Add debug logging for tools
     for tool in pending_tools:
         app.logger.info(f'Processing pending tool - ID: {tool.id}, Name: {tool.name}')
+        app.logger.info(f'Categories: {[c.name for c in tool.categories]}')
         app.logger.info(f'Image URL: {tool.image_url}')
         app.logger.info(f'YouTube URL: {tool.youtube_url}')
         
@@ -340,3 +324,55 @@ def remove_tool(tool_id):
     
     flash('Tool has been permanently removed.', 'success')
     return redirect(url_for('index'))
+
+@app.route('/edit-tool/<int:tool_id>', methods=['GET', 'POST'])
+@login_required
+def edit_tool(tool_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tool = Tool.query.get_or_404(tool_id)
+    categories = Category.query.all()
+    
+    if request.method == 'POST':
+        image_url = request.form.get('image_url', '').strip()
+        youtube_url = request.form.get('youtube_url', '').strip()
+        category_ids = request.form.getlist('categories')
+        
+        if not category_ids:
+            flash('Please select at least one category', 'danger')
+            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+        
+        if image_url and not is_valid_image_url(image_url):
+            flash('Invalid image URL. Please provide a URL ending with .jpg, .jpeg, .png, .gif, or .webp', 'danger')
+            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+            
+        if youtube_url and not is_valid_youtube_url(youtube_url):
+            flash('Invalid YouTube URL. Please provide a valid YouTube video URL', 'danger')
+            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+        
+        clean_description = bleach.clean(
+            request.form['description'],
+            tags=ALLOWED_TAGS,
+            attributes=ALLOWED_ATTRIBUTES
+        )
+        
+        tool.name = request.form['name']
+        tool.description = clean_description
+        tool.url = request.form['url']
+        tool.image_url = image_url or None
+        tool.youtube_url = youtube_url or None
+        
+        # Update categories
+        selected_categories = Category.query.filter(Category.id.in_(category_ids)).all()
+        tool.categories = selected_categories
+        
+        db.session.commit()
+        
+        app.logger.info(f'Tool updated - ID: {tool.id}, Name: {tool.name}, Categories: {[c.name for c in tool.categories]}')
+        
+        flash('Tool updated successfully!', 'success')
+        return redirect(url_for('tool', tool_id=tool.id))
+    
+    return render_template('admin/edit_tool.html', tool=tool, categories=categories)

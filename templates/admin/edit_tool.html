@@ -35,14 +35,22 @@
                         <small class="text-muted">Add a YouTube video demonstrating your tool</small>
                     </div>
                     <div class="mb-3">
-                        <label for="category" class="form-label">Category</label>
-                        <select class="form-select" id="category" name="category" required>
+                        <label class="form-label">Categories</label>
+                        <div class="row row-cols-1 row-cols-md-2 g-3">
                             {% for category in categories %}
-                            <option value="{{ category.id }}" {% if category.id == tool.category_id %}selected{% endif %}>
-                                {{ category.name }}
-                            </option>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="categories" 
+                                           value="{{ category.id }}" id="category{{ category.id }}"
+                                           {% if category in tool.categories %}checked{% endif %}>
+                                    <label class="form-check-label" for="category{{ category.id }}">
+                                        {{ category.name }}
+                                        <small class="d-block text-muted">{{ category.description }}</small>
+                                    </label>
+                                </div>
+                            </div>
                             {% endfor %}
-                        </select>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                     <a href="{{ url_for('tool', tool_id=tool.id) }}" class="btn btn-secondary">Cancel</a>

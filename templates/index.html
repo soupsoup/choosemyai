@@ -64,9 +64,14 @@
                 <div class="card h-100 tool-card">
                     <div class="card-body">
                         <h5 class="card-title">{{ tool.name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">
-                            {{ tool.category.name }}
-                        </h6>
+                        <div class="d-flex flex-wrap gap-2 mb-2">
+                            {% for category in tool.categories %}
+                            <a href="{{ url_for('category', category_id=category.id) }}" 
+                               class="badge bg-secondary text-decoration-none">
+                                {{ category.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
                         <div class="card-text description-preview">
                             {{ tool.description|striptags|truncate(150) }}
                         </div>

@@ -8,11 +8,13 @@
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <h2 class="card-title">{{ tool.name }}</h2>
-                        <div class="d-flex align-items-center mb-3">
-                            <a href="{{ url_for('category', category_id=tool.category.id) }}" 
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            {% for category in tool.categories %}
+                            <a href="{{ url_for('category', category_id=category.id) }}" 
                                class="badge bg-secondary text-decoration-none">
-                                {{ tool.category.name }}
+                                {{ category.name }}
                             </a>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="d-flex align-items-start gap-3">
@@ -118,37 +120,30 @@
     </div>
 
     <div class="col-md-4">
+        {% for category in tool.categories %}
         <div class="card mb-4">
             <div class="card-header">
-                <h4 class="card-title mb-0">Category Details</h4>
+                <h4 class="card-title mb-0">Category: {{ category.name }}</h4>
             </div>
             <div class="card-body">
-                <h5 class="card-subtitle mb-3">{{ tool.category.name }}</h5>
-                <p class="card-text">{{ tool.category.description }}</p>
-                <div class="d-grid gap-2">
-                    <a href="{{ url_for('category', category_id=tool.category.id) }}" 
+                <p class="card-text">{{ category.description }}</p>
+                <div class="d-grid">
+                    <a href="{{ url_for('category', category_id=category.id) }}" 
                        class="btn btn-outline-primary">
-                        View All Tools in {{ tool.category.name }}
+                        View All Tools in {{ category.name }}
                     </a>
                 </div>
             </div>
         </div>
-
-        {% set similar_tools = [] %}
-        {% for t in tool.category.tools %}
-            {% if t.is_approved and t.id != tool.id %}
-                {% set _ = similar_tools.append(t) %}
-            {% endif %}
         {% endfor %}
-        {% set sorted_tools = similar_tools|sort(attribute='vote_count', reverse=true) %}
-        
+
         {% if similar_tools %}
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title mb-0">Similar Tools</h4>
             </div>
             <div class="list-group list-group-flush">
-                {% for similar_tool in sorted_tools[:5] %}
+                {% for similar_tool in similar_tools %}
                 <a href="{{ url_for('tool', tool_id=similar_tool.id) }}" 
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     {{ similar_tool.name }}
