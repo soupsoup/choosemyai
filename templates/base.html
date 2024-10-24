@@ -47,14 +47,29 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('submit_tool') }}">Submit Tool</a>
                     </li>
-                    {% if current_user.is_moderator %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('moderate_tools') }}">Moderate Tools</a>
-                    </li>
-                    {% endif %}
-                    {% if current_user.is_admin %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin.appearance') }}">Appearance Settings</a>
+                    {% if current_user.is_authenticated and current_user.is_admin %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('admin.appearance') }}">
+                                    <i class="fas fa-paint-brush"></i> Appearance Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('admin.categories') }}">
+                                    <i class="fas fa-tags"></i> Manage Categories
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('moderate_tools') }}">
+                                    <i class="fas fa-tasks"></i> Moderate Tools
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     {% endif %}
                     {% endif %}
