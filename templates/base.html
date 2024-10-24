@@ -2,7 +2,22 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L8DR42XFLV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-L8DR42XFLV');
+    </script>
+    <!-- END Google tag (gtag.js) -->
+    <!-- Plausible analytics tag -->
+    <script defer data-domain="choosemyai.com" src="https://plausible.io/js/script.outbound-links.pageview-props.tagged-events.js"></script>
+    <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+    <!-- END Plausible analytics tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name='impact-site-verification' value='61d8b66d-26b4-427e-af56-f522e7b988fe'>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1587060587484049"
          crossorigin="anonymous"></script>
     <title>AI Tools Directory</title>
@@ -66,6 +81,11 @@
                             <li>
                                 <a class="dropdown-item" href="{{ url_for('admin.import_tools') }}">
                                     <i class="fas fa-file-import"></i> Import/Export Tools
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('admin.change_password') }}">
+                                    <i class="fas fa-key"></i> Change Password
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
