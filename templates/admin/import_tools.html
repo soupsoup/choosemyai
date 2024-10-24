@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">Import Tools</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">JSON File</label>
+                        <input type="file" class="form-control" id="file" name="file" accept=".json" required>
+                        <small class="text-muted">Only JSON files exported from this system are supported</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Import Tools</button>
+                </form>
+                <hr>
+                <div class="text-center">
+                    <a href="{{ url_for('admin.export_tools') }}" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Export Current Tools
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
