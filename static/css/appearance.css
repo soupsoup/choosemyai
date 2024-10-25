@@ -1,9 +1,11 @@
 /* Color picker styling */
 .form-control-color {
     width: 60px !important;
-    padding: 0.375rem;
+    height: 38px !important;
+    padding: 3px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    cursor: pointer;
 }
 
 .form-control-color::-webkit-color-swatch-wrapper {
@@ -22,6 +24,7 @@
     flex-wrap: nowrap;
     align-items: stretch;
     width: 100%;
+    margin-bottom: 1rem;
 }
 
 /* Make color text inputs readonly but look active */
@@ -32,19 +35,21 @@ input[data-color-input] {
     cursor: default;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    text-transform: uppercase;
 }
 
 /* Form layout and spacing */
-.row.g-3 > * {
+.form-group {
     margin-bottom: 1.5rem;
 }
 
 .form-label {
     margin-bottom: 0.5rem;
     font-weight: 500;
+    display: block;
 }
 
-/* Reset button spacing */
+/* Button spacing */
 .btn + .btn {
     margin-left: 0.5rem;
 }
@@ -56,4 +61,11 @@ input[data-color-input] {
     margin-top: 1.5rem;
     background-color: var(--bs-body-bg);
     border: 1px solid var(--bs-border-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .col-md-6 {
+        margin-bottom: 1rem;
+    }
 }
