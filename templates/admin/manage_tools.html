@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-0">Manage Tools</h4>
+                <button type="button" class="btn btn-danger" onclick="deleteSelectedTools()" id="deleteBtn" disabled>
+                    Delete Selected Tools
+                </button>
+            </div>
+            <div class="card-body">
+                <form id="toolsForm">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll" onchange="toggleAllTools()">
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Categories</th>
+                                    <th>Author</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tool in tools %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="tool_ids" value="{{ tool.id }}" 
+                                               class="tool-checkbox" onchange="updateDeleteButton()">
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('tool', tool_id=tool.id) }}">{{ tool.name }}</a>
+                                    </td>
+                                    <td>
+                                        {% for category in tool.categories %}
+                                        <span class="badge bg-secondary">{{ category.name }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ tool.author.username }}</td>
+                                    <td>
+                                        {% if tool.is_approved %}
+                                        <span class="badge bg-success">Approved</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleAllTools() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.getElementsByClassName('tool-checkbox');
+    for (let checkbox of checkboxes) {
+        checkbox.checked = selectAll.checked;
+    }
+    updateDeleteButton();
+}
+
+function updateDeleteButton() {
+    const checkboxes = document.getElementsByClassName('tool-checkbox');
+    const deleteBtn = document.getElementById('deleteBtn');
+    let checkedCount = 0;
+    for (let checkbox of checkboxes) {
+        if (checkbox.checked) checkedCount++;
+    }
+    deleteBtn.disabled = checkedCount === 0;
+}
+
+function deleteSelectedTools() {
+    if (!confirm('Are you sure you want to delete the selected tools? This action cannot be undone.')) {
+        return;
+    }
+    
+    const form = document.getElementById('toolsForm');
+    const formData = new FormData(form);
+    
+    fetch('/admin/delete-tools', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Error deleting tools: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while deleting tools');
+    });
+}
+</script>
+{% endblock %}

@@ -189,3 +189,31 @@ def import_tools():
             return redirect(url_for('admin.import_tools'))
     
     return render_template('admin/import_tools.html')
+
+@admin.route('/admin/manage-tools')
+@login_required
+def manage_tools():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tools = Tool.query.order_by(Tool.created_at.desc()).all()
+    return render_template('admin/manage_tools.html', tools=tools)
+
+@admin.route('/admin/delete-tools', methods=['POST'])
+@login_required
+def delete_tools():
+    if not current_user.is_admin:
+        return jsonify({'success': False, 'error': 'Access denied'}), 403
+    
+    tool_ids = request.form.getlist('tool_ids')
+    if not tool_ids:
+        return jsonify({'success': False, 'error': 'No tools selected'}), 400
+    
+    try:
+        Tool.query.filter(Tool.id.in_(tool_ids)).delete(synchronize_session=False)
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)}), 500
