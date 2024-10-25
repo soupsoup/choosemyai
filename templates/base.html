@@ -28,21 +28,27 @@
     {% if appearance_settings %}
     <style>
         :root {
+            --bs-body-bg: {{ appearance_settings.background_color }};
+            --bs-body-color: {{ appearance_settings.font_color }};
             --bs-primary: {{ appearance_settings.primary_color }};
             --bs-secondary: {{ appearance_settings.secondary_color }};
-            --bs-body-bg: {{ appearance_settings.background_color }};
-            --bs-navbar-bg: {{ appearance_settings.header_background }};
-            --bs-body-color: {{ appearance_settings.font_color }};
+            --bs-secondary-color: {{ appearance_settings.secondary_text_color }};
             --bs-font-sans-serif: {{ appearance_settings.font_family }};
-            --bs-secondary-text: {{ appearance_settings.secondary_text_color }};
         }
-        .navbar { 
-            background-color: var(--bs-navbar-bg) !important;
+        
+        /* Override navbar background */
+        .navbar {
+            background-color: {{ appearance_settings.header_background }} !important;
         }
+        
+        /* Apply font family globally */
         body {
             font-family: var(--bs-font-sans-serif);
-            color: var(--bs-body-color);
-            background-color: var(--bs-body-bg);
+        }
+        
+        /* Ensure text colors are applied */
+        .text-muted {
+            color: var(--bs-secondary-color) !important;
         }
     </style>
     {% endif %}

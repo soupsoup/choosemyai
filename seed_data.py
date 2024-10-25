@@ -11,6 +11,13 @@ def seed_data():
     
     # Create default appearance settings
     settings = AppearanceSettings()
+    settings.primary_color = '#0d6efd'
+    settings.secondary_color = '#6c757d'
+    settings.background_color = '#212529'
+    settings.font_color = '#ffffff'
+    settings.header_background = '#212529'
+    settings.secondary_text_color = '#6c757d'
+    settings.font_family = 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif'
     db.session.add(settings)
     
     # Create a moderator user
