@@ -15,7 +15,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="6" required>{{ tool.description }}</textarea>
+                        <textarea class="form-control" id="description" name="description" rows="6" required>{{ tool.description|striptags }}</textarea>
                         <small class="text-muted">Basic HTML formatting is allowed (e.g., &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;)</small>
                     </div>
                     <div class="mb-3">
@@ -56,29 +56,19 @@
                                         </div>
                                     </div>
                                     {% endfor %}
-                                {% else %}
-                                    <div class="resource-entry mb-2">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" name="resource_titles[]" 
-                                                   placeholder="Resource Title (e.g., Tutorial or Course name)">
-                                            <input type="url" class="form-control" name="resource_urls[]" 
-                                                   placeholder="Resource URL">
-                                            <button type="button" class="btn btn-danger remove-entry" 
-                                                    onclick="removeEntry(this)">Remove</button>
-                                        </div>
-                                    </div>
                                 {% endif %}
-                            {% else %}
-                                <div class="resource-entry mb-2">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="resource_titles[]" 
-                                               placeholder="Resource Title (e.g., Tutorial or Course name)">
-                                        <input type="url" class="form-control" name="resource_urls[]" 
-                                               placeholder="Resource URL">
-                                        <button type="button" class="btn btn-danger remove-entry" 
-                                                onclick="removeEntry(this)">Remove</button>
-                                    </div>
+                            {% endif %}
+                            {% if not tool.resources or not tool.resources|tojson|safe|from_json %}
+                            <div class="resource-entry mb-2">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="resource_titles[]" 
+                                           placeholder="Resource Title (e.g., Tutorial or Course name)">
+                                    <input type="url" class="form-control" name="resource_urls[]" 
+                                           placeholder="Resource URL">
+                                    <button type="button" class="btn btn-danger remove-entry" 
+                                            onclick="removeEntry(this)">Remove</button>
                                 </div>
+                            </div>
                             {% endif %}
                         </div>
                         <button type="button" class="btn btn-secondary mt-2" 
@@ -114,7 +104,6 @@
 
 <script>
 function addResource() {
-    console.log('Adding new resource entry');
     const container = document.getElementById('resources-container');
     const entry = document.createElement('div');
     entry.className = 'resource-entry mb-2';
@@ -132,7 +121,6 @@ function addResource() {
 }
 
 function removeEntry(button) {
-    console.log('Removing resource entry');
     button.closest('.resource-entry').remove();
 }
 </script>
