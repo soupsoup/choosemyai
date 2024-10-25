@@ -8,118 +8,134 @@
                 <h4 class="card-title mb-0">Customize Appearance</h4>
             </div>
             <div class="card-body">
-                <form method="POST">
+                <form method="POST" id="appearanceForm">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="primary_color" class="form-label">Primary Color</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="primary_color" name="primary_color" 
-                                       value="{{ settings.primary_color }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.primary_color }}" 
-                                       data-color-input="primary_color" readonly>
+                            <div class="form-group">
+                                <label for="primary_color" class="form-label">Primary Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="primary_color" name="primary_color" 
+                                           value="{{ settings.primary_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.primary_color }}" 
+                                           data-color-input="primary_color" readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="secondary_color" class="form-label">Secondary Color</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="secondary_color" name="secondary_color" 
-                                       value="{{ settings.secondary_color }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.secondary_color }}" 
-                                       data-color-input="secondary_color" readonly>
+                            <div class="form-group">
+                                <label for="secondary_color" class="form-label">Secondary Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="secondary_color" name="secondary_color" 
+                                           value="{{ settings.secondary_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.secondary_color }}" 
+                                           data-color-input="secondary_color" readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="background_color" class="form-label">Background Color</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="background_color" name="background_color" 
-                                       value="{{ settings.background_color }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.background_color }}" 
-                                       data-color-input="background_color" readonly>
+                            <div class="form-group">
+                                <label for="background_color" class="form-label">Background Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="background_color" name="background_color" 
+                                           value="{{ settings.background_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.background_color }}" 
+                                           data-color-input="background_color" readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="font_color" class="form-label">Font Color</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="font_color" name="font_color" 
-                                       value="{{ settings.font_color }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.font_color }}" 
-                                       data-color-input="font_color" readonly>
+                            <div class="form-group">
+                                <label for="font_color" class="form-label">Font Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="font_color" name="font_color" 
+                                           value="{{ settings.font_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.font_color }}" 
+                                           data-color-input="font_color" readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="header_background" class="form-label">Header Background</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="header_background" name="header_background" 
-                                       value="{{ settings.header_background }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.header_background }}" 
-                                       data-color-input="header_background" readonly>
+                            <div class="form-group">
+                                <label for="header_background" class="form-label">Header Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="header_background" name="header_background" 
+                                           value="{{ settings.header_background }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.header_background }}" 
+                                           data-color-input="header_background" readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="secondary_text_color" class="form-label">Secondary Text Color</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="secondary_text_color" name="secondary_text_color" 
-                                       value="{{ settings.secondary_text_color }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.secondary_text_color }}" 
-                                       data-color-input="secondary_text_color" readonly>
+                            <div class="form-group">
+                                <label for="secondary_text_color" class="form-label">Secondary Text Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="secondary_text_color" name="secondary_text_color" 
+                                           value="{{ settings.secondary_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.secondary_text_color }}" 
+                                           data-color-input="secondary_text_color" readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="placeholder_text_color" class="form-label">Placeholder Text Color</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="placeholder_text_color" name="placeholder_text_color" 
-                                       value="{{ settings.placeholder_text_color }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.placeholder_text_color }}" 
-                                       data-color-input="placeholder_text_color" readonly>
+                            <div class="form-group">
+                                <label for="placeholder_text_color" class="form-label">Placeholder Text Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="placeholder_text_color" name="placeholder_text_color" 
+                                           value="{{ settings.placeholder_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.placeholder_text_color }}" 
+                                           data-color-input="placeholder_text_color" readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <label for="font_family" class="form-label">Font Family</label>
-                            <select class="form-select" id="font_family" name="font_family">
-                                <option value="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif" 
-                                        {% if settings.font_family == "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif" %}selected{% endif %}>
-                                    System Default
-                                </option>
-                                <option value="'Roboto', sans-serif" 
-                                        {% if settings.font_family == "'Roboto', sans-serif" %}selected{% endif %}>
-                                    Roboto
-                                </option>
-                                <option value="'Open Sans', sans-serif" 
-                                        {% if settings.font_family == "'Open Sans', sans-serif" %}selected{% endif %}>
-                                    Open Sans
-                                </option>
-                                <option value="'Lato', sans-serif" 
-                                        {% if settings.font_family == "'Lato', sans-serif" %}selected{% endif %}>
-                                    Lato
-                                </option>
-                            </select>
+                            <div class="form-group">
+                                <label for="font_family" class="form-label">Font Family</label>
+                                <select class="form-select" id="font_family" name="font_family">
+                                    <option value="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif" 
+                                            {% if settings.font_family == "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif" %}selected{% endif %}>
+                                        System Default
+                                    </option>
+                                    <option value="'Roboto', sans-serif" 
+                                            {% if settings.font_family == "'Roboto', sans-serif" %}selected{% endif %}>
+                                        Roboto
+                                    </option>
+                                    <option value="'Open Sans', sans-serif" 
+                                            {% if settings.font_family == "'Open Sans', sans-serif" %}selected{% endif %}>
+                                        Open Sans
+                                    </option>
+                                    <option value="'Lato', sans-serif" 
+                                            {% if settings.font_family == "'Lato', sans-serif" %}selected{% endif %}>
+                                        Lato
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="reset" class="btn btn-secondary">Reset</button>
+                        <button type="reset" class="btn btn-secondary" id="resetButton">Reset</button>
                     </div>
                 </form>
             </div>
@@ -129,26 +145,42 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('appearanceForm');
+    
     // Handle color picker changes
     document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
         colorPicker.addEventListener('input', function() {
             const textInput = document.querySelector(`input[data-color-input="${this.id}"]`);
             if (textInput) {
-                textInput.value = this.value;
+                textInput.value = this.value.toUpperCase();
+            }
+        });
+        
+        colorPicker.addEventListener('change', function() {
+            const textInput = document.querySelector(`input[data-color-input="${this.id}"]`);
+            if (textInput) {
+                textInput.value = this.value.toUpperCase();
             }
         });
     });
 
     // Handle form reset
-    document.querySelector('form').addEventListener('reset', function() {
+    form.addEventListener('reset', function(e) {
         setTimeout(() => {
             document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
                 const textInput = document.querySelector(`input[data-color-input="${colorPicker.id}"]`);
                 if (textInput) {
-                    textInput.value = colorPicker.value;
+                    textInput.value = colorPicker.value.toUpperCase();
                 }
             });
         }, 0);
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
     });
 });
 </script>
