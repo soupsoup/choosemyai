@@ -4,8 +4,13 @@ from app import db
 from models import AppearanceSettings, Category, Tool
 from datetime import datetime
 import json
+import logging
 
 admin = Blueprint('admin', __name__)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 @admin.route('/admin/change-password', methods=['GET', 'POST'])
 @login_required
@@ -46,26 +51,47 @@ def appearance():
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
     
-    settings = AppearanceSettings.get_settings()
-    
-    if request.method == 'POST':
-        color_fields = [
-            'primary_color', 'secondary_color', 'background_color',
-            'font_color', 'header_background', 'secondary_text_color',
-            'placeholder_text_color'
-        ]
+    try:
+        logger.info("Attempting to retrieve appearance settings")
+        settings = AppearanceSettings.get_settings()
+        logger.info(f"Settings retrieved: {settings is not None}")
         
-        for field in color_fields:
-            value = request.form.get(field)
-            if value and value.startswith('#'):
-                setattr(settings, field, value)
+        if request.method == 'POST':
+            try:
+                logger.info("Processing POST request")
+                color_fields = [
+                    'primary_color', 'secondary_color', 'background_color',
+                    'font_color', 'header_background', 'secondary_text_color',
+                    'placeholder_text_color'
+                ]
+                
+                for field in color_fields:
+                    value = request.form.get(field)
+                    logger.info(f"Processing field {field} with value {value}")
+                    if value and value.startswith('#'):
+                        setattr(settings, field, value)
+                        logger.info(f"Updated {field} to {value}")
+                
+                settings.font_family = request.form.get('font_family', settings.font_family)
+                logger.info(f"Updated font_family to {settings.font_family}")
+                
+                db.session.commit()
+                logger.info("Successfully saved appearance settings")
+                flash('Appearance settings updated successfully!', 'success')
+                return redirect(url_for('admin.appearance'))
+                
+            except Exception as e:
+                logger.error(f"Error in POST request: {str(e)}")
+                db.session.rollback()
+                flash('Error updating settings. Please try again.', 'danger')
+                return redirect(url_for('admin.appearance'))
         
-        settings.font_family = request.form.get('font_family', settings.font_family)
-        db.session.commit()
-        flash('Appearance settings updated successfully!', 'success')
-        return redirect(url_for('admin.appearance'))
-    
-    return render_template('admin/appearance.html', settings=settings)
+        return render_template('admin/appearance.html', settings=settings)
+        
+    except Exception as e:
+        logger.error(f"Error in appearance route: {str(e)}")
+        flash('Error loading appearance settings. Please try again.', 'danger')
+        return redirect(url_for('index'))
 
 @admin.route('/admin/categories', methods=['GET'])
 @login_required
@@ -77,4 +103,35 @@ def categories():
     categories = Category.query.all()
     return render_template('admin/categories.html', categories=categories)
 
-# ... rest of the admin.py file remains unchanged ...
+@admin.route('/admin/categories/add', methods=['POST'])
+@login_required
+def add_category():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    name = request.form.get('name')
+    description = request.form.get('description')
+    
+    if name and description:
+        category = Category(name=name, description=description)
+        db.session.add(category)
+        db.session.commit()
+        flash('Category added successfully!', 'success')
+    else:
+        flash('Name and description are required.', 'danger')
+    
+    return redirect(url_for('admin.categories'))
+
+@admin.route('/admin/categories/<int:category_id>/remove', methods=['POST'])
+@login_required
+def remove_category(category_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    category = Category.query.get_or_404(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    flash('Category removed successfully!', 'success')
+    return redirect(url_for('admin.categories'))
