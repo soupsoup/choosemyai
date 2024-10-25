@@ -7,6 +7,9 @@
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    {% if request.endpoint == 'admin.appearance' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/appearance.css') }}">
+    {% endif %}
     <style>
         :root {
             --bs-primary: {{ appearance_settings.primary_color }};
