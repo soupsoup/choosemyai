@@ -49,16 +49,21 @@ def appearance():
     settings = AppearanceSettings.get_settings()
     
     if request.method == 'POST':
-        settings.primary_color = request.form.get('primary_color', settings.primary_color)
-        settings.secondary_color = request.form.get('secondary_color', settings.secondary_color)
-        settings.background_color = request.form.get('background_color', settings.background_color)
-        settings.header_background = request.form.get('header_background', settings.header_background)
-        settings.font_family = request.form.get('font_family', settings.font_family)
-        settings.font_color = request.form.get('font_color', settings.font_color)
-        settings.secondary_text_color = request.form.get('secondary_text_color', settings.secondary_text_color)
+        try:
+            settings.primary_color = request.form.get('primary_color')
+            settings.secondary_color = request.form.get('secondary_color')
+            settings.background_color = request.form.get('background_color')
+            settings.font_color = request.form.get('font_color')
+            settings.header_background = request.form.get('header_background')
+            settings.secondary_text_color = request.form.get('secondary_text_color')
+            settings.font_family = request.form.get('font_family')
+            
+            db.session.commit()
+            flash('Appearance settings updated successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error updating appearance settings: {str(e)}', 'danger')
         
-        db.session.commit()
-        flash('Appearance settings updated successfully!', 'success')
         return redirect(url_for('admin.appearance'))
     
     return render_template('admin/appearance.html', settings=settings)
@@ -128,7 +133,8 @@ def export_tools():
             'image_url': tool.image_url,
             'youtube_url': tool.youtube_url,
             'categories': [category.name for category in tool.categories],
-            'is_approved': tool.is_approved
+            'is_approved': tool.is_approved,
+            'resources': json.loads(tool.resources) if tool.resources else []
         }
         export_data.append(tool_data)
     
@@ -171,6 +177,7 @@ def import_tools():
                 tool.youtube_url = tool_data.get('youtube_url')
                 tool.is_approved = tool_data.get('is_approved', False)
                 tool.user_id = current_user.id
+                tool.resources = json.dumps(tool_data.get('resources', []))
                 
                 # Handle categories
                 for category_name in tool_data.get('categories', []):
