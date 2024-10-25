@@ -34,6 +34,44 @@
                                value="{{ tool.youtube_url or '' }}" placeholder="Enter YouTube video URL">
                         <small class="text-muted">Add a YouTube video demonstrating your tool</small>
                     </div>
+
+                    <!-- Learning Resources Section -->
+                    <div class="mb-3">
+                        <label class="form-label">Learning Resources</label>
+                        <div id="resources-container">
+                            {% if tool.resources %}
+                                {% for resource in tool.resources|tojson|safe|from_json %}
+                                <div class="resource-entry mb-2">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="resource_titles[]" 
+                                               value="{{ resource.title }}"
+                                               placeholder="Resource Title (e.g., Tutorial or Course name)">
+                                        <input type="url" class="form-control" name="resource_urls[]" 
+                                               value="{{ resource.url }}"
+                                               placeholder="Resource URL">
+                                        <button type="button" class="btn btn-danger remove-entry" 
+                                                onclick="removeEntry(this)">Remove</button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                            <div class="resource-entry mb-2">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="resource_titles[]" 
+                                           placeholder="Resource Title (e.g., Tutorial or Course name)">
+                                    <input type="url" class="form-control" name="resource_urls[]" 
+                                           placeholder="Resource URL">
+                                    <button type="button" class="btn btn-danger remove-entry" 
+                                            onclick="removeEntry(this)">Remove</button>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <button type="button" class="btn btn-secondary mt-2" 
+                                onclick="addResource()">Add Resource</button>
+                        <small class="text-muted d-block mt-1">Add links to helpful tutorials, courses, or other learning materials</small>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label">Categories</label>
                         <div class="row row-cols-1 row-cols-md-2 g-3">
@@ -59,4 +97,27 @@
         </div>
     </div>
 </div>
+
+<script>
+function addResource() {
+    const container = document.getElementById('resources-container');
+    const entry = document.createElement('div');
+    entry.className = 'resource-entry mb-2';
+    entry.innerHTML = `
+        <div class="input-group">
+            <input type="text" class="form-control" name="resource_titles[]" 
+                   placeholder="Resource Title (e.g., Tutorial or Course name)">
+            <input type="url" class="form-control" name="resource_urls[]" 
+                   placeholder="Resource URL">
+            <button type="button" class="btn btn-danger remove-entry" 
+                    onclick="removeEntry(this)">Remove</button>
+        </div>
+    `;
+    container.appendChild(entry);
+}
+
+function removeEntry(button) {
+    button.closest('.resource-entry').remove();
+}
+</script>
 {% endblock %}
