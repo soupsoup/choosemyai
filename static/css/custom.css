@@ -35,16 +35,3 @@
 .text-muted {
     color: var(--bs-secondary-text) !important;
 }
-
-::placeholder {
-    color: var(--bs-placeholder-color) !important;
-    opacity: 1;
-}
-
-:-ms-input-placeholder {
-    color: var(--bs-placeholder-color) !important;
-}
-
-::-ms-input-placeholder {
-    color: var(--bs-placeholder-color) !important;
-}

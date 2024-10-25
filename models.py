@@ -4,10 +4,6 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 import re
-import logging
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # Association table for Tool-Category many-to-many relationship
 tool_categories = db.Table('tool_categories',
@@ -109,26 +105,13 @@ class AppearanceSettings(db.Model):
     font_family = db.Column(db.Text, default='system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif')
     header_background = db.Column(db.String(7), default='#212529')
     secondary_text_color = db.Column(db.String(7), default='#6c757d')
-    placeholder_text_color = db.Column(db.String(7), default='#6c757d')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod
     def get_settings():
-        logger.info("Getting appearance settings")
-        try:
-            settings = AppearanceSettings.query.first()
-            if not settings:
-                logger.info("No settings found, creating default settings")
-                settings = AppearanceSettings()
-                try:
-                    db.session.add(settings)
-                    db.session.commit()
-                    logger.info("Default settings created successfully")
-                except Exception as e:
-                    logger.error(f"Error creating default settings: {str(e)}")
-                    db.session.rollback()
-                    raise
-            return settings
-        except Exception as e:
-            logger.error(f"Error retrieving appearance settings: {str(e)}")
-            raise
+        settings = AppearanceSettings.query.first()
+        if not settings:
+            settings = AppearanceSettings()
+            db.session.add(settings)
+            db.session.commit()
+        return settings
