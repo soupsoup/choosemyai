@@ -66,6 +66,52 @@ def index():
     
     return render_template('index.html', categories=categories, tools=tools)
 
+@app.route('/submit-tool', methods=['GET', 'POST'])
+@login_required
+def submit_tool():
+    categories = Category.query.all()
+    if request.method == 'POST':
+        # Handle form submission
+        clean_description = bleach.clean(
+            request.form['description'],
+            tags=ALLOWED_TAGS,
+            attributes=ALLOWED_ATTRIBUTES
+        )
+        
+        tool = Tool()
+        tool.name = request.form['name']
+        tool.description = clean_description
+        tool.url = request.form['url']
+        tool.image_url = request.form.get('image_url') or None
+        tool.youtube_url = request.form.get('youtube_url') or None
+        tool.user_id = current_user.id
+        
+        # Process learning resources
+        resources = []
+        resource_titles = request.form.getlist('resource_titles[]')
+        resource_urls = request.form.getlist('resource_urls[]')
+        for title, url in zip(resource_titles, resource_urls):
+            if title.strip() and url.strip():
+                resources.append({'title': title.strip(), 'url': url.strip()})
+        tool.resources = json.dumps(resources) if resources else None
+        
+        # Handle categories
+        category_ids = request.form.getlist('categories')
+        if not category_ids:
+            flash('Please select at least one category', 'danger')
+            return render_template('submit_tool.html', categories=categories)
+            
+        selected_categories = Category.query.filter(Category.id.in_(category_ids)).all()
+        tool.categories = selected_categories
+        
+        db.session.add(tool)
+        db.session.commit()
+        
+        flash('Tool submitted successfully! It will be reviewed by a moderator.', 'success')
+        return redirect(url_for('index'))
+    
+    return render_template('submit_tool.html', categories=categories)
+
 @app.route('/edit-tool/<int:tool_id>', methods=['GET', 'POST'])
 @login_required
 def edit_tool(tool_id):
@@ -75,6 +121,9 @@ def edit_tool(tool_id):
     
     tool = Tool.query.get_or_404(tool_id)
     categories = Category.query.all()
+    
+    # Add debug log for tool resources
+    app.logger.info(f'Tool resources: {tool.resources}')
     
     if request.method == 'POST':
         image_url = request.form.get('image_url', '').strip()
