@@ -68,7 +68,7 @@
                 <div class="mt-4">
                     <h4>Learning Resources</h4>
                     <div class="list-group">
-                        {% for resource in tool.resources|tojson|safe|from_json %}
+                        {% for resource in tool.resources|parse_json %}
                         <a href="{{ resource.url }}" target="_blank" 
                            class="list-group-item list-group-item-action">
                             <i class="fas fa-graduation-cap me-2"></i>
