@@ -56,6 +56,7 @@ def appearance():
         settings.font_family = request.form.get('font_family', settings.font_family)
         settings.font_color = request.form.get('font_color', settings.font_color)
         settings.secondary_text_color = request.form.get('secondary_text_color', settings.secondary_text_color)
+        settings.placeholder_text_color = request.form.get('placeholder_text_color', settings.placeholder_text_color)
         
         db.session.commit()
         flash('Appearance settings updated successfully!', 'success')
@@ -128,7 +129,8 @@ def export_tools():
             'image_url': tool.image_url,
             'youtube_url': tool.youtube_url,
             'categories': [category.name for category in tool.categories],
-            'is_approved': tool.is_approved
+            'is_approved': tool.is_approved,
+            'resources': json.loads(tool.resources) if tool.resources else []
         }
         export_data.append(tool_data)
     
@@ -171,6 +173,7 @@ def import_tools():
                 tool.youtube_url = tool_data.get('youtube_url')
                 tool.is_approved = tool_data.get('is_approved', False)
                 tool.user_id = current_user.id
+                tool.resources = json.dumps(tool_data.get('resources', []))
                 
                 # Handle categories
                 for category_name in tool_data.get('categories', []):
