@@ -189,3 +189,21 @@ def import_tools():
             return redirect(url_for('admin.import_tools'))
     
     return render_template('admin/import_tools.html')
+
+@admin.route('/tools/bulk-remove', methods=['POST'])
+@login_required
+def bulk_remove_tools():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tool_ids = request.form.getlist('tool_ids[]')
+    if not tool_ids:
+        flash('No tools selected for removal.', 'warning')
+        return redirect(url_for('index'))
+    
+    Tool.query.filter(Tool.id.in_(tool_ids)).delete(synchronize_session=False)
+    db.session.commit()
+    
+    flash(f'Successfully removed {len(tool_ids)} tools.', 'success')
+    return redirect(url_for('index'))
