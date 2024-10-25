@@ -35,44 +35,24 @@
                         <small class="text-muted">Add a YouTube video demonstrating your tool</small>
                     </div>
 
-                    <!-- Courses Section -->
+                    <!-- Learning Resources Section -->
                     <div class="mb-3">
-                        <label class="form-label">Courses</label>
-                        <div id="courses-container">
-                            <div class="course-entry mb-2">
+                        <label class="form-label">Learning Resources</label>
+                        <div id="resources-container">
+                            <div class="resource-entry mb-2">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="course_titles[]" 
-                                           placeholder="Course Title">
-                                    <input type="url" class="form-control" name="course_urls[]" 
-                                           placeholder="Course URL">
+                                    <input type="text" class="form-control" name="resource_titles[]" 
+                                           placeholder="Resource Title (e.g., Tutorial or Course name)">
+                                    <input type="url" class="form-control" name="resource_urls[]" 
+                                           placeholder="Resource URL">
                                     <button type="button" class="btn btn-danger remove-entry" 
                                             onclick="removeEntry(this)">Remove</button>
                                 </div>
                             </div>
                         </div>
                         <button type="button" class="btn btn-secondary mt-2" 
-                                onclick="addCourse()">Add Course</button>
-                        <small class="text-muted d-block mt-1">Add relevant courses that teach how to use this tool</small>
-                    </div>
-
-                    <!-- Tutorials Section -->
-                    <div class="mb-3">
-                        <label class="form-label">Tutorials</label>
-                        <div id="tutorials-container">
-                            <div class="tutorial-entry mb-2">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="tutorial_titles[]" 
-                                           placeholder="Tutorial Title">
-                                    <input type="url" class="form-control" name="tutorial_urls[]" 
-                                           placeholder="Tutorial URL">
-                                    <button type="button" class="btn btn-danger remove-entry" 
-                                            onclick="removeEntry(this)">Remove</button>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-secondary mt-2" 
-                                onclick="addTutorial()">Add Tutorial</button>
-                        <small class="text-muted d-block mt-1">Add helpful tutorials that demonstrate tool usage</small>
+                                onclick="addResource()">Add Resource</button>
+                        <small class="text-muted d-block mt-1">Add links to helpful tutorials, courses, or other learning materials</small>
                     </div>
 
                     <div class="mb-3">
@@ -100,36 +80,25 @@
 </div>
 
 <script>
-function addCourse() {
-    const container = document.getElementById('courses-container');
+function addResource() {
+    const container = document.getElementById('resources-container');
     const entry = document.createElement('div');
-    entry.className = 'course-entry mb-2';
+    entry.className = 'resource-entry mb-2';
     entry.innerHTML = `
         <div class="input-group">
-            <input type="text" class="form-control" name="course_titles[]" placeholder="Course Title">
-            <input type="url" class="form-control" name="course_urls[]" placeholder="Course URL">
-            <button type="button" class="btn btn-danger remove-entry" onclick="removeEntry(this)">Remove</button>
-        </div>
-    `;
-    container.appendChild(entry);
-}
-
-function addTutorial() {
-    const container = document.getElementById('tutorials-container');
-    const entry = document.createElement('div');
-    entry.className = 'tutorial-entry mb-2';
-    entry.innerHTML = `
-        <div class="input-group">
-            <input type="text" class="form-control" name="tutorial_titles[]" placeholder="Tutorial Title">
-            <input type="url" class="form-control" name="tutorial_urls[]" placeholder="Tutorial URL">
-            <button type="button" class="btn btn-danger remove-entry" onclick="removeEntry(this)">Remove</button>
+            <input type="text" class="form-control" name="resource_titles[]" 
+                   placeholder="Resource Title (e.g., Tutorial or Course name)">
+            <input type="url" class="form-control" name="resource_urls[]" 
+                   placeholder="Resource URL">
+            <button type="button" class="btn btn-danger remove-entry" 
+                    onclick="removeEntry(this)">Remove</button>
         </div>
     `;
     container.appendChild(entry);
 }
 
 function removeEntry(button) {
-    button.closest('.course-entry, .tutorial-entry').remove();
+    button.closest('.resource-entry').remove();
 }
 </script>
 {% endblock %}

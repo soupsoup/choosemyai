@@ -62,33 +62,17 @@
                     </div>
                 </div>
                 {% endif %}
-                
-                <!-- Courses Section -->
-                {% if tool.courses %}
+
+                <!-- Learning Resources Section -->
+                {% if tool.resources %}
                 <div class="mt-4">
-                    <h4>Available Courses</h4>
+                    <h4>Learning Resources</h4>
                     <div class="list-group">
-                        {% for course in tool.courses|tojson|safe|from_json %}
-                        <a href="{{ course.url }}" target="_blank" 
+                        {% for resource in tool.resources|tojson|safe|from_json %}
+                        <a href="{{ resource.url }}" target="_blank" 
                            class="list-group-item list-group-item-action">
                             <i class="fas fa-graduation-cap me-2"></i>
-                            {{ course.title }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-
-                <!-- Tutorials Section -->
-                {% if tool.tutorials %}
-                <div class="mt-4">
-                    <h4>Helpful Tutorials</h4>
-                    <div class="list-group">
-                        {% for tutorial in tool.tutorials|tojson|safe|from_json %}
-                        <a href="{{ tutorial.url }}" target="_blank" 
-                           class="list-group-item list-group-item-action">
-                            <i class="fas fa-book-reader me-2"></i>
-                            {{ tutorial.title }}
+                            {{ resource.title }}
                         </a>
                         {% endfor %}
                     </div>

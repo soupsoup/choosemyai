@@ -46,9 +46,7 @@ class Tool(db.Model):
     is_approved = db.Column(db.Boolean, default=False)
     categories = db.relationship('Category', secondary=tool_categories, lazy='subquery',
                                 backref=db.backref('tools', lazy=True))
-    # New fields for courses and tutorials
-    courses = db.Column(db.Text)  # Store as JSON string of course entries
-    tutorials = db.Column(db.Text)  # Store as JSON string of tutorial entries
+    resources = db.Column(db.Text)  # Store as JSON string of resource entries
 
     @property
     def vote_count(self):

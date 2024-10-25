@@ -241,19 +241,13 @@ def submit_tool():
             attributes=ALLOWED_ATTRIBUTES
         )
         
-        courses = []
-        course_titles = request.form.getlist('course_titles[]')
-        course_urls = request.form.getlist('course_urls[]')
-        for title, url in zip(course_titles, course_urls):
+        # Process learning resources
+        resources = []
+        resource_titles = request.form.getlist('resource_titles[]')
+        resource_urls = request.form.getlist('resource_urls[]')
+        for title, url in zip(resource_titles, resource_urls):
             if title.strip() and url.strip():
-                courses.append({'title': title.strip(), 'url': url.strip()})
-        
-        tutorials = []
-        tutorial_titles = request.form.getlist('tutorial_titles[]')
-        tutorial_urls = request.form.getlist('tutorial_urls[]')
-        for title, url in zip(tutorial_titles, tutorial_urls):
-            if title.strip() and url.strip():
-                tutorials.append({'title': title.strip(), 'url': url.strip()})
+                resources.append({'title': title.strip(), 'url': url.strip()})
         
         tool = Tool()
         tool.name = request.form['name']
@@ -263,8 +257,7 @@ def submit_tool():
         tool.youtube_url = youtube_url or None
         tool.user_id = current_user.id
         tool.is_approved = False
-        tool.courses = json.dumps(courses) if courses else None
-        tool.tutorials = json.dumps(tutorials) if tutorials else None
+        tool.resources = json.dumps(resources) if resources else None
         
         selected_categories = Category.query.filter(Category.id.in_(category_ids)).all()
         tool.categories = selected_categories
@@ -370,11 +363,20 @@ def edit_tool(tool_id):
             attributes=ALLOWED_ATTRIBUTES
         )
         
+        # Process learning resources
+        resources = []
+        resource_titles = request.form.getlist('resource_titles[]')
+        resource_urls = request.form.getlist('resource_urls[]')
+        for title, url in zip(resource_titles, resource_urls):
+            if title.strip() and url.strip():
+                resources.append({'title': title.strip(), 'url': url.strip()})
+        
         tool.name = request.form['name']
         tool.description = clean_description
         tool.url = request.form['url']
         tool.image_url = image_url or None
         tool.youtube_url = youtube_url or None
+        tool.resources = json.dumps(resources) if resources else None
         
         selected_categories = Category.query.filter(Category.id.in_(category_ids)).all()
         tool.categories = selected_categories
