@@ -11,7 +11,7 @@
                 <form method="POST" id="appearanceForm">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="color-picker-container">
                                 <label for="primary_color" class="form-label">Primary Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
@@ -25,7 +25,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="color-picker-container">
                                 <label for="secondary_color" class="form-label">Secondary Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="color-picker-container">
                                 <label for="background_color" class="form-label">Background Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="color-picker-container">
                                 <label for="font_color" class="form-label">Font Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="color-picker-container">
                                 <label for="header_background" class="form-label">Header Background</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="color-picker-container">
                                 <label for="secondary_text_color" class="form-label">Secondary Text Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
@@ -95,7 +95,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="color-picker-container">
                                 <label for="placeholder_text_color" class="form-label">Placeholder Text Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
@@ -147,11 +147,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Color picker functionality
     document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
-        colorPicker.addEventListener('input', function() {
-            const textInput = document.querySelector(`input[data-color-input="${this.id}"]`);
-            if (textInput) {
-                textInput.value = this.value.toUpperCase();
-            }
+        ['input', 'change'].forEach(eventType => {
+            colorPicker.addEventListener(eventType, function() {
+                const textInput = document.querySelector(`input[data-color-input="${this.id}"]`);
+                if (textInput) {
+                    textInput.value = this.value.toUpperCase();
+                }
+            });
         });
     });
 
@@ -163,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
         initialValues[colorPicker.id] = colorPicker.value;
     });
+    initialValues['font_family'] = document.getElementById('font_family').value;
     
     // Handle reset
     form.addEventListener('reset', function(e) {
@@ -174,6 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     textInput.value = initialValues[colorPicker.id].toUpperCase();
                 }
             });
+            document.getElementById('font_family').value = initialValues['font_family'];
         }, 0);
     });
 });

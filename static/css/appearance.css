@@ -1,8 +1,15 @@
 /* Color picker styling */
+.color-picker-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
 .form-control-color {
-    width: 60px !important;
-    height: 38px !important;
+    min-width: 60px !important;
     padding: 3px;
+    cursor: pointer;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
@@ -29,7 +36,6 @@
     flex-wrap: nowrap;
     align-items: stretch;
     width: 100%;
-    margin-bottom: 1rem;
 }
 
 /* Make color text inputs readonly but look active */
