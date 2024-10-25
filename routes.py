@@ -66,6 +66,16 @@ def index():
     
     return render_template('index.html', categories=categories, tools=tools)
 
+@app.route('/moderate-tools')
+@login_required
+def moderate_tools():
+    if not current_user.is_moderator:
+        flash('Access denied. Moderator rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tools = Tool.query.filter_by(is_approved=False).all()
+    return render_template('moderate_tools.html', tools=tools)
+
 @app.route('/submit-tool', methods=['GET', 'POST'])
 @login_required
 def submit_tool():
@@ -125,6 +135,12 @@ def edit_tool(tool_id):
     # Add debug log for tool resources
     app.logger.info(f'Tool resources: {tool.resources}')
     
+    # Parse tool resources with error handling
+    try:
+        tool_resources = json.loads(tool.resources) if tool.resources else []
+    except json.JSONDecodeError:
+        tool_resources = []
+    
     if request.method == 'POST':
         image_url = request.form.get('image_url', '').strip()
         youtube_url = request.form.get('youtube_url', '').strip()
@@ -132,15 +148,15 @@ def edit_tool(tool_id):
         
         if not category_ids:
             flash('Please select at least one category', 'danger')
-            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+            return render_template('admin/edit_tool.html', tool=tool, categories=categories, tool_resources=tool_resources)
         
         if image_url and not is_valid_image_url(image_url):
             flash('Invalid image URL. Please provide a URL ending with .jpg, .jpeg, .png, .gif, or .webp', 'danger')
-            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+            return render_template('admin/edit_tool.html', tool=tool, categories=categories, tool_resources=tool_resources)
             
         if youtube_url and not is_valid_youtube_url(youtube_url):
             flash('Invalid YouTube URL. Please provide a valid YouTube video URL', 'danger')
-            return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+            return render_template('admin/edit_tool.html', tool=tool, categories=categories, tool_resources=tool_resources)
         
         clean_description = bleach.clean(
             request.form['description'],
@@ -171,7 +187,7 @@ def edit_tool(tool_id):
         flash('Tool updated successfully!', 'success')
         return redirect(url_for('tool', tool_id=tool.id))
     
-    return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+    return render_template('admin/edit_tool.html', tool=tool, categories=categories, tool_resources=tool_resources)
 
 def is_valid_youtube_url(url):
     if not url:

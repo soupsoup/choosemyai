@@ -39,9 +39,8 @@
                     <div class="mb-3">
                         <label class="form-label">Learning Resources</label>
                         <div id="resources-container">
-                            {% if tool.resources %}
-                                {% set resources = tool.resources|parse_json %}
-                                {% for resource in resources %}
+                            {% if tool_resources %}
+                                {% for resource in tool_resources %}
                                 <div class="resource-entry mb-2">
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="resource_titles[]" 
