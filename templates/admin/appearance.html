@@ -70,6 +70,19 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <label for="secondary_text_color" class="form-label">Secondary Text Color</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color" 
+                                       id="secondary_text_color" name="secondary_text_color" 
+                                       value="{{ settings.secondary_text_color }}">
+                                <input type="text" class="form-control" 
+                                       value="{{ settings.secondary_text_color }}" 
+                                       data-color-input="secondary_text_color" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
                             <label for="font_family" class="form-label">Font Family</label>
                             <select class="form-select" id="font_family" name="font_family">
                                 <option value="system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Noto Sans, Liberation Sans, Arial, sans-serif"

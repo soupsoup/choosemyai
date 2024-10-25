@@ -106,6 +106,7 @@ class AppearanceSettings(db.Model):
     font_color = db.Column(db.String(7), default='#ffffff')
     font_family = db.Column(db.Text, default='system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif')
     header_background = db.Column(db.String(7), default='#212529')
+    secondary_text_color = db.Column(db.String(7), default='#6c757d')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod

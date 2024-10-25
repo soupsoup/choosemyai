@@ -31,3 +31,7 @@
     word-break: break-all;
     word-wrap: break-word;
 }
+
+.text-muted {
+    color: var(--bs-secondary-text) !important;
+}
