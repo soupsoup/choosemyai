@@ -8,11 +8,10 @@ from admin import admin
 import bleach
 import re
 import logging
+import json
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Configure bleach with allowed tags and attributes
 ALLOWED_TAGS = [
     'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'ul', 'ol', 'li', 'a', 'blockquote', 'code', 'pre'
@@ -43,7 +42,6 @@ def is_valid_image_url(url):
     return url.lower().endswith(image_extensions)
 
 def validate_media_urls(tool):
-    """Validate and log media URLs for a tool"""
     issues = []
     
     if tool.image_url:
@@ -243,6 +241,20 @@ def submit_tool():
             attributes=ALLOWED_ATTRIBUTES
         )
         
+        courses = []
+        course_titles = request.form.getlist('course_titles[]')
+        course_urls = request.form.getlist('course_urls[]')
+        for title, url in zip(course_titles, course_urls):
+            if title.strip() and url.strip():
+                courses.append({'title': title.strip(), 'url': url.strip()})
+        
+        tutorials = []
+        tutorial_titles = request.form.getlist('tutorial_titles[]')
+        tutorial_urls = request.form.getlist('tutorial_urls[]')
+        for title, url in zip(tutorial_titles, tutorial_urls):
+            if title.strip() and url.strip():
+                tutorials.append({'title': title.strip(), 'url': url.strip()})
+        
         tool = Tool()
         tool.name = request.form['name']
         tool.description = clean_description
@@ -251,8 +263,9 @@ def submit_tool():
         tool.youtube_url = youtube_url or None
         tool.user_id = current_user.id
         tool.is_approved = False
+        tool.courses = json.dumps(courses) if courses else None
+        tool.tutorials = json.dumps(tutorials) if tutorials else None
         
-        # Add selected categories
         selected_categories = Category.query.filter(Category.id.in_(category_ids)).all()
         tool.categories = selected_categories
         
@@ -276,7 +289,6 @@ def moderate_tools():
     
     pending_tools = Tool.query.filter_by(is_approved=False).order_by(Tool.created_at.desc()).all()
     
-    # Add debug logging for tools
     for tool in pending_tools:
         app.logger.info(f'Processing pending tool - ID: {tool.id}, Name: {tool.name}')
         app.logger.info(f'Categories: {[c.name for c in tool.categories]}')
@@ -364,7 +376,6 @@ def edit_tool(tool_id):
         tool.image_url = image_url or None
         tool.youtube_url = youtube_url or None
         
-        # Update categories
         selected_categories = Category.query.filter(Category.id.in_(category_ids)).all()
         tool.categories = selected_categories
         
