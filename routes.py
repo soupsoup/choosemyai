@@ -338,6 +338,7 @@ def edit_tool(tool_id):
         return redirect(url_for('index'))
     
     tool = Tool.query.get_or_404(tool_id)
+    app.logger.info(f'Edit tool - resources: {tool.resources}')
     categories = Category.query.all()
     
     if request.method == 'POST':
