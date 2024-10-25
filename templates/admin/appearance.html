@@ -16,7 +16,7 @@
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
                                            id="primary_color" name="primary_color" 
-                                           value="{{ settings.primary_color }}" title="Choose primary color">
+                                           value="{{ settings.primary_color }}">
                                     <input type="text" class="form-control" 
                                            value="{{ settings.primary_color }}" 
                                            data-color-input="primary_color" readonly>
@@ -30,7 +30,7 @@
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
                                            id="secondary_color" name="secondary_color" 
-                                           value="{{ settings.secondary_color }}" title="Choose secondary color">
+                                           value="{{ settings.secondary_color }}">
                                     <input type="text" class="form-control" 
                                            value="{{ settings.secondary_color }}" 
                                            data-color-input="secondary_color" readonly>
@@ -44,7 +44,7 @@
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
                                            id="background_color" name="background_color" 
-                                           value="{{ settings.background_color }}" title="Choose background color">
+                                           value="{{ settings.background_color }}">
                                     <input type="text" class="form-control" 
                                            value="{{ settings.background_color }}" 
                                            data-color-input="background_color" readonly>
@@ -58,7 +58,7 @@
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
                                            id="font_color" name="font_color" 
-                                           value="{{ settings.font_color }}" title="Choose font color">
+                                           value="{{ settings.font_color }}">
                                     <input type="text" class="form-control" 
                                            value="{{ settings.font_color }}" 
                                            data-color-input="font_color" readonly>
@@ -72,7 +72,7 @@
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
                                            id="header_background" name="header_background" 
-                                           value="{{ settings.header_background }}" title="Choose header background color">
+                                           value="{{ settings.header_background }}">
                                     <input type="text" class="form-control" 
                                            value="{{ settings.header_background }}" 
                                            data-color-input="header_background" readonly>
@@ -86,7 +86,7 @@
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
                                            id="secondary_text_color" name="secondary_text_color" 
-                                           value="{{ settings.secondary_text_color }}" title="Choose secondary text color">
+                                           value="{{ settings.secondary_text_color }}">
                                     <input type="text" class="form-control" 
                                            value="{{ settings.secondary_text_color }}" 
                                            data-color-input="secondary_text_color" readonly>
@@ -100,7 +100,7 @@
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
                                            id="placeholder_text_color" name="placeholder_text_color" 
-                                           value="{{ settings.placeholder_text_color }}" title="Choose placeholder text color">
+                                           value="{{ settings.placeholder_text_color }}">
                                     <input type="text" class="form-control" 
                                            value="{{ settings.placeholder_text_color }}" 
                                            data-color-input="placeholder_text_color" readonly>
@@ -135,7 +135,7 @@
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="reset" class="btn btn-secondary" id="resetButton">Reset</button>
+                        <button type="reset" class="btn btn-secondary">Reset</button>
                     </div>
                 </form>
             </div>
@@ -145,33 +145,28 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('appearanceForm');
-    const initialValues = {};
-    
-    // Store initial values for reset
+    // Color picker functionality
     document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
-        initialValues[colorPicker.id] = colorPicker.value;
-    });
-    initialValues['font_family'] = document.getElementById('font_family').value;
-    
-    // Handle color picker changes
-    document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
-        // Handle both input and change events
-        ['input', 'change'].forEach(eventType => {
-            colorPicker.addEventListener(eventType, function() {
-                const textInput = document.querySelector(`input[data-color-input="${this.id}"]`);
-                if (textInput) {
-                    textInput.value = this.value.toUpperCase();
-                }
-            });
+        colorPicker.addEventListener('input', function() {
+            const textInput = document.querySelector(`input[data-color-input="${this.id}"]`);
+            if (textInput) {
+                textInput.value = this.value.toUpperCase();
+            }
         });
     });
 
-    // Handle form reset
+    // Reset functionality
+    const form = document.getElementById('appearanceForm');
+    const initialValues = {};
+    
+    // Store initial values
+    document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
+        initialValues[colorPicker.id] = colorPicker.value;
+    });
+    
+    // Handle reset
     form.addEventListener('reset', function(e) {
-        // Use setTimeout to ensure this runs after the default reset behavior
         setTimeout(() => {
-            // Reset color pickers and their text inputs
             document.querySelectorAll('input[type="color"]').forEach(colorPicker => {
                 colorPicker.value = initialValues[colorPicker.id];
                 const textInput = document.querySelector(`input[data-color-input="${colorPicker.id}"]`);
@@ -179,17 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     textInput.value = initialValues[colorPicker.id].toUpperCase();
                 }
             });
-            
-            // Reset font family select
-            document.getElementById('font_family').value = initialValues['font_family'];
         }, 0);
-    });
-
-    // Handle form submission
-    form.addEventListener('submit', function(e) {
-        const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
     });
 });
 </script>
