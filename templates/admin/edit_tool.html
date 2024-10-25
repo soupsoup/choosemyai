@@ -15,7 +15,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="6" required>{{ tool.description }}</textarea>
+                        <textarea class="form-control" id="description" name="description" rows="6" required>{{ tool.description|safe }}</textarea>
                         <small class="text-muted">Basic HTML formatting is allowed (e.g., &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;)</small>
                     </div>
                     <div class="mb-3">
@@ -39,22 +39,26 @@
                     <div class="mb-3">
                         <label class="form-label">Learning Resources</label>
                         <div id="resources-container">
-                            {% if tool_resources %}
-                                {% for resource in tool_resources %}
-                                <div class="resource-entry mb-2">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="resource_titles[]" 
-                                               value="{{ resource.title }}"
-                                               placeholder="Resource Title">
-                                        <input type="url" class="form-control" name="resource_urls[]" 
-                                               value="{{ resource.url }}"
-                                               placeholder="Resource URL">
-                                        <button type="button" class="btn btn-danger remove-entry" 
-                                                onclick="removeEntry(this)">Remove</button>
+                            {% if tool.resources %}
+                                {% set resources = tool.resources|safe %}
+                                {% if resources %}
+                                    {% for resource in resources|tojson|safe %}
+                                    <div class="resource-entry mb-2">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="resource_titles[]" 
+                                                   value="{{ resource.title }}"
+                                                   placeholder="Resource Title">
+                                            <input type="url" class="form-control" name="resource_urls[]" 
+                                                   value="{{ resource.url }}"
+                                                   placeholder="Resource URL">
+                                            <button type="button" class="btn btn-danger remove-entry" 
+                                                    onclick="removeEntry(this)">Remove</button>
+                                        </div>
                                     </div>
-                                </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
                             {% else %}
+                                <!-- Default empty resource entry -->
                                 <div class="resource-entry mb-2">
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="resource_titles[]" 
