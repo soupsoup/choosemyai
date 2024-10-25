@@ -40,8 +40,9 @@
                         <label class="form-label">Learning Resources</label>
                         <div id="resources-container">
                             {% if tool.resources %}
-                                {% try %}
-                                    {% for resource in tool.resources|tojson|safe|from_json %}
+                                {% set resources = tool.resources|tojson|safe|from_json %}
+                                {% if resources %}
+                                    {% for resource in resources %}
                                     <div class="resource-entry mb-2">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="resource_titles[]" 
@@ -55,8 +56,7 @@
                                         </div>
                                     </div>
                                     {% endfor %}
-                                {% except %}
-                                    <!-- Handle invalid JSON -->
+                                {% else %}
                                     <div class="resource-entry mb-2">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="resource_titles[]" 
@@ -67,9 +67,8 @@
                                                     onclick="removeEntry(this)">Remove</button>
                                         </div>
                                     </div>
-                                {% endtry %}
+                                {% endif %}
                             {% else %}
-                                <!-- Default empty resource entry -->
                                 <div class="resource-entry mb-2">
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="resource_titles[]" 
