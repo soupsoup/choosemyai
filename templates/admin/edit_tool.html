@@ -40,9 +40,9 @@
                         <label class="form-label">Learning Resources</label>
                         <div id="resources-container">
                             {% if tool.resources %}
-                                {% set resources = tool.resources|tojson|safe|from_json %}
+                                {% set resources = tool.resources|safe %}
                                 {% if resources %}
-                                    {% for resource in resources %}
+                                    {% for resource in resources|tojson|safe %}
                                     <div class="resource-entry mb-2">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="resource_titles[]" 
