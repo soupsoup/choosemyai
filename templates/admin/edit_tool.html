@@ -15,7 +15,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="6" required>{{ tool.description|safe }}</textarea>
+                        <textarea class="form-control" id="description" name="description" rows="6" required>{{ tool.description|striptags }}</textarea>
                         <small class="text-muted">Basic HTML formatting is allowed (e.g., &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;)</small>
                     </div>
                     <div class="mb-3">
@@ -40,16 +40,16 @@
                         <label class="form-label">Learning Resources</label>
                         <div id="resources-container">
                             {% if tool.resources %}
-                                {% set resources = tool.resources|tojson|safe|from_json %}
+                                {% set resources = tool.resources|parse_json %}
                                 {% if resources %}
                                     {% for resource in resources %}
                                     <div class="resource-entry mb-2">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="resource_titles[]" 
-                                                   value="{{ resource['title'] }}"
+                                                   value="{{ resource.title }}"
                                                    placeholder="Resource Title">
                                             <input type="url" class="form-control" name="resource_urls[]" 
-                                                   value="{{ resource['url'] }}"
+                                                   value="{{ resource.url }}"
                                                    placeholder="Resource URL">
                                             <button type="button" class="btn btn-danger remove-entry" 
                                                     onclick="removeEntry(this)">Remove</button>

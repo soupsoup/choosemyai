@@ -24,6 +24,13 @@ ALLOWED_ATTRIBUTES = {
 app.register_blueprint(auth)
 app.register_blueprint(admin)
 
+@app.template_filter('parse_json')
+def parse_json_filter(value):
+    try:
+        return json.loads(value) if value else []
+    except:
+        return []
+
 def is_valid_youtube_url(url):
     if not url:
         return True
@@ -338,7 +345,6 @@ def edit_tool(tool_id):
         return redirect(url_for('index'))
     
     tool = Tool.query.get_or_404(tool_id)
-    app.logger.info(f'Edit tool - resources: {tool.resources}')
     categories = Category.query.all()
     
     if request.method == 'POST':
@@ -383,8 +389,6 @@ def edit_tool(tool_id):
         tool.categories = selected_categories
         
         db.session.commit()
-        
-        app.logger.info(f'Tool updated - ID: {tool.id}, Name: {tool.name}, Categories: {[c.name for c in tool.categories]}')
         
         flash('Tool updated successfully!', 'success')
         return redirect(url_for('tool', tool_id=tool.id))
