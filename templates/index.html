@@ -64,6 +64,11 @@
                 <div class="card h-100 tool-card">
                     <div class="card-body">
                         <h5 class="card-title">{{ tool.name }}</h5>
+                        {% if tool.image_url %}
+                        <div class='mt-2 mb-3'>
+                            <img src='{{ tool.image_url }}' alt='{{ tool.name }}' class='img-fluid rounded' style='max-height: 200px; width: 100%; object-fit: cover;'>
+                        </div>
+                        {% endif %}
                         <div class="d-flex flex-wrap gap-2 mb-2">
                             {% for category in tool.categories %}
                             <a href="{{ url_for('category', category_id=category.id) }}" 
