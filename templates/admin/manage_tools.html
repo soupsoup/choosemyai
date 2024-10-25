@@ -23,6 +23,7 @@
                                     <th>Categories</th>
                                     <th>Author</th>
                                     <th>Status</th>
+                                    <th>Created At</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,6 +49,7 @@
                                         <span class="badge bg-warning">Pending</span>
                                         {% endif %}
                                     </td>
+                                    <td>{{ tool.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
