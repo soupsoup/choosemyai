@@ -1,35 +1,3 @@
-/* Force button visibility */
-.btn,
-.btn-group .btn,
-.tool-card .btn,
-.card .btn,
-.navbar .btn,
-.dropdown-item {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: inline-flex !important;
-    align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-
-
-/* Ensure button groups are always visible */
-.btn-group {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: inline-flex !important; 
-}
-
-
-/* Override any hover states that might affect visibility */
-.tool-card:not(:hover) .btn,
-.card:not(:hover) .btn,
-.btn-group:not(:hover) .btn {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: inline-flex !important;
-} 
-
 .vote-arrow {
     cursor: pointer;
     transition: color 0.2s;
@@ -39,50 +7,12 @@
     color: var(--bs-primary);
 }
 
-/* Remove hover-only visibility for all buttons */
-.btn {
-    opacity: 1 !important;
-    display: inline-flex !important;
-    align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    transition: background-color 0.2s, transform 0.2s;
-    gap: 0.5rem;
-}
-
-/* Tool card styling without hover-dependent visibility */
 .tool-card {
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
     transition: transform 0.2s;
 }
 
-.tool-card .btn-group {
-    display: flex !important;
-    opacity: 1 !important;
-} 
-
-/* Ensure consistent button visibility in all contexts */
-.card .btn,
-.tool-card .btn,
-.btn-group .btn,
-.navbar .btn,
-.dropdown-item,
-.form-control,
-.input-group .btn {
-    opacity: 1 !important;
-    display: inline-flex !important;
-    visibility: visible !important;
-} 
-
-/* Button group spacing and visibility */
-.btn-group {
-    display: inline-flex !important;
-    opacity: 1 !important;
-    gap: 0.25rem;
-} 
-
-.btn-group .btn {
-    position: relative;
-    border-radius: var(--bs-border-radius) !important;
+.tool-card:hover {
+    transform: translateY(-2px);
 }
 
 .comment {
@@ -103,50 +33,5 @@
 }
 
 .text-muted {
-    color: var(--app-secondary-text) !important;
-}
-
-/* Form controls and input styling */
-.form-control,
-.form-select,
-.input-group-text {
-    opacity: 1 !important;
-    border: 1px solid rgb(0, 0, 0, 0.15) !important;
-}
-
-/* Input group styling */
-.input-group {
-    border-radius: var(--bs-border-radius);
-}
-
-/* Checkbox and radio visibility */
-.form-check-input {
-    opacity: 1 !important;
-    border: 1px solid rgb(0, 0, 0, 0.15) !important;
-}
-
-/* Card border visibility */
-.card {
-    border: 1px solid rgb(0, 0, 0, 0.15) !important;
-}
-
-/* Input focus states */
-.form-control:focus,
-.form-select:focus {
-    border-color: var(--bs-primary) !important;
-    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
-}
-
-/* Dropdown menu visibility */
-.dropdown-menu {
-    border: 1px solid rgb(210, 209, 209, 0.15) !important;
-    background-color: var(--bs-body-bg) !important;
-}
-
-.dropdown-item {
-    color: var(--bs-body-color) !important;
-}
-
-.dropdown-item:hover {
-    background-color: rgba(210, 209, 209, 0.1) !important;
+    color: var(--bs-secondary-text) !important;
 }
