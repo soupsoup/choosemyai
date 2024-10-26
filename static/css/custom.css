@@ -12,12 +12,14 @@
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
+
 /* Ensure button groups are always visible */
 .btn-group {
     opacity: 1 !important;
     visibility: visible !important;
-    display: inline-flex !important;
+    display: inline-flex !important; 
 }
+
 
 /* Override any hover states that might affect visibility */
 .tool-card:not(:hover) .btn,
@@ -26,7 +28,7 @@
     opacity: 1 !important;
     visibility: visible !important;
     display: inline-flex !important;
-}
+} 
 
 .vote-arrow {
     cursor: pointer;
@@ -47,10 +49,6 @@
     gap: 0.5rem;
 }
 
-.btn:hover {
-    transform: translateY(-1px);
-}
-
 /* Tool card styling without hover-dependent visibility */
 .tool-card {
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -60,7 +58,7 @@
 .tool-card .btn-group {
     display: flex !important;
     opacity: 1 !important;
-}
+} 
 
 /* Ensure consistent button visibility in all contexts */
 .card .btn,
@@ -73,14 +71,14 @@
     opacity: 1 !important;
     display: inline-flex !important;
     visibility: visible !important;
-}
+} 
 
 /* Button group spacing and visibility */
 .btn-group {
     display: inline-flex !important;
     opacity: 1 !important;
     gap: 0.25rem;
-}
+} 
 
 .btn-group .btn {
     position: relative;
@@ -113,7 +111,7 @@
 .form-select,
 .input-group-text {
     opacity: 1 !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgb(0, 0, 0, 0.15) !important;
 }
 
 /* Input group styling */
@@ -124,12 +122,12 @@
 /* Checkbox and radio visibility */
 .form-check-input {
     opacity: 1 !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgb(0, 0, 0, 0.15) !important;
 }
 
 /* Card border visibility */
 .card {
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgb(0, 0, 0, 0.15) !important;
 }
 
 /* Input focus states */
@@ -141,7 +139,7 @@
 
 /* Dropdown menu visibility */
 .dropdown-menu {
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgb(210, 209, 209, 0.15) !important;
     background-color: var(--bs-body-bg) !important;
 }
 
@@ -150,5 +148,5 @@
 }
 
 .dropdown-item:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: rgba(210, 209, 209, 0.1) !important;
 }
