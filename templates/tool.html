@@ -25,20 +25,18 @@
                             <i class="fa-solid fa-arrow-down vote-arrow" 
                                onclick="vote('tool', {{ tool.id }}, -1)"></i>
                         </div>
-                        {% if current_user.is_authenticated %}
-                            {% if current_user.is_admin %}
+                        {% if current_user.is_authenticated and current_user.is_admin %}
+                        <div class="btn-group">
                             <a href="{{ url_for('edit_tool', tool_id=tool.id) }}" 
                                class="btn btn-primary">
                                 <i class="fas fa-edit"></i> Edit Tool
                             </a>
-                            {% endif %}
-                            {% if current_user.is_moderator %}
                             <a href="{{ url_for('remove_tool', tool_id=tool.id) }}" 
                                class="btn btn-danger"
                                onclick="return confirm('Are you sure you want to permanently remove this tool?')">
                                 <i class="fas fa-trash"></i> Remove
                             </a>
-                            {% endif %}
+                        </div>
                         {% endif %}
                     </div>
                 </div>
