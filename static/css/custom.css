@@ -7,12 +7,36 @@
     color: var(--bs-primary);
 }
 
+/* Remove hover-only visibility for all buttons */
+.btn {
+    opacity: 1 !important;
+    display: inline-flex !important;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Tool card styling without hover-dependent visibility */
 .tool-card {
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
     transition: transform 0.2s;
 }
 
-.tool-card:hover {
-    transform: translateY(-2px);
+.tool-card .btn-group {
+    display: flex !important;
+    opacity: 1 !important;
+}
+
+/* Ensure consistent button visibility in all contexts */
+.card .btn,
+.tool-card .btn,
+.btn-group .btn {
+    opacity: 1 !important;
+    display: inline-flex !important;
 }
 
 .comment {
@@ -36,26 +60,12 @@
     color: var(--app-secondary-text) !important;
 }
 
-/* Always show buttons and input borders */
-.btn,
+/* Form controls and input styling */
 .form-control,
 .form-select,
 .input-group-text {
     opacity: 1 !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-/* Improved button visibility */
-.btn {
-    position: relative;
-    z-index: 1;
-}
-
-/* Improved input focus states */
-.form-control:focus,
-.form-select:focus {
-    border-color: var(--bs-primary) !important;
-    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 /* Input group styling */
@@ -66,15 +76,17 @@
 /* Checkbox and radio visibility */
 .form-check-input {
     opacity: 1 !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 /* Card border visibility */
 .card {
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Improved border contrast */
-.border {
-    border-color: rgba(255, 255, 255, 0.2) !important;
+/* Input focus states */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
 }
