@@ -35,3 +35,23 @@
 .text-muted {
     color: var(--bs-secondary-text) !important;
 }
+
+/* Always show buttons and input borders */
+.btn,
+.form-control,
+.input-group-text {
+    opacity: 1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Remove hover-only visibility */
+.btn:not(:hover),
+.form-control:not(:focus) {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Ensure consistent visibility */
+.form-control:focus {
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
