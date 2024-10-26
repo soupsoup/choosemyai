@@ -1,3 +1,33 @@
+/* Force button visibility */
+.btn,
+.btn-group .btn,
+.tool-card .btn,
+.card .btn,
+.navbar .btn,
+.dropdown-item {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-flex !important;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Ensure button groups are always visible */
+.btn-group {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-flex !important;
+}
+
+/* Override any hover states that might affect visibility */
+.tool-card:not(:hover) .btn,
+.card:not(:hover) .btn,
+.btn-group:not(:hover) .btn {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-flex !important;
+}
+
 .vote-arrow {
     cursor: pointer;
     transition: color 0.2s;
