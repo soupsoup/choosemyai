@@ -105,6 +105,16 @@ class AppearanceSettings(db.Model):
     font_family = db.Column(db.Text, default='system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif')
     header_background = db.Column(db.String(7), default='#212529')
     secondary_text_color = db.Column(db.String(7), default='#6c757d')
+    button_border_radius = db.Column(db.String(10), default='0.375rem')
+    button_border_width = db.Column(db.String(10), default='1px')
+    button_border_color = db.Column(db.String(7), default='#6c757d')
+    input_border_radius = db.Column(db.String(10), default='0.375rem')
+    input_border_width = db.Column(db.String(10), default='1px')
+    input_border_color = db.Column(db.String(7), default='#6c757d')
+    button_background_color = db.Column(db.String(7), default='#0d6efd')
+    tool_card_border_color = db.Column(db.String(7), default='#6c757d')
+    tool_card_border_width = db.Column(db.String(10), default='1px')
+    tool_card_border_style = db.Column(db.String(20), default='solid')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod

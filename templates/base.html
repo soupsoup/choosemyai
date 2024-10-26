@@ -27,19 +27,32 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
     {% if appearance_settings %}
     <style>
-        /* Override Bootstrap theme variables */
         :root {
             --bs-body-bg: {{ appearance_settings.background_color }} !important;
             --bs-body-color: {{ appearance_settings.font_color }} !important;
             --bs-primary: {{ appearance_settings.primary_color }};
             --bs-secondary: {{ appearance_settings.secondary_color }};
             --bs-body-font-family: {{ appearance_settings.font_family }};
-        }
-
-        /* Custom CSS variables */
-        :root {
+            
+            /* Custom CSS variables */
             --app-secondary-text: {{ appearance_settings.secondary_text_color }};
             --app-header-bg: {{ appearance_settings.header_background }};
+            
+            /* Button styles */
+            --app-button-border-radius: {{ appearance_settings.button_border_radius }};
+            --app-button-border-width: {{ appearance_settings.button_border_width }};
+            --app-button-border-color: {{ appearance_settings.button_border_color }};
+            --app-button-background: {{ appearance_settings.button_background_color }};
+            
+            /* Input field styles */
+            --app-input-border-radius: {{ appearance_settings.input_border_radius }};
+            --app-input-border-width: {{ appearance_settings.input_border_width }};
+            --app-input-border-color: {{ appearance_settings.input_border_color }};
+
+            /* Tool card styles */
+            --app-tool-card-border-color: {{ appearance_settings.tool_card_border_color }};
+            --app-tool-card-border-width: {{ appearance_settings.tool_card_border_width }};
+            --app-tool-card-border-style: {{ appearance_settings.tool_card_border_style }};
         }
 
         /* Apply styles */
@@ -53,31 +66,32 @@
             background-color: var(--app-header-bg) !important;
         }
 
-        /* Override Bootstrap components */
-        .btn-primary {
-            background-color: var(--bs-primary);
-            border-color: var(--bs-primary);
-        }
-
-        .btn-secondary {
-            background-color: var(--bs-secondary);
-            border-color: var(--bs-secondary);
-        }
-
-        .text-muted, .text-body-secondary {
-            color: var(--app-secondary-text) !important;
-        }
-
-        /* Dark theme specific overrides */
-        [data-bs-theme=dark] {
-            --bs-body-bg: {{ appearance_settings.background_color }} !important;
-            --bs-body-color: {{ appearance_settings.font_color }} !important;
-        }
-
         /* Card and form backgrounds */
         .card, .form-control, .btn {
             background-color: var(--bs-body-bg);
             border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Button styles */
+        .btn {
+            border-radius: var(--app-button-border-radius) !important;
+            border-width: var(--app-button-border-width) !important;
+            border-color: var(--app-button-border-color) !important;
+            background-color: var(--app-button-background) !important;
+        }
+
+        /* Input field styles */
+        .form-control {
+            border-radius: var(--app-input-border-radius) !important;
+            border-width: var(--app-input-border-width) !important;
+            border-color: var(--app-input-border-color) !important;
+        }
+
+        /* Tool card styles */
+        .tool-card {
+            border-color: var(--app-tool-card-border-color) !important;
+            border-width: var(--app-tool-card-border-width) !important;
+            border-style: var(--app-tool-card-border-style) !important;
         }
     </style>
     {% endif %}

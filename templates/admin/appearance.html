@@ -81,6 +81,107 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Button Appearance Section -->
+                    <div class="mb-4">
+                        <h5>Button Appearance</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Border Radius</label>
+                                <input type="text" class="form-control" name="button_border_radius" 
+                                       value="{{ settings.button_border_radius }}" placeholder="e.g., 0.375rem">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Border Width</label>
+                                <input type="text" class="form-control" name="button_border_width" 
+                                       value="{{ settings.button_border_width }}" placeholder="e.g., 1px">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Border Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="button_border_color" name="button_border_color" 
+                                           value="{{ settings.button_border_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.button_border_color }}" 
+                                           data-color-input="button_border_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Background Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="button_background_color" name="button_background_color" 
+                                           value="{{ settings.button_background_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.button_background_color }}" 
+                                           data-color-input="button_background_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Fields Appearance Section -->
+                    <div class="mb-4">
+                        <h5>Input Fields Appearance</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Border Radius</label>
+                                <input type="text" class="form-control" name="input_border_radius" 
+                                       value="{{ settings.input_border_radius }}" placeholder="e.g., 0.375rem">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Border Width</label>
+                                <input type="text" class="form-control" name="input_border_width" 
+                                       value="{{ settings.input_border_width }}" placeholder="e.g., 1px">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Border Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="input_border_color" name="input_border_color" 
+                                           value="{{ settings.input_border_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.input_border_color }}" 
+                                           data-color-input="input_border_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tool Cards Appearance Section -->
+                    <div class="mb-4">
+                        <h5>Tool Cards Appearance</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Border Width</label>
+                                <input type="text" class="form-control" name="tool_card_border_width" 
+                                       value="{{ settings.tool_card_border_width }}" placeholder="e.g., 1px">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Border Style</label>
+                                <select class="form-select" name="tool_card_border_style">
+                                    <option value="solid" {% if settings.tool_card_border_style == 'solid' %}selected{% endif %}>Solid</option>
+                                    <option value="dashed" {% if settings.tool_card_border_style == 'dashed' %}selected{% endif %}>Dashed</option>
+                                    <option value="dotted" {% if settings.tool_card_border_style == 'dotted' %}selected{% endif %}>Dotted</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Border Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="tool_card_border_color" name="tool_card_border_color" 
+                                           value="{{ settings.tool_card_border_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.tool_card_border_color }}" 
+                                           data-color-input="tool_card_border_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="font_family" class="form-label">Font Family</label>
@@ -115,12 +216,14 @@
 document.querySelectorAll('input[type="color"]').forEach(input => {
     input.addEventListener('input', (e) => {
         const textInput = document.querySelector(`[data-color-input="${e.target.id}"]`);
-        textInput.value = e.target.value;
+        if (textInput) {
+            textInput.value = e.target.value;
+        }
     });
 });
 
-document.getElementById('font_family').addEventListener('change', () => {
-    setTimeout(() => location.reload(), 500);
+document.getElementById('font_family').addEventListener('change', (e) => {
+    document.body.style.fontFamily = e.target.value;
 });
 </script>
 {% endblock %}

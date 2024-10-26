@@ -27,7 +27,7 @@ def change_password():
             flash('New passwords do not match.', 'danger')
             return redirect(url_for('admin.change_password'))
         
-        if len(new_password) < 6:
+        if not new_password or len(new_password) < 6:  # Fixed LSP warning by checking for None
             flash('Password must be at least 6 characters long.', 'danger')
             return redirect(url_for('admin.change_password'))
         
@@ -57,6 +57,16 @@ def appearance():
             settings.header_background = request.form.get('header_background')
             settings.secondary_text_color = request.form.get('secondary_text_color')
             settings.font_family = request.form.get('font_family')
+            settings.button_border_radius = request.form.get('button_border_radius')
+            settings.button_border_width = request.form.get('button_border_width')
+            settings.button_border_color = request.form.get('button_border_color')
+            settings.input_border_radius = request.form.get('input_border_radius')
+            settings.input_border_width = request.form.get('input_border_width')
+            settings.input_border_color = request.form.get('input_border_color')
+            settings.button_background_color = request.form.get('button_background_color')
+            settings.tool_card_border_color = request.form.get('tool_card_border_color')
+            settings.tool_card_border_width = request.form.get('tool_card_border_width')
+            settings.tool_card_border_style = request.form.get('tool_card_border_style')
             
             db.session.commit()
             flash('Appearance settings updated successfully!', 'success')
@@ -156,7 +166,7 @@ def import_tools():
             return redirect(url_for('admin.import_tools'))
         
         file = request.files['file']
-        if file.filename == '':
+        if not file or not file.filename:  # Fixed LSP warning by checking both file and filename
             flash('No file selected', 'danger')
             return redirect(url_for('admin.import_tools'))
         
