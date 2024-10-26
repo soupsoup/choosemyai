@@ -33,25 +33,48 @@
 }
 
 .text-muted {
-    color: var(--bs-secondary-text) !important;
+    color: var(--app-secondary-text) !important;
 }
 
 /* Always show buttons and input borders */
 .btn,
 .form-control,
+.form-select,
 .input-group-text {
     opacity: 1 !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-/* Remove hover-only visibility */
-.btn:not(:hover),
-.form-control:not(:focus) {
-    border-color: rgba(255, 255, 255, 0.2) !important;
+/* Improved button visibility */
+.btn {
+    position: relative;
+    z-index: 1;
 }
 
-/* Ensure consistent visibility */
-.form-control:focus {
+/* Improved input focus states */
+.form-control:focus,
+.form-select:focus {
     border-color: var(--bs-primary) !important;
-    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
+}
+
+/* Input group styling */
+.input-group {
+    border-radius: var(--bs-border-radius);
+}
+
+/* Checkbox and radio visibility */
+.form-check-input {
+    opacity: 1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Card border visibility */
+.card {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Improved border contrast */
+.border {
+    border-color: rgba(255, 255, 255, 0.2) !important;
 }
