@@ -89,4 +89,64 @@ def index():
     
     return render_template('index.html', tools=tools, categories=categories)
 
+@app.route('/submit-tool', methods=['GET', 'POST'])
+@login_required
+def submit_tool():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = bleach.clean(request.form.get('description'), tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+        url = request.form.get('url')
+        image_url = request.form.get('image_url')
+        youtube_url = request.form.get('youtube_url')
+        category_ids = request.form.getlist('categories')
+        
+        if not name or not description or not url or not category_ids:
+            flash('Please fill in all required fields', 'danger')
+            return redirect(url_for('submit_tool'))
+            
+        if youtube_url and not is_valid_youtube_url(youtube_url):
+            flash('Please enter a valid YouTube URL', 'danger')
+            return redirect(url_for('submit_tool'))
+            
+        if image_url and not is_valid_image_url(image_url):
+            flash('Please enter a valid image URL', 'danger')
+            return redirect(url_for('submit_tool'))
+            
+        tool = Tool()
+        tool.name = name
+        tool.description = description
+        tool.url = url
+        tool.image_url = image_url
+        tool.youtube_url = youtube_url
+        tool.user_id = current_user.id
+        
+        # Handle categories
+        categories = Category.query.filter(Category.id.in_(category_ids)).all()
+        if not categories:
+            flash('Please select at least one valid category', 'danger')
+            return redirect(url_for('submit_tool'))
+        tool.categories = categories
+        
+        # Handle resources
+        resource_titles = request.form.getlist('resource_titles[]')
+        resource_urls = request.form.getlist('resource_urls[]')
+        resources = []
+        for title, url in zip(resource_titles, resource_urls):
+            if title and url:
+                resources.append({'title': title, 'url': url})
+        tool.resources = json.dumps(resources)
+        
+        try:
+            db.session.add(tool)
+            db.session.commit()
+            flash('Tool submitted successfully! It will be reviewed by moderators.', 'success')
+            return redirect(url_for('index'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error submitting tool: {str(e)}', 'danger')
+            return redirect(url_for('submit_tool'))
+    
+    categories = Category.query.all()
+    return render_template('submit_tool.html', categories=categories)
+
 # Add other routes back...
