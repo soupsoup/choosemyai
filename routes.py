@@ -89,6 +89,33 @@ def index():
     
     return render_template('index.html', tools=tools, categories=categories)
 
+@app.route('/category/<int:category_id>')
+def category(category_id):
+    category = Category.query.get_or_404(category_id)
+    
+    search_query = request.args.get('search', '').strip()
+    sort_by = request.args.get('sort', 'votes')
+    
+    query = Tool.query.filter_by(is_approved=True).filter(Tool.categories.contains(category))
+    
+    if search_query:
+        query = query.filter(
+            or_(
+                Tool.name.ilike(f'%{search_query}%'),
+                Tool.description.ilike(f'%{search_query}%')
+            )
+        )
+    
+    if sort_by == 'votes':
+        query = query.join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
+                    .group_by(Tool.id)\
+                    .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))
+    else:
+        query = query.order_by(desc(Tool.created_at))
+    
+    tools = query.all()
+    return render_template('category.html', category=category, tools=tools)
+
 @app.route('/submit-tool', methods=['GET', 'POST'])
 @login_required
 def submit_tool():
