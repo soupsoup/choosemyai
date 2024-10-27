@@ -131,6 +131,31 @@ def tool(tool_id):
     
     return render_template('tool.html', tool=tool, comments=comments, similar_tools=similar_tools)
 
+@app.route('/add-comment/<int:tool_id>', methods=['POST'])
+@login_required
+def add_comment(tool_id):
+    tool = Tool.query.get_or_404(tool_id)
+    content = bleach.clean(request.form.get('content') or '', tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+    
+    if not content:
+        flash('Comment cannot be empty', 'danger')
+        return redirect(url_for('tool', tool_id=tool_id))
+    
+    comment = Comment()
+    comment.content = content
+    comment.tool_id = tool_id
+    comment.user_id = current_user.id
+    
+    try:
+        db.session.add(comment)
+        db.session.commit()
+        flash('Comment added successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error adding comment: {str(e)}', 'danger')
+    
+    return redirect(url_for('tool', tool_id=tool_id))
+
 @app.route('/submit-tool', methods=['GET', 'POST'])
 @login_required
 def submit_tool():
