@@ -57,131 +57,85 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="header_background" class="form-label">Header Background</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="header_background" name="header_background" 
-                                       value="{{ settings.header_background }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.header_background }}" 
-                                       data-color-input="header_background" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="secondary_text_color" class="form-label">Secondary Text Color</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" 
-                                       id="secondary_text_color" name="secondary_text_color" 
-                                       value="{{ settings.secondary_text_color }}">
-                                <input type="text" class="form-control" 
-                                       value="{{ settings.secondary_text_color }}" 
-                                       data-color-input="secondary_text_color" readonly>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Button Appearance Section -->
+                    <!-- New Link and Navigation Colors Section -->
                     <div class="mb-4">
-                        <h5>Button Appearance</h5>
+                        <h5>Link and Navigation Colors</h5>
                         <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Border Radius</label>
-                                <input type="text" class="form-control" name="button_border_radius" 
-                                       value="{{ settings.button_border_radius }}" placeholder="e.g., 0.375rem">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Border Width</label>
-                                <input type="text" class="form-control" name="button_border_width" 
-                                       value="{{ settings.button_border_width }}" placeholder="e.g., 1px">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Border Color</label>
+                            <div class="col-md-6">
+                                <label class="form-label">Link Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
-                                           id="button_border_color" name="button_border_color" 
-                                           value="{{ settings.button_border_color }}">
+                                           id="link_color" name="link_color" 
+                                           value="{{ settings.link_color }}">
                                     <input type="text" class="form-control" 
-                                           value="{{ settings.button_border_color }}" 
-                                           data-color-input="button_border_color" readonly>
+                                           value="{{ settings.link_color }}" 
+                                           data-color-input="link_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Link Hover Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="link_hover_color" name="link_hover_color" 
+                                           value="{{ settings.link_hover_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.link_hover_color }}" 
+                                           data-color-input="link_hover_color" readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Background Color</label>
+                            <div class="col-md-6">
+                                <label class="form-label">Category Badge Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
-                                           id="button_background_color" name="button_background_color" 
-                                           value="{{ settings.button_background_color }}">
+                                           id="category_badge_color" name="category_badge_color" 
+                                           value="{{ settings.category_badge_color }}">
                                     <input type="text" class="form-control" 
-                                           value="{{ settings.button_background_color }}" 
-                                           data-color-input="button_background_color" readonly>
+                                           value="{{ settings.category_badge_color }}" 
+                                           data-color-input="category_badge_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Category Badge Hover Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="category_badge_hover_color" name="category_badge_hover_color" 
+                                           value="{{ settings.category_badge_hover_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.category_badge_hover_color }}" 
+                                           data-color-input="category_badge_hover_color" readonly>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Input Fields Appearance Section -->
-                    <div class="mb-4">
-                        <h5>Input Fields Appearance</h5>
                         <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Border Radius</label>
-                                <input type="text" class="form-control" name="input_border_radius" 
-                                       value="{{ settings.input_border_radius }}" placeholder="e.g., 0.375rem">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Border Width</label>
-                                <input type="text" class="form-control" name="input_border_width" 
-                                       value="{{ settings.input_border_width }}" placeholder="e.g., 1px">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Border Color</label>
+                            <div class="col-md-6">
+                                <label class="form-label">Nav Link Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
-                                           id="input_border_color" name="input_border_color" 
-                                           value="{{ settings.input_border_color }}">
+                                           id="nav_link_color" name="nav_link_color" 
+                                           value="{{ settings.nav_link_color }}">
                                     <input type="text" class="form-control" 
-                                           value="{{ settings.input_border_color }}" 
-                                           data-color-input="input_border_color" readonly>
+                                           value="{{ settings.nav_link_color }}" 
+                                           data-color-input="nav_link_color" readonly>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Tool Cards Appearance Section -->
-                    <div class="mb-4">
-                        <h5>Tool Cards Appearance</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Border Width</label>
-                                <input type="text" class="form-control" name="tool_card_border_width" 
-                                       value="{{ settings.tool_card_border_width }}" placeholder="e.g., 1px">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Border Style</label>
-                                <select class="form-select" name="tool_card_border_style">
-                                    <option value="solid" {% if settings.tool_card_border_style == 'solid' %}selected{% endif %}>Solid</option>
-                                    <option value="dashed" {% if settings.tool_card_border_style == 'dashed' %}selected{% endif %}>Dashed</option>
-                                    <option value="dotted" {% if settings.tool_card_border_style == 'dotted' %}selected{% endif %}>Dotted</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Border Color</label>
+                            <div class="col-md-6">
+                                <label class="form-label">Nav Link Hover Color</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
-                                           id="tool_card_border_color" name="tool_card_border_color" 
-                                           value="{{ settings.tool_card_border_color }}">
+                                           id="nav_link_hover_color" name="nav_link_hover_color" 
+                                           value="{{ settings.nav_link_hover_color }}">
                                     <input type="text" class="form-control" 
-                                           value="{{ settings.tool_card_border_color }}" 
-                                           data-color-input="tool_card_border_color" readonly>
+                                           value="{{ settings.nav_link_hover_color }}" 
+                                           data-color-input="nav_link_hover_color" readonly>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Rest of the existing form fields... -->
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="font_family" class="form-label">Font Family</label>

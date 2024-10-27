@@ -115,6 +115,12 @@ class AppearanceSettings(db.Model):
     tool_card_border_color = db.Column(db.String(7), default='#6c757d')
     tool_card_border_width = db.Column(db.String(10), default='1px')
     tool_card_border_style = db.Column(db.String(20), default='solid')
+    link_color = db.Column(db.String(7), default='#0d6efd')
+    link_hover_color = db.Column(db.String(7), default='#0a58ca')
+    category_badge_color = db.Column(db.String(7), default='#6c757d')
+    category_badge_hover_color = db.Column(db.String(7), default='#5c636a')
+    nav_link_color = db.Column(db.String(7), default='#ffffff')
+    nav_link_hover_color = db.Column(db.String(7), default='#e9ecef')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod

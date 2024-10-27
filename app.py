@@ -41,8 +41,6 @@ with app.app_context():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    db.create_all()
-
 # Import and register other blueprints
 from routes import *  # noqa: F401, E402
 from api import api  # Import the API blueprint

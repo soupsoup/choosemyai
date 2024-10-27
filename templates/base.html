@@ -2,24 +2,7 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L8DR42XFLV"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-L8DR42XFLV');
-    </script>
-    <!-- END Google tag (gtag.js) -->
-    <!-- Plausible analytics tag -->
-    <script defer data-domain="choosemyai.com" src="https://plausible.io/js/script.outbound-links.pageview-props.tagged-events.js"></script>
-    <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-    <!-- END Plausible analytics tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name='impact-site-verification' value='61d8b66d-26b4-427e-af56-f522e7b988fe'>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1587060587484049"
-         crossorigin="anonymous"></script>
     <title>AI Tools Directory</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&display=swap" rel="stylesheet">
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
@@ -37,6 +20,14 @@
             /* Custom CSS variables */
             --app-secondary-text: {{ appearance_settings.secondary_text_color }};
             --app-header-bg: {{ appearance_settings.header_background }};
+            
+            /* Link and Navigation Colors */
+            --app-link-color: {{ appearance_settings.link_color }};
+            --app-link-hover-color: {{ appearance_settings.link_hover_color }};
+            --app-category-badge-color: {{ appearance_settings.category_badge_color }};
+            --app-category-badge-hover-color: {{ appearance_settings.category_badge_hover_color }};
+            --app-nav-link-color: {{ appearance_settings.nav_link_color }};
+            --app-nav-link-hover-color: {{ appearance_settings.nav_link_hover_color }};
             
             /* Button styles */
             --app-button-border-radius: {{ appearance_settings.button_border_radius }};
@@ -64,6 +55,33 @@
 
         .navbar {
             background-color: var(--app-header-bg) !important;
+        }
+
+        /* Link styles */
+        a {
+            color: var(--app-link-color);
+        }
+
+        a:hover {
+            color: var(--app-link-hover-color);
+        }
+
+        /* Category badge styles */
+        .badge.bg-secondary {
+            background-color: var(--app-category-badge-color) !important;
+        }
+
+        .badge.bg-secondary:hover {
+            background-color: var(--app-category-badge-hover-color) !important;
+        }
+
+        /* Navigation link styles */
+        .navbar-nav .nav-link {
+            color: var(--app-nav-link-color) !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--app-nav-link-hover-color) !important;
         }
 
         /* Card and form backgrounds */
