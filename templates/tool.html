@@ -33,7 +33,7 @@
                             </a>
                             {% endif %}
                             {% if current_user.is_moderator %}
-                            <a href="{{ url_for('remove_tool', tool_id=tool.id) }}" 
+                            <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='reject') }}" 
                                class="btn btn-danger"
                                onclick="return confirm('Are you sure you want to permanently remove this tool?')">
                                 <i class="fas fa-trash"></i> Remove
@@ -160,9 +160,9 @@
             </div>
             <div class="list-group list-group-flush">
                 {% for similar_tool in similar_tools %}
-                <a href="{{ url_for('tool', tool_id=similar_tool.id) }}" 
+                <a href="{{ url_for('tool', tool_id=similar_tool.Tool.id) }}" 
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    {{ similar_tool.name }}
+                    {{ similar_tool.Tool.name }}
                     <span class="badge bg-primary rounded-pill">{{ similar_tool.vote_count }}</span>
                 </a>
                 {% endfor %}
