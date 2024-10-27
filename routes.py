@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from app import app, db
 from models import Category, Tool, Comment, ToolVote, CommentVote, AppearanceSettings
 from sqlalchemy import desc, func, or_
-from auth import auth
+from api import api
 from admin import admin
 import bleach
 import re
@@ -20,9 +20,6 @@ ALLOWED_ATTRIBUTES = {
     'a': ['href', 'title'],
     '*': ['class']
 }
-
-app.register_blueprint(auth)
-app.register_blueprint(admin)
 
 @app.template_filter('parse_json')
 def parse_json_filter(value):
