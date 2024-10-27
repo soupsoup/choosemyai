@@ -124,7 +124,7 @@ def tool(tool_id):
     ).group_by(
         Tool.id
     ).order_by(
-        desc('vote_count')
+        desc(func.coalesce(func.sum(ToolVote.value), 0))  # Order directly by the sum instead of the label
     ).limit(5)
 
     similar_tools = similar_tools_query.all()
