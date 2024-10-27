@@ -94,7 +94,7 @@ def index():
 def submit_tool():
     if request.method == 'POST':
         name = request.form.get('name')
-        description = bleach.clean(request.form.get('description'), tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+        description = bleach.clean(request.form.get('description') or '', tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
         url = request.form.get('url')
         image_url = request.form.get('image_url')
         youtube_url = request.form.get('youtube_url')
@@ -148,5 +148,42 @@ def submit_tool():
     
     categories = Category.query.all()
     return render_template('submit_tool.html', categories=categories)
+
+@app.route('/moderate-tools')
+@login_required
+def moderate_tools():
+    if not current_user.is_moderator:
+        flash('Access denied. Moderator rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tools = Tool.query.filter_by(is_approved=False).order_by(Tool.created_at.desc()).all()
+    return render_template('moderate_tools.html', tools=tools)
+
+@app.route('/moderate-tool/<int:tool_id>/<string:action>')
+@login_required
+def moderate_tool(tool_id, action):
+    if not current_user.is_moderator:
+        flash('Access denied. Moderator rights required.', 'danger')
+        return redirect(url_for('index'))
+        
+    tool = Tool.query.get_or_404(tool_id)
+    
+    if action == 'approve':
+        tool.is_approved = True
+        flash('Tool approved successfully!', 'success')
+    elif action == 'reject':
+        db.session.delete(tool)
+        flash('Tool rejected successfully!', 'success')
+    else:
+        flash('Invalid action!', 'danger')
+        return redirect(url_for('moderate_tools'))
+        
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error: {str(e)}', 'danger')
+        
+    return redirect(url_for('moderate_tools'))
 
 # Add other routes back...
