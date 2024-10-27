@@ -161,30 +161,45 @@ def import_tools():
             return redirect(url_for('admin.import_tools'))
         
         try:
-            tools_data = json.loads(file.read().decode('utf-8'))
+            content = file.read().decode('utf-8')
+            tools_data = json.loads(content)
+            
+            # Ensure tools_data is a list
+            if isinstance(tools_data, dict):
+                tools_data = [tools_data]
+            elif not isinstance(tools_data, list):
+                raise ValueError("Invalid JSON format: must be an array or object of tools")
+            
             for tool_data in tools_data:
+                if not isinstance(tool_data, dict):
+                    continue
+                    
                 tool = Tool()
-                tool.name = tool_data['name']
-                tool.description = tool_data['description']
-                tool.url = tool_data['url']
-                tool.image_url = tool_data.get('image_url')
-                tool.youtube_url = tool_data.get('youtube_url')
+                tool.name = str(tool_data.get('name', ''))
+                tool.description = str(tool_data.get('description', ''))
+                tool.url = str(tool_data.get('url', ''))
+                tool.image_url = str(tool_data.get('image_url', '')) or None
+                tool.youtube_url = str(tool_data.get('youtube_url', '')) or None
                 tool.resources = json.dumps(tool_data.get('resources', []))
                 tool.user_id = current_user.id
                 tool.is_approved = True
                 
                 # Handle categories
                 categories = []
-                for cat_name in tool_data.get('categories', []):
-                    category = Category.query.filter_by(name=cat_name).first()
-                    if category:
-                        categories.append(category)
+                cat_names = tool_data.get('categories', [])
+                if isinstance(cat_names, list):
+                    for cat_name in cat_names:
+                        category = Category.query.filter_by(name=str(cat_name)).first()
+                        if category:
+                            categories.append(category)
                 tool.categories = categories
                 
                 db.session.add(tool)
             
             db.session.commit()
             flash('Tools imported successfully!', 'success')
+        except json.JSONDecodeError:
+            flash('Invalid JSON file format', 'danger')
         except Exception as e:
             db.session.rollback()
             flash(f'Error importing tools: {str(e)}', 'danger')
