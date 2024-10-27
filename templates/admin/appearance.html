@@ -46,6 +46,19 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <label for="header_background" class="form-label">Header Background Color</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color" 
+                                       id="header_background" name="header_background" 
+                                       value="{{ settings.header_background }}">
+                                <input type="text" class="form-control" 
+                                       value="{{ settings.header_background }}" 
+                                       data-color-input="header_background" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="font_color" class="form-label">Font Color</label>
                             <div class="input-group">
                                 <input type="color" class="form-control form-control-color" 
@@ -56,9 +69,20 @@
                                        data-color-input="font_color" readonly>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <label for="secondary_text_color" class="form-label">Secondary Text Color</label>
+                            <div class="input-group">
+                                <input type="color" class="form-control form-control-color" 
+                                       id="secondary_text_color" name="secondary_text_color" 
+                                       value="{{ settings.secondary_text_color }}">
+                                <input type="text" class="form-control" 
+                                       value="{{ settings.secondary_text_color }}" 
+                                       data-color-input="secondary_text_color" readonly>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- New Link and Navigation Colors Section -->
+                    <!-- Link and Navigation Colors Section -->
                     <div class="mb-4">
                         <h5>Link and Navigation Colors</h5>
                         <div class="row mb-3">
@@ -135,7 +159,6 @@
                         </div>
                     </div>
 
-                    <!-- Rest of the existing form fields... -->
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="font_family" class="form-label">Font Family</label>
