@@ -9,26 +9,26 @@
             </div>
             <div class="card-body">
                 <form method="POST">
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="name" class="form-label">Tool Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ tool.name }}" required>
+                        <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ tool.name }}" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="6" required>{{ tool.description|striptags }}</textarea>
+                        <textarea class="form-control" id="description" name="description" rows="8" required>{{ tool.description|striptags }}</textarea>
                         <small class="text-muted">Basic HTML formatting is allowed (e.g., &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;)</small>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="url" class="form-label">Website URL</label>
                         <input type="url" class="form-control" id="url" name="url" value="{{ tool.url }}" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="image_url" class="form-label">Image URL (optional)</label>
                         <input type="url" class="form-control" id="image_url" name="image_url" 
                                value="{{ tool.image_url or '' }}" placeholder="Enter URL of an image that represents your tool">
                         <small class="text-muted">Provide a URL to an image that showcases your tool</small>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="youtube_url" class="form-label">YouTube Video URL (optional)</label>
                         <input type="url" class="form-control" id="youtube_url" name="youtube_url" 
                                value="{{ tool.youtube_url or '' }}" placeholder="Enter YouTube video URL">
@@ -36,14 +36,14 @@
                     </div>
 
                     <!-- Learning Resources Section -->
-                    <div class="mb-3">
-                        <label class="form-label">Learning Resources</label>
+                    <div class="mb-4">
+                        <label class="form-label h5">Learning Resources</label>
                         <div id="resources-container">
                             {% if tool.resources %}
                                 {% set resources = tool.resources|parse_json %}
                                 {% if resources %}
                                     {% for resource in resources %}
-                                    <div class="resource-entry mb-2">
+                                    <div class="resource-entry mb-3">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="resource_titles[]" 
                                                    value="{{ resource.title }}"
@@ -58,7 +58,7 @@
                                     {% endfor %}
                                 {% endif %}
                             {% endif %}
-                            <div class="resource-entry mb-2">
+                            <div class="resource-entry mb-3">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="resource_titles[]" 
                                            placeholder="Resource Title">
@@ -69,13 +69,13 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-secondary mt-2" 
+                        <button type="button" class="btn btn-secondary mt-3" 
                                 onclick="addResource()">Add Resource</button>
-                        <small class="text-muted d-block mt-1">Add links to helpful tutorials, courses, or other learning materials</small>
+                        <small class="text-muted d-block mt-2">Add links to helpful tutorials, courses, or other learning materials</small>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Categories</label>
+                    <div class="mb-4">
+                        <label class="form-label h5">Categories</label>
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             {% for category in categories %}
                             <div class="col">
@@ -92,8 +92,10 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="{{ url_for('tool', tool_id=tool.id) }}" class="btn btn-secondary">Cancel</a>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                        <a href="{{ url_for('tool', tool_id=tool.id) }}" class="btn btn-secondary btn-lg">Cancel</a>
+                    </div>
                 </form>
             </div>
         </div>
@@ -104,7 +106,7 @@
 function addResource() {
     const container = document.getElementById('resources-container');
     const entry = document.createElement('div');
-    entry.className = 'resource-entry mb-2';
+    entry.className = 'resource-entry mb-3';
     entry.innerHTML = `
         <div class="input-group">
             <input type="text" class="form-control" name="resource_titles[]" 
