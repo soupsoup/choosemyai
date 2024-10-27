@@ -15,43 +15,30 @@
             --bs-body-color: {{ appearance_settings.font_color }} !important;
             --bs-primary: {{ appearance_settings.primary_color }};
             --bs-secondary: {{ appearance_settings.secondary_color }};
-            --bs-body-font-family: {{ appearance_settings.font_family }};
+            --bs-body-font-family: {{ appearance_settings.font_family|safe }};
             
             /* Custom CSS variables */
             --app-secondary-text: {{ appearance_settings.secondary_text_color }};
             --app-header-bg: {{ appearance_settings.header_background }};
             --app-button-text-color: {{ appearance_settings.button_text_color }};
+            --app-button-hover-text-color: {{ appearance_settings.button_hover_text_color }};
             
             /* Link and Navigation Colors */
             --app-link-color: {{ appearance_settings.link_color }};
             --app-link-hover-color: {{ appearance_settings.link_hover_color }};
-            --app-category-badge-color: {{ appearance_settings.category_badge_color }};
-            --app-category-badge-hover-color: {{ appearance_settings.category_badge_hover_color }};
             --app-nav-link-color: {{ appearance_settings.nav_link_color }};
             --app-nav-link-hover-color: {{ appearance_settings.nav_link_hover_color }};
             
             /* Button styles */
-            --app-button-border-radius: {{ appearance_settings.button_border_radius }};
-            --app-button-border-width: {{ appearance_settings.button_border_width }};
-            --app-button-border-color: {{ appearance_settings.button_border_color }};
             --app-button-background: {{ appearance_settings.button_background_color }};
-            
-            /* Input field styles */
-            --app-input-border-radius: {{ appearance_settings.input_border_radius }};
-            --app-input-border-width: {{ appearance_settings.input_border_width }};
-            --app-input-border-color: {{ appearance_settings.input_border_color }};
-
-            /* Tool card styles */
-            --app-tool-card-border-color: {{ appearance_settings.tool_card_border_color }};
-            --app-tool-card-border-width: {{ appearance_settings.tool_card_border_width }};
-            --app-tool-card-border-style: {{ appearance_settings.tool_card_border_style }};
+            --app-button-hover-background: {{ appearance_settings.button_hover_background_color }};
         }
 
         /* Apply styles */
         body {
+            font-family: var(--bs-body-font-family) !important;
             background-color: var(--bs-body-bg) !important;
             color: var(--bs-body-color) !important;
-            font-family: var(--bs-body-font-family) !important;
         }
 
         .navbar {
@@ -67,15 +54,6 @@
             color: var(--app-link-hover-color);
         }
 
-        /* Category badge styles */
-        .badge.bg-secondary {
-            background-color: var(--app-category-badge-color) !important;
-        }
-
-        .badge.bg-secondary:hover {
-            background-color: var(--app-category-badge-hover-color) !important;
-        }
-
         /* Navigation link styles */
         .navbar-nav .nav-link {
             color: var(--app-nav-link-color) !important;
@@ -85,33 +63,16 @@
             color: var(--app-nav-link-hover-color) !important;
         }
 
-        /* Card and form backgrounds */
-        .card, .form-control, .btn {
-            background-color: var(--bs-body-bg);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
         /* Button styles */
         .btn-primary {
-            border-radius: var(--app-button-border-radius) !important;
-            border-width: var(--app-button-border-width) !important;
-            border-color: var(--app-button-border-color) !important;
             background-color: var(--app-button-background) !important;
             color: var(--app-button-text-color) !important;
+            border-color: transparent !important;
         }
 
-        /* Input field styles */
-        .form-control {
-            border-radius: var(--app-input-border-radius) !important;
-            border-width: var(--app-input-border-width) !important;
-            border-color: var(--app-input-border-color) !important;
-        }
-
-        /* Tool card styles */
-        .tool-card {
-            border-color: var(--app-tool-card-border-color) !important;
-            border-width: var(--app-tool-card-border-width) !important;
-            border-style: var(--app-tool-card-border-style) !important;
+        .btn-primary:hover {
+            background-color: var(--app-button-hover-background) !important;
+            color: var(--app-button-hover-text-color) !important;
         }
     </style>
     {% endif %}
