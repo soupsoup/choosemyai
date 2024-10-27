@@ -109,44 +109,27 @@ def tool(tool_id):
     comments = query.all()
     
     # Get similar tools from the same categories
-    similar_tools = Tool.query.filter(Tool.id != tool_id, Tool.is_approved == True)\
-                            .join(Tool.categories)\
-                            .filter(Category.id.in_([c.id for c in tool.categories]))\
-                            .distinct()\
-                            .join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
-                            .group_by(Tool.id)\
-                            .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))\
-                            .limit(5)\
-                            .all()
+    similar_tools_query = Tool.query.with_entities(
+        Tool,
+        func.coalesce(func.sum(ToolVote.value), 0).label('vote_count')
+    ).filter(
+        Tool.id != tool_id,
+        Tool.is_approved == True
+    ).join(
+        Tool.categories
+    ).filter(
+        Category.id.in_([c.id for c in tool.categories])
+    ).outerjoin(
+        ToolVote
+    ).group_by(
+        Tool.id
+    ).order_by(
+        desc('vote_count')
+    ).limit(5)
+
+    similar_tools = similar_tools_query.all()
     
     return render_template('tool.html', tool=tool, comments=comments, similar_tools=similar_tools)
-
-@app.route('/category/<int:category_id>')
-def category(category_id):
-    category = Category.query.get_or_404(category_id)
-    
-    search_query = request.args.get('search', '').strip()
-    sort_by = request.args.get('sort', 'votes')
-    
-    query = Tool.query.filter_by(is_approved=True).filter(Tool.categories.contains(category))
-    
-    if search_query:
-        query = query.filter(
-            or_(
-                Tool.name.ilike(f'%{search_query}%'),
-                Tool.description.ilike(f'%{search_query}%')
-            )
-        )
-    
-    if sort_by == 'votes':
-        query = query.join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
-                    .group_by(Tool.id)\
-                    .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))
-    else:
-        query = query.order_by(desc(Tool.created_at))
-    
-    tools = query.all()
-    return render_template('category.html', category=category, tools=tools)
 
 @app.route('/submit-tool', methods=['GET', 'POST'])
 @login_required
@@ -256,7 +239,7 @@ def edit_tool(tool_id):
     
     if request.method == 'POST':
         name = request.form.get('name')
-        description = bleach.clean(request.form.get('description'), tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+        description = bleach.clean(request.form.get('description') or '', tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
         url = request.form.get('url')
         image_url = request.form.get('image_url')
         youtube_url = request.form.get('youtube_url')
@@ -307,3 +290,30 @@ def edit_tool(tool_id):
     
     categories = Category.query.all()
     return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+
+@app.route('/category/<int:category_id>')
+def category(category_id):
+    category = Category.query.get_or_404(category_id)
+    
+    search_query = request.args.get('search', '').strip()
+    sort_by = request.args.get('sort', 'votes')
+    
+    query = Tool.query.filter_by(is_approved=True).filter(Tool.categories.contains(category))
+    
+    if search_query:
+        query = query.filter(
+            or_(
+                Tool.name.ilike(f'%{search_query}%'),
+                Tool.description.ilike(f'%{search_query}%')
+            )
+        )
+    
+    if sort_by == 'votes':
+        query = query.join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
+                    .group_by(Tool.id)\
+                    .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))
+    else:
+        query = query.order_by(desc(Tool.created_at))
+    
+    tools = query.all()
+    return render_template('category.html', category=category, tools=tools)
