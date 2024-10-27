@@ -15,7 +15,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="8" required>{{ tool.description }}</textarea>
+                        <textarea class="form-control" id="description" name="description" rows="8" required>{{ tool.description|e }}</textarea>
                         <small class="text-muted">Basic HTML formatting is allowed (e.g., &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;)</small>
                     </div>
                     <div class="mb-4">
