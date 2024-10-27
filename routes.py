@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, jsonify, flash, send_file
+from flask import render_template, request, redirect, url_for, jsonify, flash, send_from_directory, send_file
 from flask_login import current_user, login_required
 from app import app, db
 from models import Category, Tool, Comment, ToolVote, CommentVote, AppearanceSettings
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 
 @app.route('/ads.txt')
 def serve_ads_txt():
-    return send_file('static/ads.txt', mimetype='text/plain')
+    return send_from_directory('static', 'ads.txt', mimetype='text/plain')
 
 ALLOWED_TAGS = [
     'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -88,6 +88,38 @@ def index():
     categories = Category.query.all()
     
     return render_template('index.html', tools=tools, categories=categories)
+
+@app.route('/tool/<int:tool_id>')
+def tool(tool_id):
+    tool = Tool.query.get_or_404(tool_id)
+    if not tool.is_approved and not (current_user.is_authenticated and (current_user.is_moderator or current_user.id == tool.user_id)):
+        flash('This tool is not yet approved.', 'warning')
+        return redirect(url_for('index'))
+    
+    sort_by = request.args.get('sort', 'votes')
+    query = Comment.query.filter_by(tool_id=tool_id)
+    
+    if sort_by == 'votes':
+        query = query.join(CommentVote, Comment.id == CommentVote.comment_id, isouter=True)\
+                    .group_by(Comment.id)\
+                    .order_by(desc(func.coalesce(func.sum(CommentVote.value), 0)))
+    else:
+        query = query.order_by(desc(Comment.created_at))
+    
+    comments = query.all()
+    
+    # Get similar tools from the same categories
+    similar_tools = Tool.query.filter(Tool.id != tool_id, Tool.is_approved == True)\
+                            .join(Tool.categories)\
+                            .filter(Category.id.in_([c.id for c in tool.categories]))\
+                            .distinct()\
+                            .join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
+                            .group_by(Tool.id)\
+                            .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))\
+                            .limit(5)\
+                            .all()
+    
+    return render_template('tool.html', tool=tool, comments=comments, similar_tools=similar_tools)
 
 @app.route('/category/<int:category_id>')
 def category(category_id):
@@ -212,5 +244,3 @@ def moderate_tool(tool_id, action):
         flash(f'Error: {str(e)}', 'danger')
         
     return redirect(url_for('moderate_tools'))
-
-# Add other routes back...
