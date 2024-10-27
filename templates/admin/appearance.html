@@ -9,6 +9,33 @@
             </div>
             <div class="card-body">
                 <form method="POST">
+                    <!-- Typography Section -->
+                    <div class="mb-4">
+                        <h5>Typography</h5>
+                        <div class="mb-3">
+                            <label for="font_family" class="form-label">Font Family</label>
+                            <select class="form-select" id="font_family" name="font_family">
+                                <option value="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" 
+                                        {% if settings.font_family == "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" %}selected{% endif %}>
+                                    System Default
+                                </option>
+                                <option value="'Roboto', sans-serif"
+                                        {% if settings.font_family == "'Roboto', sans-serif" %}selected{% endif %}>
+                                    Roboto
+                                </option>
+                                <option value="'Open Sans', sans-serif"
+                                        {% if settings.font_family == "'Open Sans', sans-serif" %}selected{% endif %}>
+                                    Open Sans
+                                </option>
+                                <option value="'Lato', sans-serif"
+                                        {% if settings.font_family == "'Lato', sans-serif" %}selected{% endif %}>
+                                    Lato
+                                </option>
+                            </select>
+                            <small class="text-muted">Select the main font family for the website</small>
+                        </div>
+                    </div>
+
                     <!-- Basic Colors Section -->
                     <div class="mb-4">
                         <h5>Basic Colors</h5>
