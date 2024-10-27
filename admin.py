@@ -85,4 +85,63 @@ def appearance():
     
     return render_template('admin/appearance.html', settings=settings)
 
-# Rest of the code remains unchanged...
+@admin.route('/admin/categories')
+@login_required
+def categories():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    categories = Category.query.all()
+    return render_template('admin/categories.html', categories=categories)
+
+@admin.route('/admin/add-category', methods=['POST'])
+@login_required
+def add_category():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    name = request.form.get('name')
+    description = request.form.get('description')
+    
+    if not name or not description:
+        flash('Both name and description are required.', 'danger')
+        return redirect(url_for('admin.categories'))
+    
+    if Category.query.filter_by(name=name).first():
+        flash('A category with this name already exists.', 'danger')
+        return redirect(url_for('admin.categories'))
+    
+    category = Category()
+    category.name = name
+    category.description = description
+    
+    try:
+        db.session.add(category)
+        db.session.commit()
+        flash('Category added successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error adding category: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.categories'))
+
+@admin.route('/admin/remove-category/<int:category_id>', methods=['POST'])
+@login_required
+def remove_category(category_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    category = Category.query.get_or_404(category_id)
+    
+    try:
+        db.session.delete(category)
+        db.session.commit()
+        flash('Category removed successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error removing category: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.categories'))
