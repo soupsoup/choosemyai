@@ -7,38 +7,6 @@ import json
 
 admin = Blueprint('admin', __name__)
 
-@admin.route('/admin/change-password', methods=['GET', 'POST'])
-@login_required
-def change_password():
-    if not current_user.is_admin:
-        flash('Access denied. Admin rights required.', 'danger')
-        return redirect(url_for('index'))
-    
-    if request.method == 'POST':
-        current_password = request.form.get('current_password')
-        new_password = request.form.get('new_password')
-        confirm_password = request.form.get('confirm_password')
-        
-        if not current_user.check_password(current_password):
-            flash('Current password is incorrect.', 'danger')
-            return redirect(url_for('admin.change_password'))
-        
-        if new_password != confirm_password:
-            flash('New passwords do not match.', 'danger')
-            return redirect(url_for('admin.change_password'))
-        
-        if not new_password or len(new_password) < 6:
-            flash('Password must be at least 6 characters long.', 'danger')
-            return redirect(url_for('admin.change_password'))
-        
-        current_user.set_password(new_password)
-        db.session.commit()
-        
-        flash('Password changed successfully!', 'success')
-        return redirect(url_for('index'))
-    
-    return render_template('admin/change_password.html')
-
 @admin.route('/admin/appearance', methods=['GET', 'POST'])
 @login_required
 def appearance():
@@ -57,21 +25,18 @@ def appearance():
             settings.header_background = request.form.get('header_background')
             settings.secondary_text_color = request.form.get('secondary_text_color')
             settings.font_family = request.form.get('font_family')
-            settings.button_border_radius = request.form.get('button_border_radius')
-            settings.button_border_width = request.form.get('button_border_width')
-            settings.button_border_color = request.form.get('button_border_color')
-            settings.input_border_radius = request.form.get('input_border_radius')
-            settings.input_border_width = request.form.get('input_border_width')
-            settings.input_border_color = request.form.get('input_border_color')
+            
+            # Button styles
             settings.button_background_color = request.form.get('button_background_color')
+            settings.button_hover_background_color = request.form.get('button_hover_background_color')
             settings.button_text_color = request.form.get('button_text_color')
-            settings.tool_card_border_color = request.form.get('tool_card_border_color')
-            settings.tool_card_border_width = request.form.get('tool_card_border_width')
-            settings.tool_card_border_style = request.form.get('tool_card_border_style')
+            settings.button_hover_text_color = request.form.get('button_hover_text_color')
+            
+            # Link colors
             settings.link_color = request.form.get('link_color')
             settings.link_hover_color = request.form.get('link_hover_color')
-            settings.category_badge_color = request.form.get('category_badge_color')
-            settings.category_badge_hover_color = request.form.get('category_badge_hover_color')
+            
+            # Navigation colors
             settings.nav_link_color = request.form.get('nav_link_color')
             settings.nav_link_hover_color = request.form.get('nav_link_hover_color')
             
@@ -207,3 +172,35 @@ def export_tools():
         tools_data.append(tool_data)
     
     return jsonify(tools_data)
+
+@admin.route('/admin/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        if not current_user.check_password(current_password):
+            flash('Current password is incorrect.', 'danger')
+            return redirect(url_for('admin.change_password'))
+        
+        if new_password != confirm_password:
+            flash('New passwords do not match.', 'danger')
+            return redirect(url_for('admin.change_password'))
+        
+        if not new_password or len(new_password) < 6:
+            flash('Password must be at least 6 characters long.', 'danger')
+            return redirect(url_for('admin.change_password'))
+        
+        current_user.set_password(new_password)
+        db.session.commit()
+        
+        flash('Password changed successfully!', 'success')
+        return redirect(url_for('index'))
+    
+    return render_template('admin/change_password.html')
