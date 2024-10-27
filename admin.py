@@ -139,12 +139,57 @@ def remove_category(category_id):
     
     return redirect(url_for('admin.categories'))
 
-@admin.route('/admin/import-tools')
+@admin.route('/admin/import-tools', methods=['GET', 'POST'])
 @login_required
 def import_tools():
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file selected', 'danger')
+            return redirect(url_for('admin.import_tools'))
+        
+        file = request.files['file']
+        if file.filename == '':
+            flash('No file selected', 'danger')
+            return redirect(url_for('admin.import_tools'))
+        
+        if not file.filename.endswith('.json'):
+            flash('Only JSON files are allowed', 'danger')
+            return redirect(url_for('admin.import_tools'))
+        
+        try:
+            tools_data = json.loads(file.read().decode('utf-8'))
+            for tool_data in tools_data:
+                tool = Tool()
+                tool.name = tool_data['name']
+                tool.description = tool_data['description']
+                tool.url = tool_data['url']
+                tool.image_url = tool_data.get('image_url')
+                tool.youtube_url = tool_data.get('youtube_url')
+                tool.resources = json.dumps(tool_data.get('resources', []))
+                tool.user_id = current_user.id
+                tool.is_approved = True
+                
+                # Handle categories
+                categories = []
+                for cat_name in tool_data.get('categories', []):
+                    category = Category.query.filter_by(name=cat_name).first()
+                    if category:
+                        categories.append(category)
+                tool.categories = categories
+                
+                db.session.add(tool)
+            
+            db.session.commit()
+            flash('Tools imported successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error importing tools: {str(e)}', 'danger')
+        
+        return redirect(url_for('admin.import_tools'))
     
     return render_template('admin/import_tools.html')
 
