@@ -85,6 +85,34 @@ def appearance():
     
     return render_template('admin/appearance.html', settings=settings)
 
+@admin.route('/admin/manage-tools')
+@login_required
+def manage_tools():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tools = Tool.query.order_by(Tool.created_at.desc()).all()
+    return render_template('admin/manage_tools.html', tools=tools)
+
+@admin.route('/admin/delete-tools', methods=['POST'])
+@login_required
+def delete_tools():
+    if not current_user.is_admin:
+        return jsonify({'error': 'Access denied'}), 403
+    
+    tool_ids = request.form.getlist('tool_ids')
+    if not tool_ids:
+        return jsonify({'error': 'No tools selected'}), 400
+    
+    try:
+        Tool.query.filter(Tool.id.in_(tool_ids)).delete(synchronize_session=False)
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
 @admin.route('/admin/categories')
 @login_required
 def categories():
@@ -145,3 +173,37 @@ def remove_category(category_id):
         flash(f'Error removing category: {str(e)}', 'danger')
     
     return redirect(url_for('admin.categories'))
+
+@admin.route('/admin/import-tools')
+@login_required
+def import_tools():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    return render_template('admin/import_tools.html')
+
+@admin.route('/admin/export-tools')
+@login_required
+def export_tools():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tools = Tool.query.all()
+    tools_data = []
+    
+    for tool in tools:
+        tool_data = {
+            'name': tool.name,
+            'description': tool.description,
+            'url': tool.url,
+            'image_url': tool.image_url,
+            'youtube_url': tool.youtube_url,
+            'categories': [cat.name for cat in tool.categories],
+            'resources': json.loads(tool.resources) if tool.resources else [],
+            'created_at': tool.created_at.isoformat()
+        }
+        tools_data.append(tool_data)
+    
+    return jsonify(tools_data)
