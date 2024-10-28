@@ -5,7 +5,7 @@
     <div class="col-md-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Blog Posts</h2>
-            <a href="{{ url_for('blog.create_blog_post') }}" class="btn btn-primary">
+            <a href="{{ url_for('blog.create_post') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> New Blog Post
             </a>
         </div>
@@ -26,7 +26,7 @@
                     {% for post in blog_posts %}
                     <tr>
                         <td>
-                            <a href="{{ url_for('blog.edit_blog_post', post_id=post.id) }}">
+                            <a href="{{ url_for('blog.edit_post', post_id=post.id) }}">
                                 {{ post.title }}
                             </a>
                         </td>
@@ -41,22 +41,22 @@
                         <td>{{ post.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
                         <td>
                             <div class="btn-group">
-                                <a href="{{ url_for('blog.edit_blog_post', post_id=post.id) }}" 
+                                <a href="{{ url_for('blog.edit_post', post_id=post.id) }}" 
                                    class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
-                                <a href="{{ url_for('blog.delete_blog_post', post_id=post.id) }}" 
+                                <a href="{{ url_for('blog.delete_post', post_id=post.id) }}" 
                                    class="btn btn-sm btn-danger"
                                    onclick="return confirm('Are you sure you want to delete this blog post?')">
                                     <i class="fas fa-trash"></i> Delete
                                 </a>
                                 {% if post.published %}
-                                <a href="{{ url_for('blog.toggle_blog_post', post_id=post.id) }}" 
+                                <a href="{{ url_for('blog.toggle_post', post_id=post.id) }}" 
                                    class="btn btn-sm btn-warning">
                                     <i class="fas fa-eye-slash"></i> Unpublish
                                 </a>
                                 {% else %}
-                                <a href="{{ url_for('blog.toggle_blog_post', post_id=post.id) }}" 
+                                <a href="{{ url_for('blog.toggle_post', post_id=post.id) }}" 
                                    class="btn btn-sm btn-success">
                                     <i class="fas fa-eye"></i> Publish
                                 </a>

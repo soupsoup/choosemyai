@@ -39,9 +39,9 @@ def blog_posts():
     posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
     return render_template('admin/blog_posts.html', blog_posts=posts)
 
-@blog.route('/admin/blog-post/create', methods=['GET', 'POST'])
+@blog.route('/blog/create', methods=['GET', 'POST'])
 @login_required
-def create_blog_post():
+def create_post():
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
@@ -55,7 +55,7 @@ def create_blog_post():
         
         if not title or not content:
             flash('Title and content are required.', 'danger')
-            return redirect(url_for('blog.create_blog_post'))
+            return redirect(url_for('blog.create_post'))
         
         post = BlogPost()
         post.title = title
@@ -74,13 +74,13 @@ def create_blog_post():
         except Exception as e:
             db.session.rollback()
             flash(f'Error creating blog post: {str(e)}', 'danger')
-            return redirect(url_for('blog.create_blog_post'))
+            return redirect(url_for('blog.create_post'))
     
     return render_template('admin/blog_post_form.html', post=None)
 
-@blog.route('/admin/blog-post/<int:post_id>/edit', methods=['GET', 'POST'])
+@blog.route('/blog/edit/<int:post_id>', methods=['GET', 'POST'])
 @login_required
-def edit_blog_post(post_id):
+def edit_post(post_id):
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
@@ -96,7 +96,7 @@ def edit_blog_post(post_id):
         
         if not title or not content:
             flash('Title and content are required.', 'danger')
-            return redirect(url_for('blog.edit_blog_post', post_id=post_id))
+            return redirect(url_for('blog.edit_post', post_id=post_id))
         
         try:
             post.title = title
@@ -113,13 +113,13 @@ def edit_blog_post(post_id):
         except Exception as e:
             db.session.rollback()
             flash(f'Error updating blog post: {str(e)}', 'danger')
-            return redirect(url_for('blog.edit_blog_post', post_id=post_id))
+            return redirect(url_for('blog.edit_post', post_id=post_id))
     
     return render_template('admin/blog_post_form.html', post=post)
 
-@blog.route('/admin/blog-post/<int:post_id>/delete')
+@blog.route('/blog/delete/<int:post_id>')
 @login_required
-def delete_blog_post(post_id):
+def delete_post(post_id):
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
@@ -136,9 +136,9 @@ def delete_blog_post(post_id):
     
     return redirect(url_for('blog.blog_posts'))
 
-@blog.route('/admin/blog-post/<int:post_id>/toggle')
+@blog.route('/blog/toggle/<int:post_id>')
 @login_required
-def toggle_blog_post(post_id):
+def toggle_post(post_id):
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
