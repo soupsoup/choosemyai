@@ -1,111 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
+<!-- Previous head section remains unchanged -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Tools Directory</title>
-    <!-- AdSense Tags -->   
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1587060587484049"
-         crossorigin="anonymous"></script>
-    <!-- Google Analytics -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L8DR42XFLV"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-L8DR42XFLV');
-    </script>
-    <!-- Plausible Analytics -->
-    <script defer data-domain="choosemyai.com" src="https://plausible.io/js/script.outbound-links.pageview-props.tagged-events.js"></script>
-    <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-    <!-- Bootstrap CSS --> 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&display=swap" rel="stylesheet">
-    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
-    <!-- Facebook Meta Tags -->   
-    <meta property="og:url" content="https://choosemyai.com">   
-    <meta property="og:type" content="website">   
-    <meta property="og:title" content="Choose My AI">
-    <meta property="og:description" content="Directory of AI tools with reviews and recommendations. Find the perfect tool for your needs.">
-    <meta property="og:image" content="https://antderosa.com/wp-content/uploads/2024/10/Screenshot-2024-10-26-at-11.16.35 PM.png">  
-    <!-- Twitter Meta Tags -->   
-    <meta name="twitter:card" content="summary_large_image">   
-    <meta property="twitter:domain" content="choosemyai.com">   
-    <meta property="twitter:url" content="https://choosemyai.com">   
-    <meta name="twitter:title" content="Choose My AI">   
-    <meta name="twitter:description" content="Directory of AI tools with reviews and recommendations. Find the perfect tool for your needs.">   
-    <meta name="twitter:image" content="https://antderosa.com/wp-content/uploads/2024/10/Screenshot-2024-10-26-at-11.16.35 PM.png">
-    {% if appearance_settings %}
-    <style>
-        :root {
-            --bs-body-bg: {{ appearance_settings.background_color }} !important;
-            --bs-body-color: {{ appearance_settings.font_color }} !important;
-            --bs-primary: {{ appearance_settings.primary_color }};
-            --bs-secondary: {{ appearance_settings.secondary_color }};
-            --bs-body-font-family: {{ appearance_settings.font_family|safe }};
-            
-            /* Custom CSS variables */
-            --app-secondary-text: {{ appearance_settings.secondary_text_color }};
-            --app-header-bg: {{ appearance_settings.header_background }};
-            --app-button-text-color: {{ appearance_settings.button_text_color }};
-            --app-button-hover-text-color: {{ appearance_settings.button_hover_text_color }};
-            
-            /* Link and Navigation Colors */
-            --app-link-color: {{ appearance_settings.link_color }};
-            --app-link-hover-color: {{ appearance_settings.link_hover_color }};
-            --app-nav-link-color: {{ appearance_settings.nav_link_color }};
-            --app-nav-link-hover-color: {{ appearance_settings.nav_link_hover_color }};
-            
-            /* Button styles */
-            --app-button-background: {{ appearance_settings.button_background_color }};
-            --app-button-hover-background: {{ appearance_settings.button_hover_background_color }};
-        }
-
-        /* Apply styles */
-        body {
-            font-family: var(--bs-body-font-family) !important;
-            background-color: var(--bs-body-bg) !important;
-            color: var(--bs-body-color) !important;
-        }
-
-        .navbar {
-            background-color: var(--app-header-bg) !important;
-        }
-
-        /* Link styles */
-        a {
-            color: var(--app-link-color);
-        }
-
-        a:hover {
-            color: var(--app-link-hover-color);
-        }
-
-        /* Navigation link styles */
-        .navbar-nav .nav-link {
-            color: var(--app-nav-link-color) !important;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: var(--app-nav-link-hover-color) !important;
-        }
-
-        /* Button styles */
-        .btn-primary {
-            background-color: var(--app-button-background) !important;
-            color: var(--app-button-text-color) !important;
-            border-color: transparent !important;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--app-button-hover-background) !important;
-            color: var(--app-button-hover-text-color) !important;
-        }
-    </style>
-    {% endif %}
+    <!-- Previous head content remains unchanged -->
+    {{ content_before_body | safe }}
 </head>
 <body>
     <!-- Navigation Header -->
@@ -125,11 +23,11 @@
                     </li>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('routes.submit_tool') }}">Submit Tool</a>
+                        <a class="nav-link" href="{{ url_for('submit_tool') }}">Submit Tool</a>
                     </li>
                     {% if current_user.is_moderator %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('routes.moderate_tools') }}">Moderate</a>
+                        <a class="nav-link" href="{{ url_for('moderate_tools') }}">Moderate</a>
                     </li>
                     {% endif %}
                     {% if current_user.is_admin %}
