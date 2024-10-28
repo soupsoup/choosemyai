@@ -39,9 +39,9 @@ def blog_posts():
     posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
     return render_template('admin/blog_posts.html', blog_posts=posts)
 
-@blog.route('/blog/create', methods=['GET', 'POST'])
+@blog.route('/admin/blog/create', methods=['GET', 'POST'])
 @login_required
-def create_post():
+def create_blog_post():
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
@@ -55,7 +55,7 @@ def create_post():
         
         if not title or not content:
             flash('Title and content are required.', 'danger')
-            return redirect(url_for('blog.create_post'))
+            return redirect(url_for('blog.create_blog_post'))
         
         post = BlogPost()
         post.title = title
@@ -74,7 +74,7 @@ def create_post():
         except Exception as e:
             db.session.rollback()
             flash(f'Error creating blog post: {str(e)}', 'danger')
-            return redirect(url_for('blog.create_post'))
+            return redirect(url_for('blog.create_blog_post'))
     
     return render_template('admin/blog_post_form.html', post=None)
 
