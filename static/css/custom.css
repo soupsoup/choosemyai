@@ -42,8 +42,8 @@ body {
     color: var(--nav-link-hover-color) !important;
 }
 
-/* Container styles */
-.card {
+/* Container and card styles */
+.card, .tool-card, .blog-post-card, .comment-card {
     background-color: var(--container-background-color) !important;
     border-color: var(--container-border-color) !important;
 }
@@ -57,12 +57,23 @@ body {
     background-color: var(--container-background-color) !important;
 }
 
-.tool-container, .comment-container, .blog-container {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
+.search-container, .search-box {
+    background-color: var(--search-box-background-color) !important;
+    border-color: var(--search-box-border-color) !important;
 }
 
-.list-group-item {
+.category-badge {
+    background-color: var(--category-item-background-color) !important;
+    color: var(--category-item-text-color) !important;
+}
+
+.category-badge:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
+}
+
+/* List group and dropdown styles */
+.list-group-item, .dropdown-menu {
     background-color: var(--container-background-color) !important;
     border-color: var(--container-border-color) !important;
     color: var(--font-color) !important;
@@ -80,20 +91,9 @@ body {
     color: var(--font-color) !important;
 }
 
-.search-container, .search-box {
-    background-color: var(--search-box-background-color) !important;
-    border-color: var(--search-box-border-color) !important;
-}
-
 .form-control:focus, .form-select:focus {
     border-color: var(--primary-color) !important;
     box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25) !important;
-}
-
-.input-group-text {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
-    color: var(--font-color) !important;
 }
 
 /* Button styles */
@@ -116,18 +116,6 @@ a {
 
 a:hover {
     color: var(--link-hover-color);
-}
-
-/* Category badges */
-.badge {
-    background-color: var(--category-item-background-color) !important;
-    color: var(--category-item-text-color) !important;
-    transition: all 0.3s ease;
-}
-
-.badge:hover {
-    background-color: var(--category-item-hover-color) !important;
-    color: var(--category-item-hover-text-color) !important;
 }
 
 /* Tables */
