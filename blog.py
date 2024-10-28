@@ -19,7 +19,7 @@ ALLOWED_ATTRIBUTES = {
 @blog.route('/blog')
 def index():
     posts = BlogPost.query.filter_by(published=True).order_by(BlogPost.created_at.desc()).all()
-    return render_template('blog/index.html', posts=posts)
+    return render_template('admin/blog/index.html', posts=posts)
 
 @blog.route('/blog/<slug>')
 def post(slug):
@@ -27,9 +27,9 @@ def post(slug):
     if not post.published and not (current_user.is_authenticated and current_user.is_admin):
         flash('This blog post is not published yet.', 'warning')
         return redirect(url_for('blog.index'))
-    return render_template('blog/post.html', post=post)
+    return render_template('admin/blog/post.html', post=post)
 
-@blog.route('/admin/blog-posts')
+@blog.route('/admin/blog')
 @login_required
 def blog_posts():
     if not current_user.is_admin:
@@ -37,7 +37,7 @@ def blog_posts():
         return redirect(url_for('index'))
     
     posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
-    return render_template('admin/blog_posts.html', blog_posts=posts)
+    return render_template('admin/blog/blog_posts.html', blog_posts=posts)
 
 @blog.route('/admin/blog/create', methods=['GET', 'POST'])
 @login_required
@@ -76,7 +76,7 @@ def create_blog_post():
             flash(f'Error creating blog post: {str(e)}', 'danger')
             return redirect(url_for('blog.create_blog_post'))
     
-    return render_template('admin/blog_post_form.html', post=None)
+    return render_template('admin/blog/blog_post_form.html', post=None)
 
 @blog.route('/blog/edit/<int:post_id>', methods=['GET', 'POST'])
 @login_required
@@ -115,7 +115,7 @@ def edit_post(post_id):
             flash(f'Error updating blog post: {str(e)}', 'danger')
             return redirect(url_for('blog.edit_post', post_id=post_id))
     
-    return render_template('admin/blog_post_form.html', post=post)
+    return render_template('admin/blog/blog_post_form.html', post=post)
 
 @blog.route('/blog/delete/<int:post_id>')
 @login_required

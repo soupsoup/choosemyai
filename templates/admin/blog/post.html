@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <article class="blog-post">
+            <h1 class="mb-4">{{ post.title }}</h1>
+            
+            <div class="blog-post-meta text-muted mb-4">
+                <span>
+                    <i class="fas fa-user"></i>
+                    {{ post.author.username }}
+                </span>
+                <span class="ms-3">
+                    <i class="fas fa-calendar"></i>
+                    {{ post.created_at.strftime('%B %d, %Y') }}
+                </span>
+                {% if post.updated_at != post.created_at %}
+                <span class="ms-3">
+                    <i class="fas fa-edit"></i>
+                    Updated {{ post.updated_at.strftime('%B %d, %Y') }}
+                </span>
+                {% endif %}
+            </div>
+            
+            {% if post.featured_image %}
+            <div class="blog-post-image mb-4">
+                <img src="{{ post.featured_image }}" alt="{{ post.title }}" 
+                     class="img-fluid rounded">
+            </div>
+            {% endif %}
+            
+            {% if post.excerpt %}
+            <div class="blog-post-excerpt mb-4">
+                <p class="lead">{{ post.excerpt }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="blog-post-content">
+                {{ post.content|safe }}
+            </div>
+        </article>
+        
+        {% if current_user.is_admin %}
+        <div class="mt-4">
+            <a href="{{ url_for('blog.edit_post', post_id=post.id) }}" 
+               class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit Post
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
