@@ -125,11 +125,11 @@
                     </li>
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('submit_tool') }}">Submit Tool</a>
+                        <a class="nav-link" href="{{ url_for('routes.submit_tool') }}">Submit Tool</a>
                     </li>
                     {% if current_user.is_moderator %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('moderate_tools') }}">Moderate</a>
+                        <a class="nav-link" href="{{ url_for('routes.moderate_tools') }}">Moderate</a>
                     </li>
                     {% endif %}
                     {% if current_user.is_admin %}
