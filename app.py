@@ -1,49 +1,33 @@
-import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from sqlalchemy.orm import DeclarativeBase
-
-class Base(DeclarativeBase):
-    pass
-
-db = SQLAlchemy(model_class=Base)
-login_manager = LoginManager()
+import os
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Setup configuration
-app.secret_key = os.environ.get("FLASK_SECRET_KEY") or "ai-tools-directory-secret-key"
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_recycle": 300,
-    "pool_pre_ping": True,
-}
-app.config['WTF_CSRF_ENABLED'] = True  # Re-enable CSRF protection
-
-# Initialize the app with the extensions
-db.init_app(app)
+db = SQLAlchemy(app)
+login_manager = LoginManager()
 login_manager.init_app(app)
-
-# Import blueprints before setting login_view
-from auth import auth  # noqa: F401, E402
-app.register_blueprint(auth)
-
-# Set login_view after auth blueprint is registered
 login_manager.login_view = 'auth.login'
-login_manager.login_message_category = 'info'
 
-with app.app_context():
-    import models  # noqa: F401
+@login_manager.user_loader
+def load_user(user_id):
     from models import User
+    return User.query.get(int(user_id))
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
+from auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint)
 
-# Import and register other blueprints
-from routes import *  # noqa: F401, E402
-from api import api  # Import the API blueprint
-from admin import admin  # Import the admin blueprint
-app.register_blueprint(api)  # Register the API blueprint
-app.register_blueprint(admin)  # Register the admin blueprint
+from admin import admin as admin_blueprint
+app.register_blueprint(admin_blueprint)
+
+from api import api as api_blueprint
+app.register_blueprint(api_blueprint)
+
+from blog import blog as blog_blueprint
+app.register_blueprint(blog_blueprint)
+
+import routes

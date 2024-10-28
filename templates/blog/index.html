@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="mb-4">Blog</h1>
+        
+        {% if posts %}
+        <div class="blog-posts">
+            {% for post in posts %}
+            <article class="blog-post-preview card mb-4">
+                <div class="row g-0">
+                    {% if post.featured_image %}
+                    <div class="col-md-4">
+                        <img src="{{ post.featured_image }}" alt="{{ post.title }}" 
+                             class="img-fluid rounded-start h-100 object-fit-cover">
+                    </div>
+                    {% endif %}
+                    <div class="{% if post.featured_image %}col-md-8{% else %}col-12{% endif %}">
+                        <div class="card-body">
+                            <h2 class="card-title h4">
+                                <a href="{{ url_for('blog.post', slug=post.slug) }}" 
+                                   class="text-decoration-none">
+                                    {{ post.title }}
+                                </a>
+                            </h2>
+                            
+                            <div class="blog-post-meta text-muted mb-2 small">
+                                <span>
+                                    <i class="fas fa-user"></i>
+                                    {{ post.author.username }}
+                                </span>
+                                <span class="ms-2">
+                                    <i class="fas fa-calendar"></i>
+                                    {{ post.created_at.strftime('%B %d, %Y') }}
+                                </span>
+                            </div>
+                            
+                            {% if post.excerpt %}
+                            <p class="card-text">{{ post.excerpt }}</p>
+                            {% endif %}
+                            
+                            <a href="{{ url_for('blog.post', slug=post.slug) }}" 
+                               class="btn btn-primary btn-sm">
+                                Read More
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            No blog posts found.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

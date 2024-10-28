@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     tools = db.relationship('Tool', backref='author', lazy=True)
     comments = db.relationship('Comment', backref='author', lazy=True)
+    blog_posts = db.relationship('BlogPost', backref='author', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -81,6 +82,30 @@ class Comment(db.Model):
     @property
     def vote_count(self):
         return db.session.query(db.func.sum(CommentVote.value)).filter(CommentVote.comment_id == self.id).scalar() or 0
+
+class BlogPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    slug = db.Column(db.String(200), unique=True, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    published = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    featured_image = db.Column(db.String(500))
+    excerpt = db.Column(db.Text)
+
+    def generate_slug(self):
+        base_slug = re.sub(r'[^\w\s-]', '', self.title.lower())
+        base_slug = re.sub(r'[-\s]+', '-', base_slug).strip('-')
+        slug = base_slug
+        counter = 1
+        
+        while BlogPost.query.filter_by(slug=slug).first() is not None:
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+            
+        return slug
 
 class ToolVote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
