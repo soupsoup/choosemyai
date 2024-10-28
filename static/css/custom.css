@@ -29,6 +29,7 @@ body {
     font-family: var(--font-family);
 }
 
+/* Navigation styles */
 .navbar {
     background-color: var(--header-background) !important;
 }
@@ -48,7 +49,7 @@ body {
 }
 
 .card-header {
-    background-color: rgba(var(--container-background-color-rgb), 0.9) !important;
+    background-color: var(--container-background-color) !important;
     border-bottom-color: var(--container-border-color) !important;
 }
 
@@ -56,11 +57,32 @@ body {
     background-color: var(--container-background-color) !important;
 }
 
+.tool-container, .comment-container, .blog-container {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+.list-group-item {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+    color: var(--font-color) !important;
+}
+
+.list-group-item:hover {
+    background-color: var(--container-background-color) !important;
+    filter: brightness(110%);
+}
+
 /* Form controls */
 .form-control, .form-select {
     background-color: var(--search-box-background-color) !important;
     border-color: var(--search-box-border-color) !important;
     color: var(--font-color) !important;
+}
+
+.search-container, .search-box {
+    background-color: var(--search-box-background-color) !important;
+    border-color: var(--search-box-border-color) !important;
 }
 
 .form-control:focus, .form-select:focus {
