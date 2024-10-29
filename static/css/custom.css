@@ -21,8 +21,10 @@
     --category-item-hover-color: {{ appearance_settings.category_item_hover_color }};
     --category-item-text-color: {{ appearance_settings.category_item_text_color }};
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
+    --font-family: {{ appearance_settings.font_family }};
 }
 
+/* Base styles */
 body {
     background-color: var(--background-color);
     color: var(--font-color);
@@ -46,6 +48,7 @@ body {
 .card, .tool-card, .blog-post-card, .comment-card, .container-card {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;
+    color: var(--font-color) !important;
 }
 
 .card-header {
@@ -58,10 +61,16 @@ body {
     border-top: 1px solid var(--container-border-color) !important;
 }
 
-/* Search container styles */
-.search-container, .form-control {
+/* Form inputs and search styles */
+.form-control, .input-group-text {
     background-color: var(--search-box-background-color) !important;
     border: 1px solid var(--search-box-border-color) !important;
+    color: var(--font-color) !important;
+}
+
+.form-control:focus {
+    background-color: var(--search-box-background-color) !important;
+    border-color: var(--primary-color) !important;
     color: var(--font-color) !important;
 }
 
@@ -75,38 +84,6 @@ body {
 .badge:hover, .category-badge:hover {
     background-color: var(--category-item-hover-color) !important;
     color: var(--category-item-hover-text-color) !important;
-}
-
-/* List items and dropdowns */
-.list-group-item, .dropdown-menu, .dropdown-item {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
-    color: var(--font-color) !important;
-}
-
-.list-group-item:hover, .dropdown-item:hover {
-    background-color: var(--category-item-hover-color) !important;
-    color: var(--category-item-hover-text-color) !important;
-}
-
-/* Table styles */
-.table, .table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: var(--container-background-color) !important;
-    color: var(--font-color) !important;
-}
-
-.table th, .table td {
-    border-color: var(--container-border-color) !important;
-}
-
-/* Color input styling */
-input[type="color"] {
-    height: 38px;
-    padding: 2px;
-}
-
-.form-control-color {
-    width: 60px !important;
 }
 
 /* Button styles */
@@ -125,8 +102,45 @@ input[type="color"] {
 /* Links */
 a {
     color: var(--link-color);
+    text-decoration: none;
 }
 
 a:hover {
     color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+/* Color input styling */
+input[type="color"] {
+    height: 38px;
+    padding: 2px;
+}
+
+.form-control-color {
+    width: 60px !important;
+}
+
+/* Table styles */
+.table {
+    color: var(--font-color) !important;
+}
+
+.table th, .table td {
+    border-color: var(--container-border-color) !important;
+    color: var(--font-color) !important;
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+.dropdown-item {
+    color: var(--font-color) !important;
+}
+
+.dropdown-item:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
 }

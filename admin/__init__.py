@@ -1,7 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, send_file
 from flask_login import login_required, current_user
 from app import db
 from models import AppearanceSettings, Category, Tool
+import json
+from io import StringIO
+import csv
 
 admin = Blueprint('admin', __name__)
 
@@ -47,6 +50,7 @@ def categories():
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
+    
     return render_template('admin/categories.html', categories=Category.query.all())
 
 @admin.route('/admin/manage-tools')
@@ -55,7 +59,53 @@ def manage_tools():
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
+    
     return render_template('admin/manage_tools.html', tools=Tool.query.all())
+
+@admin.route('/admin/export-tools')
+@login_required
+def export_tools():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    # Create CSV StringIO object
+    si = StringIO()
+    writer = csv.writer(si)
+    
+    # Write headers
+    writer.writerow(['Name', 'Description', 'URL', 'Image URL', 'YouTube URL', 'Categories', 'Resources', 'Is Approved'])
+    
+    # Write tool data
+    tools = Tool.query.all()
+    for tool in tools:
+        categories = [c.name for c in tool.categories]
+        resources = json.loads(tool.resources) if tool.resources else []
+        writer.writerow([
+            tool.name,
+            tool.description,
+            tool.url,
+            tool.image_url or '',
+            tool.youtube_url or '',
+            ', '.join(categories),
+            json.dumps(resources),
+            'Yes' if tool.is_approved else 'No'
+        ])
+    
+    output = si.getvalue()
+    si.close()
+    
+    # Create a memory file for the CSV
+    mem = StringIO()
+    mem.write(output)
+    mem.seek(0)
+    
+    return send_file(
+        mem,
+        mimetype='text/csv',
+        as_attachment=True,
+        download_name='tools_export.csv'
+    )
 
 @admin.route('/admin/import-tools')
 @login_required
