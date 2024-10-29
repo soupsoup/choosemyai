@@ -12,6 +12,17 @@ def init_db():
         # Create default appearance settings
         default_settings = AppearanceSettings()
         db.session.add(default_settings)
+        
+        # Create admin user
+        admin = User(
+            username='admin',
+            email='admin@example.com',
+            is_admin=True,
+            is_moderator=True
+        )
+        admin.set_password('admin123')  # Set a default password
+        db.session.add(admin)
+        
         db.session.commit()
         
         print("Database initialized successfully!")
