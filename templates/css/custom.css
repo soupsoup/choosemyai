@@ -29,6 +29,11 @@ body {
     font-family: var(--font-family);
 }
 
+.text-secondary {
+    color: var(--secondary-text-color) !important;
+}
+
+/* Navigation styles */
 .navbar {
     background-color: var(--header-background) !important;
 }
@@ -41,8 +46,17 @@ body {
     color: var(--nav-link-hover-color) !important;
 }
 
+/* Link styles */
+a {
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
 /* Container styles */
-.card, .container-card {
+.card, .tool-card, .blog-post-card, .comment-card, .container-card {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;
 }
@@ -58,7 +72,7 @@ body {
 }
 
 /* Search container styles */
-.search-container input, .form-control {
+.search-container, .form-control {
     background-color: var(--search-box-background-color) !important;
     border: 1px solid var(--search-box-border-color) !important;
     color: var(--font-color) !important;
@@ -68,9 +82,22 @@ body {
 .badge, .category-badge {
     background-color: var(--category-item-background-color) !important;
     color: var(--category-item-text-color) !important;
+    border: 1px solid var(--container-border-color) !important;
 }
 
 .badge:hover, .category-badge:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
+}
+
+/* List items and dropdowns */
+.list-group-item, .dropdown-menu, .dropdown-item {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+    color: var(--font-color) !important;
+}
+
+.list-group-item:hover, .dropdown-item:hover {
     background-color: var(--category-item-hover-color) !important;
     color: var(--category-item-hover-text-color) !important;
 }
@@ -88,16 +115,7 @@ body {
     color: var(--button-hover-text-color) !important;
 }
 
-/* Links */
-a {
-    color: var(--link-color);
-}
-
-a:hover {
-    color: var(--link-hover-color);
-}
-
-/* Input color styling */
+/* Color input styling */
 input[type="color"] {
     height: 38px;
     padding: 2px;
