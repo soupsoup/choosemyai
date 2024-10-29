@@ -32,7 +32,7 @@ body {
 }
 
 /* Container styles */
-.card, .container-card {
+.card, .container-card, .tool-card, .blog-post-card {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;
     color: var(--font-color);
@@ -60,18 +60,6 @@ body {
     border-color: var(--primary-color) !important;
     color: var(--font-color) !important;
     box-shadow: 0 0 0 0.25rem rgba(var(--primary-color), 0.25);
-}
-
-/* Category items */
-.badge, .category-badge {
-    background-color: var(--category-item-background-color) !important;
-    color: var(--category-item-text-color) !important;
-    border: 1px solid var(--container-border-color) !important;
-}
-
-.badge:hover, .category-badge:hover {
-    background-color: var(--category-item-hover-color) !important;
-    color: var(--category-item-hover-text-color) !important;
 }
 
 /* Navigation styles */
@@ -111,6 +99,42 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Category items */
+.badge, .category-badge {
+    background-color: var(--category-item-background-color) !important;
+    color: var(--category-item-text-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+}
+
+.badge:hover, .category-badge:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
+}
+
+/* Table styles */
+.table {
+    color: var(--font-color) !important;
+}
+
+.table th, .table td {
+    border-color: var(--container-border-color) !important;
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+.dropdown-item {
+    color: var(--font-color) !important;
+}
+
+.dropdown-item:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
+}
+
 /* Color input styling */
 input[type="color"] {
     height: 38px;
@@ -121,7 +145,7 @@ input[type="color"] {
     width: 60px !important;
 }
 
-/* Preview elements for color settings */
+/* Preview elements */
 .color-preview {
     width: 100%;
     padding: 1rem;
@@ -132,4 +156,15 @@ input[type="color"] {
 /* Ensure text remains visible during webfont load */
 .font-loading {
     font-display: swap;
+}
+
+/* Pre and code blocks */
+pre {
+    background-color: var(--container-background-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+    color: var(--font-color) !important;
+}
+
+code {
+    color: var(--font-color) !important;
 }

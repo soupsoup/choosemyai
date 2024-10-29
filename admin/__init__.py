@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, send_file
+from flask import Blueprint, render_template, redirect, url_for, flash, request, send_file, make_response
 from flask_login import login_required, current_user
 from app import db
 from models import AppearanceSettings, Category, Tool
@@ -107,12 +107,72 @@ def export_tools():
         download_name='tools_export.csv'
     )
 
-@admin.route('/admin/import-tools')
+@admin.route('/admin/import-tools', methods=['GET', 'POST'])
 @login_required
 def import_tools():
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file uploaded', 'danger')
+            return redirect(url_for('admin.import_tools'))
+        
+        file = request.files['file']
+        if file.filename == '':
+            flash('No file selected', 'danger')
+            return redirect(url_for('admin.import_tools'))
+        
+        if not file.filename.endswith(('.json', '.csv')):
+            flash('Only JSON and CSV files are allowed', 'danger')
+            return redirect(url_for('admin.import_tools'))
+        
+        try:
+            content = file.read()
+            if file.filename.endswith('.json'):
+                data = json.loads(content)
+            else:
+                # Handle CSV import
+                decoded_content = content.decode('utf-8')
+                reader = csv.DictReader(StringIO(decoded_content))
+                data = list(reader)
+            
+            # Process and import the tools
+            for item in data:
+                tool = Tool(
+                    name=item['name'],
+                    description=item['description'],
+                    url=item['url'],
+                    image_url=item.get('image_url', ''),
+                    youtube_url=item.get('youtube_url', ''),
+                    is_approved=True,
+                    user_id=current_user.id
+                )
+                
+                # Handle categories
+                if 'categories' in item:
+                    category_names = [c.strip() for c in item['categories'].split(',')]
+                    for name in category_names:
+                        category = Category.query.filter_by(name=name).first()
+                        if category:
+                            tool.categories.append(category)
+                
+                # Handle resources
+                if 'resources' in item:
+                    tool.resources = item['resources']
+                
+                db.session.add(tool)
+            
+            db.session.commit()
+            flash('Tools imported successfully!', 'success')
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error importing tools: {str(e)}', 'danger')
+        
+        return redirect(url_for('admin.import_tools'))
+    
     return render_template('admin/import_tools.html')
 
 @admin.route('/admin/change-password')

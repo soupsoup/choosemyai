@@ -3,24 +3,35 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
+        <div class="card container-card">
             <div class="card-header">
                 <h4 class="card-title mb-0">Import Tools</h4>
             </div>
             <div class="card-body">
                 <form method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="file" class="form-label">JSON File</label>
-                        <input type="file" class="form-control" id="file" name="file" accept=".json" required>
-                        <small class="text-muted">Only JSON files exported from this system are supported</small>
+                        <label for="file" class="form-label">Choose File</label>
+                        <input type="file" class="form-control" id="file" name="file" accept=".json,.csv">
+                        <div class="form-text">
+                            Upload a JSON or CSV file containing tool data.
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Import Tools</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                    <a href="{{ url_for('admin.export_tools') }}" class="btn btn-secondary">Export Tools</a>
                 </form>
-                <hr>
-                <div class="text-center">
-                    <a href="{{ url_for('admin.export_tools') }}" class="btn btn-secondary">
-                        <i class="fas fa-download"></i> Export Current Tools
-                    </a>
+                
+                <div class="mt-4">
+                    <h5>File Format</h5>
+                    <p>The JSON file should contain an array of objects with the following structure:</p>
+                    <pre class="bg-dark text-light p-3 rounded"><code>{
+    "name": "Tool Name",
+    "description": "Tool Description", 
+    "url": "https://tool-url.com",
+    "image_url": "https://image-url.com/image.jpg",
+    "youtube_url": "https://youtube.com/watch?v=video-id",
+    "categories": "Category1, Category2",
+    "resources": "[{"title":"Resource 1","url":"https://resource1.com"}]"
+}</code></pre>
                 </div>
             </div>
         </div>
