@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app import db
-from models import AppearanceSettings
+from models import AppearanceSettings, Category, Tool
 
 admin = Blueprint('admin', __name__)
 
@@ -40,3 +40,35 @@ def appearance():
             flash(f'Error updating appearance settings: {str(e)}', 'danger')
     
     return render_template('admin/appearance.html', settings=settings)
+
+@admin.route('/admin/categories')
+@login_required
+def categories():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    return render_template('admin/categories.html', categories=Category.query.all())
+
+@admin.route('/admin/manage-tools')
+@login_required
+def manage_tools():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    return render_template('admin/manage_tools.html', tools=Tool.query.all())
+
+@admin.route('/admin/import-tools')
+@login_required
+def import_tools():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    return render_template('admin/import_tools.html')
+
+@admin.route('/admin/change-password')
+@login_required
+def change_password():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    return render_template('admin/change_password.html')
