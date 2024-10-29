@@ -13,6 +13,14 @@
     --link-hover-color: {{ appearance_settings.link_hover_color }};
     --nav-link-color: {{ appearance_settings.nav_link_color }};
     --nav-link-hover-color: {{ appearance_settings.nav_link_hover_color }};
+    --container-background-color: {{ appearance_settings.container_background_color }};
+    --container-border-color: {{ appearance_settings.container_border_color }};
+    --search-box-background-color: {{ appearance_settings.search_box_background_color }};
+    --search-box-border-color: {{ appearance_settings.search_box_border_color }};
+    --category-item-background-color: {{ appearance_settings.category_item_background_color }};
+    --category-item-hover-color: {{ appearance_settings.category_item_hover_color }};
+    --category-item-text-color: {{ appearance_settings.category_item_text_color }};
+    --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
 }
 
 body {
@@ -33,20 +41,68 @@ body {
     color: var(--nav-link-hover-color) !important;
 }
 
+/* Container styles */
+.card, .container-card {
+    background-color: var(--container-background-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+}
+
+.card-header {
+    background-color: var(--container-background-color) !important;
+    border-bottom: 1px solid var(--container-border-color) !important;
+}
+
+.card-footer {
+    background-color: var(--container-background-color) !important;
+    border-top: 1px solid var(--container-border-color) !important;
+}
+
+/* Search container styles */
+.search-container input, .form-control {
+    background-color: var(--search-box-background-color) !important;
+    border: 1px solid var(--search-box-border-color) !important;
+    color: var(--font-color) !important;
+}
+
+/* Category items */
+.badge, .category-badge {
+    background-color: var(--category-item-background-color) !important;
+    color: var(--category-item-text-color) !important;
+}
+
+.badge:hover, .category-badge:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
+}
+
+/* Button styles */
 .btn-primary {
     background-color: var(--button-background-color) !important;
+    border-color: var(--button-background-color) !important;
     color: var(--button-text-color) !important;
 }
 
 .btn-primary:hover {
     background-color: var(--button-hover-background-color) !important;
+    border-color: var(--button-hover-background-color) !important;
     color: var(--button-hover-text-color) !important;
 }
 
+/* Links */
 a {
     color: var(--link-color);
 }
 
 a:hover {
     color: var(--link-hover-color);
+}
+
+/* Input color styling */
+input[type="color"] {
+    height: 38px;
+    padding: 2px;
+}
+
+.form-control-color {
+    width: 60px !important;
 }
