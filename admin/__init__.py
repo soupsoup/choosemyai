@@ -156,16 +156,27 @@ def import_tools():
                     if isinstance(item['categories'], str):
                         category_names = [c.strip() for c in item['categories'].split(',')]
                     elif isinstance(item['categories'], list):
-                        category_names = [str(c).strip() for c in item['categories']]
+                        category_names = item['categories']
+                    else:
+                        category_names = []
                     
                     for name in category_names:
+                        name = str(name).strip()
                         category = Category.query.filter_by(name=name).first()
                         if category:
                             tool.categories.append(category)
                 
-                # Handle resources
+                # Handle resources field
                 if 'resources' in item:
-                    tool.resources = item['resources']
+                    try:
+                        if isinstance(item['resources'], str):
+                            tool.resources = item['resources']
+                        elif isinstance(item['resources'], list):
+                            tool.resources = json.dumps(item['resources'])
+                        else:
+                            tool.resources = '[]'
+                    except:
+                        tool.resources = '[]'
                 
                 db.session.add(tool)
             
