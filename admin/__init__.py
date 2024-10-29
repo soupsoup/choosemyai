@@ -152,7 +152,12 @@ def import_tools():
                 
                 # Handle categories
                 if 'categories' in item:
-                    category_names = [c.strip() for c in item['categories'].split(',')]
+                    category_names = []
+                    if isinstance(item['categories'], str):
+                        category_names = [c.strip() for c in item['categories'].split(',')]
+                    elif isinstance(item['categories'], list):
+                        category_names = [str(c).strip() for c in item['categories']]
+                    
                     for name in category_names:
                         category = Category.query.filter_by(name=name).first()
                         if category:
