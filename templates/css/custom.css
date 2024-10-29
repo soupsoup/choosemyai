@@ -21,18 +21,20 @@
     --category-item-hover-color: {{ appearance_settings.category_item_hover_color }};
     --category-item-text-color: {{ appearance_settings.category_item_text_color }};
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
+    --font-family: {{ appearance_settings.font_family }};
 }
 
-/* Base text color */
+/* Base styles */
 body {
     background-color: var(--background-color);
     color: var(--font-color) !important;
-    font-family: var(--font-family);
+    font-family: var(--font-family) !important;
 }
 
-/* Ensure all text containers inherit the text color */
+/* Ensure all text containers inherit the text color and font */
 .card, .card-body, .container-card, .tool-card, .blog-post-card {
     color: var(--font-color) !important;
+    font-family: var(--font-family) !important;
 }
 
 /* Navigation styles */
@@ -46,15 +48,6 @@ body {
 
 .nav-link:hover {
     color: var(--nav-link-hover-color) !important;
-}
-
-/* Link styles */
-a {
-    color: var(--link-color);
-}
-
-a:hover {
-    color: var(--link-hover-color);
 }
 
 /* Container styles */
@@ -131,6 +124,15 @@ a:hover {
     background-color: var(--button-hover-background-color) !important;
     border-color: var(--button-hover-background-color) !important;
     color: var(--button-hover-text-color) !important;
+}
+
+/* Links */
+a {
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--link-hover-color);
 }
 
 /* Color input styling */
