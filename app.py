@@ -25,6 +25,7 @@ def load_user(user_id):
     from models import User
     return User.query.get(int(user_id))
 
+# Register all blueprints
 from auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 
@@ -37,4 +38,5 @@ app.register_blueprint(api_blueprint)
 from blog import blog as blog_blueprint
 app.register_blueprint(blog_blueprint)
 
+# Import routes after registering blueprints
 import routes
