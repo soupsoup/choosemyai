@@ -23,14 +23,16 @@
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
 }
 
+/* Base text color */
 body {
     background-color: var(--background-color);
-    color: var(--font-color);
+    color: var(--font-color) !important;
     font-family: var(--font-family);
 }
 
-.text-secondary {
-    color: var(--secondary-text-color) !important;
+/* Ensure all text containers inherit the text color */
+.card, .card-body, .container-card, .tool-card, .blog-post-card {
+    color: var(--font-color) !important;
 }
 
 /* Navigation styles */
@@ -71,11 +73,17 @@ a:hover {
     border-top: 1px solid var(--container-border-color) !important;
 }
 
-/* Search container styles */
-.search-container, .form-control {
+/* Form inputs and search styles */
+.form-control {
     background-color: var(--search-box-background-color) !important;
     border: 1px solid var(--search-box-border-color) !important;
     color: var(--font-color) !important;
+}
+
+/* Search container styles */
+.search-container {
+    background-color: var(--search-box-background-color) !important;
+    border: 1px solid var(--search-box-border-color) !important;
 }
 
 /* Category items */
@@ -100,6 +108,16 @@ a:hover {
 .list-group-item:hover, .dropdown-item:hover {
     background-color: var(--category-item-hover-color) !important;
     color: var(--category-item-hover-text-color) !important;
+}
+
+/* Table styles */
+.table {
+    color: var(--font-color) !important;
+}
+
+.table th, .table td {
+    border-color: var(--container-border-color) !important;
+    color: var(--font-color) !important;
 }
 
 /* Button styles */
