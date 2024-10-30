@@ -1,57 +1,120 @@
-[Previous HTML content...]
-                    <!-- Input Field Colors Section -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card container-card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">Website Appearance</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <!-- Container Colors Section -->
                     <div class="mb-4">
-                        <h5>Input Field Colors</h5>
+                        <h5>Container Colors</h5>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="input_background_color" class="form-label">Input Background</label>
+                                <label for="container_background_color" class="form-label">Container Background</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
-                                           id="input_background_color" name="input_background_color" 
-                                           value="{{ settings.input_background_color }}">
+                                           id="container_background_color" name="container_background_color" 
+                                           value="{{ settings.container_background_color }}">
                                     <input type="text" class="form-control" 
-                                           value="{{ settings.input_background_color }}" 
-                                           data-color-input="input_background_color" readonly>
+                                           value="{{ settings.container_background_color }}" 
+                                           data-color-input="container_background_color" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="input_text_color" class="form-label">Input Text Color</label>
+                                <label for="container_border_color" class="form-label">Container Border</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
-                                           id="input_text_color" name="input_text_color" 
-                                           value="{{ settings.input_text_color }}">
+                                           id="container_border_color" name="container_border_color" 
+                                           value="{{ settings.container_border_color }}">
                                     <input type="text" class="form-control" 
-                                           value="{{ settings.input_text_color }}" 
-                                           data-color-input="input_text_color" readonly>
+                                           value="{{ settings.container_border_color }}" 
+                                           data-color-input="container_border_color" readonly>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Comment Box Colors Section -->
+                    <!-- Search Box Colors Section -->
                     <div class="mb-4">
-                        <h5>Comment Box Colors</h5>
+                        <h5>Search Box Colors</h5>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="comment_box_background_color" class="form-label">Comment Box Background</label>
+                                <label for="search_box_background_color" class="form-label">Search Box Background</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
-                                           id="comment_box_background_color" name="comment_box_background_color" 
-                                           value="{{ settings.comment_box_background_color }}">
+                                           id="search_box_background_color" name="search_box_background_color" 
+                                           value="{{ settings.search_box_background_color }}">
                                     <input type="text" class="form-control" 
-                                           value="{{ settings.comment_box_background_color }}" 
-                                           data-color-input="comment_box_background_color" readonly>
+                                           value="{{ settings.search_box_background_color }}" 
+                                           data-color-input="search_box_background_color" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="comment_box_text_color" class="form-label">Comment Box Text Color</label>
+                                <label for="search_box_border_color" class="form-label">Search Box Border</label>
                                 <div class="input-group">
                                     <input type="color" class="form-control form-control-color" 
-                                           id="comment_box_text_color" name="comment_box_text_color" 
-                                           value="{{ settings.comment_box_text_color }}">
+                                           id="search_box_border_color" name="search_box_border_color" 
+                                           value="{{ settings.search_box_border_color }}">
                                     <input type="text" class="form-control" 
-                                           value="{{ settings.comment_box_text_color }}" 
-                                           data-color-input="comment_box_text_color" readonly>
+                                           value="{{ settings.search_box_border_color }}" 
+                                           data-color-input="search_box_border_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Item Colors Section -->
+                    <div class="mb-4">
+                        <h5>Category Item Colors</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="category_item_background_color" class="form-label">Category Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="category_item_background_color" name="category_item_background_color" 
+                                           value="{{ settings.category_item_background_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.category_item_background_color }}" 
+                                           data-color-input="category_item_background_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="category_item_hover_color" class="form-label">Category Hover Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="category_item_hover_color" name="category_item_hover_color" 
+                                           value="{{ settings.category_item_hover_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.category_item_hover_color }}" 
+                                           data-color-input="category_item_hover_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="category_item_text_color" class="form-label">Category Text Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="category_item_text_color" name="category_item_text_color" 
+                                           value="{{ settings.category_item_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.category_item_text_color }}" 
+                                           data-color-input="category_item_text_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="category_item_hover_text_color" class="form-label">Category Hover Text</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="category_item_hover_text_color" name="category_item_hover_text_color" 
+                                           value="{{ settings.category_item_hover_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.category_item_hover_text_color }}" 
+                                           data-color-input="category_item_hover_text_color" readonly>
                                 </div>
                             </div>
                         </div>
