@@ -27,14 +27,38 @@
 /* Base styles */
 body {
     background-color: var(--background-color);
-    color: var(--font-color) !important;
-    font-family: var(--font-family) !important;
+    color: var(--font-color);
+    font-family: var(--font-family);
 }
 
-/* Ensure all text containers inherit the text color and font */
-.card, .card-body, .container-card, .tool-card, .blog-post-card {
+/* Container styles */
+.card, .container-card {
+    background-color: var(--container-background-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+    color: var(--font-color);
+}
+
+.card-header {
+    background-color: var(--container-background-color) !important;
+    border-bottom: 1px solid var(--container-border-color) !important;
+}
+
+.card-body {
+    background-color: var(--container-background-color) !important;
+    color: var(--font-color);
+}
+
+/* Form inputs and search styles */
+.form-control, .input-group-text {
+    background-color: var(--search-box-background-color) !important;
+    border: 1px solid var(--search-box-border-color) !important;
     color: var(--font-color) !important;
-    font-family: var(--font-family) !important;
+}
+
+.form-control:focus {
+    background-color: var(--search-box-background-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--font-color) !important;
 }
 
 /* Navigation styles */
@@ -50,35 +74,6 @@ body {
     color: var(--nav-link-hover-color) !important;
 }
 
-/* Container styles */
-.card, .tool-card, .blog-post-card, .comment-card, .container-card {
-    background-color: var(--container-background-color) !important;
-    border: 1px solid var(--container-border-color) !important;
-}
-
-.card-header {
-    background-color: var(--container-background-color) !important;
-    border-bottom: 1px solid var(--container-border-color) !important;
-}
-
-.card-footer {
-    background-color: var(--container-background-color) !important;
-    border-top: 1px solid var(--container-border-color) !important;
-}
-
-/* Form inputs and search styles */
-.form-control {
-    background-color: var(--search-box-background-color) !important;
-    border: 1px solid var(--search-box-border-color) !important;
-    color: var(--font-color) !important;
-}
-
-/* Search container styles */
-.search-container {
-    background-color: var(--search-box-background-color) !important;
-    border: 1px solid var(--search-box-border-color) !important;
-}
-
 /* Category items */
 .badge, .category-badge {
     background-color: var(--category-item-background-color) !important;
@@ -89,28 +84,6 @@ body {
 .badge:hover, .category-badge:hover {
     background-color: var(--category-item-hover-color) !important;
     color: var(--category-item-hover-text-color) !important;
-}
-
-/* List items and dropdowns */
-.list-group-item, .dropdown-menu, .dropdown-item {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
-    color: var(--font-color) !important;
-}
-
-.list-group-item:hover, .dropdown-item:hover {
-    background-color: var(--category-item-hover-color) !important;
-    color: var(--category-item-hover-text-color) !important;
-}
-
-/* Table styles */
-.table {
-    color: var(--font-color) !important;
-}
-
-.table th, .table td {
-    border-color: var(--container-border-color) !important;
-    color: var(--font-color) !important;
 }
 
 /* Button styles */
@@ -129,10 +102,21 @@ body {
 /* Links */
 a {
     color: var(--link-color);
+    text-decoration: none;
 }
 
 a:hover {
     color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+/* Tables */
+.table {
+    color: var(--font-color) !important;
+}
+
+.table th, .table td {
+    border-color: var(--container-border-color) !important;
 }
 
 /* Color input styling */
