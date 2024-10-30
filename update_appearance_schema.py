@@ -19,15 +19,23 @@ def update_appearance_schema():
                 if hasattr(new_settings, key):
                     setattr(new_settings, key, value)
             
-            # Set defaults for new columns
-            new_settings.container_background_color = '#2c3034'
-            new_settings.container_border_color = '#373b3e'
-            new_settings.search_box_background_color = '#2c3034'
-            new_settings.search_box_border_color = '#373b3e'
-            new_settings.category_item_background_color = '#2c3034'
-            new_settings.category_item_hover_color = '#373b3e'
-            new_settings.category_item_text_color = '#ffffff'
-            new_settings.category_item_hover_text_color = '#ffffff'
+            # Set defaults for new columns if they don't exist in backup
+            defaults = {
+                'comment_box_background_color': '#2c3034',
+                'comment_box_text_color': '#ffffff',
+                'container_background_color': '#2c3034',
+                'container_border_color': '#373b3e',
+                'search_box_background_color': '#2c3034',
+                'search_box_border_color': '#373b3e',
+                'category_item_background_color': '#2c3034',
+                'category_item_hover_color': '#373b3e',
+                'category_item_text_color': '#ffffff',
+                'category_item_hover_text_color': '#ffffff'
+            }
+            
+            for key, value in defaults.items():
+                if key not in settings_backup:
+                    setattr(new_settings, key, value)
             
             db.session.add(new_settings)
             db.session.commit()
