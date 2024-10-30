@@ -150,6 +150,8 @@ class AppearanceSettings(db.Model):
     # Input field colors
     input_background_color = db.Column(db.String(7), default='#2c3034')
     input_text_color = db.Column(db.String(7), default='#ffffff')
+    # Blog metadata text color
+    blog_meta_text_color = db.Column(db.String(7), default='#6c757d')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod

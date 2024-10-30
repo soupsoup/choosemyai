@@ -23,6 +23,7 @@
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
     --input-background-color: {{ appearance_settings.input_background_color }};
     --input-text-color: {{ appearance_settings.input_text_color }};
+    --blog-meta-text-color: {{ appearance_settings.blog_meta_text_color }};
     --font-family: {{ appearance_settings.font_family }};
 }
 
@@ -156,4 +157,9 @@ pre {
 
 code {
     color: var(--font-color) !important;
+}
+
+/* Blog post styles */
+.blog-post-meta {
+    color: var(--blog-meta-text-color) !important;
 }
