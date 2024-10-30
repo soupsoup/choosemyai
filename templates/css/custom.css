@@ -35,7 +35,7 @@ body {
 }
 
 /* Container styles */
-.card, .container-card {
+.card, .container-card, .tool-card {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;
     color: var(--font-color);
@@ -51,17 +51,17 @@ body {
     color: var(--font-color);
 }
 
-/* Form inputs and search styles */
+/* Search box and input styles */
 .form-control, .input-group-text, .form-select {
-    background-color: var(--input-background-color) !important;
-    color: var(--input-text-color) !important;
-    border: 1px solid var(--container-border-color) !important;
+    background-color: var(--search-box-background-color) !important;
+    border: 1px solid var(--search-box-border-color) !important;
+    color: var(--font-color) !important;
 }
 
 .form-control:focus {
-    background-color: var(--input-background-color) !important;
-    color: var(--input-text-color) !important;
+    background-color: var(--search-box-background-color) !important;
     border-color: var(--primary-color) !important;
+    color: var(--font-color) !important;
     box-shadow: 0 0 0 0.25rem rgba(var(--primary-color), 0.25);
 }
 
@@ -76,18 +76,6 @@ body {
 
 .nav-link:hover {
     color: var(--nav-link-hover-color) !important;
-}
-
-/* Category items */
-.badge, .category-badge {
-    background-color: var(--category-item-background-color) !important;
-    color: var(--category-item-text-color) !important;
-    border: 1px solid var(--container-border-color) !important;
-}
-
-.badge:hover, .category-badge:hover {
-    background-color: var(--category-item-hover-color) !important;
-    color: var(--category-item-hover-text-color) !important;
 }
 
 /* Button styles */
@@ -114,7 +102,19 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Tables */
+/* Category items */
+.badge, .category-badge {
+    background-color: var(--category-item-background-color) !important;
+    color: var(--category-item-text-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+}
+
+.badge:hover, .category-badge:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
+}
+
+/* Table styles */
 .table {
     color: var(--font-color) !important;
 }
@@ -148,18 +148,51 @@ input[type="color"] {
     width: 60px !important;
 }
 
-/* Pre and code blocks */
-pre {
+/* List group styles */
+.list-group-item {
     background-color: var(--container-background-color) !important;
-    border: 1px solid var(--container-border-color) !important;
+    border-color: var(--container-border-color) !important;
     color: var(--font-color) !important;
 }
 
-code {
-    color: var(--font-color) !important;
+.list-group-item:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
 }
 
 /* Blog post styles */
 .blog-post-meta {
     color: var(--blog-meta-text-color) !important;
+}
+
+/* Alert styles */
+.alert {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+/* Text colors */
+.text-muted {
+    color: var(--secondary-text-color) !important;
+}
+
+/* Modal styles */
+.modal-content {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+.modal-header {
+    border-bottom-color: var(--container-border-color) !important;
+}
+
+.modal-footer {
+    border-top-color: var(--container-border-color) !important;
+}
+
+/* Code and pre blocks */
+pre, code {
+    background-color: var(--container-background-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+    color: var(--font-color) !important;
 }
