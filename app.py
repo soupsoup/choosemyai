@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, send_file, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import os
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key')
@@ -24,6 +25,13 @@ login_manager.login_view = 'auth.login'
 def load_user(user_id):
     from models import User
     return User.query.get(int(user_id))
+
+@app.template_filter('parse_json')
+def parse_json_filter(value):
+    try:
+        return json.loads(value) if value else []
+    except:
+        return []
 
 # Register all blueprints
 from auth import auth as auth_blueprint

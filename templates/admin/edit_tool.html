@@ -3,98 +3,73 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
+        <div class="card container-card">
             <div class="card-header">
                 <h4 class="card-title mb-0">Edit Tool</h4>
             </div>
             <div class="card-body">
                 <form method="POST">
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="name" class="form-label">Tool Name</label>
-                        <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ tool.name }}" required>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ tool.name }}" required>
                     </div>
-                    <div class="mb-4">
+                    
+                    <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="8" required>{{ tool.description|e }}</textarea>
-                        <small class="text-muted">Basic HTML formatting is allowed (e.g., &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;)</small>
+                        <textarea class="form-control" id="description" name="description" rows="5" required>{{ tool.description }}</textarea>
                     </div>
-                    <div class="mb-4">
-                        <label for="url" class="form-label">Website URL</label>
+                    
+                    <div class="mb-3">
+                        <label for="url" class="form-label">URL</label>
                         <input type="url" class="form-control" id="url" name="url" value="{{ tool.url }}" required>
                     </div>
-                    <div class="mb-4">
+                    
+                    <div class="mb-3">
                         <label for="image_url" class="form-label">Image URL (optional)</label>
-                        <input type="url" class="form-control" id="image_url" name="image_url" 
-                               value="{{ tool.image_url or '' }}" placeholder="Enter URL of an image that represents your tool">
-                        <small class="text-muted">Provide a URL to an image that showcases your tool</small>
+                        <input type="url" class="form-control" id="image_url" name="image_url" value="{{ tool.image_url }}">
                     </div>
-                    <div class="mb-4">
-                        <label for="youtube_url" class="form-label">YouTube Video URL (optional)</label>
-                        <input type="url" class="form-control" id="youtube_url" name="youtube_url" 
-                               value="{{ tool.youtube_url or '' }}" placeholder="Enter YouTube video URL">
-                        <small class="text-muted">Add a YouTube video demonstrating your tool</small>
+                    
+                    <div class="mb-3">
+                        <label for="youtube_url" class="form-label">YouTube URL (optional)</label>
+                        <input type="url" class="form-control" id="youtube_url" name="youtube_url" value="{{ tool.youtube_url }}">
                     </div>
-
-                    <!-- Learning Resources Section -->
-                    <div class="mb-4">
-                        <label class="form-label h5">Learning Resources</label>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Categories</label>
+                        {% for category in categories %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="category{{ category.id }}" 
+                                   name="categories" value="{{ category.id }}"
+                                   {% if category in tool.categories %}checked{% endif %}>
+                            <label class="form-check-label" for="category{{ category.id }}">
+                                {{ category.name }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Resources</label>
                         <div id="resources-container">
-                            {% if tool.resources %}
-                                {% set resources = tool.resources|parse_json %}
-                                {% if resources %}
-                                    {% for resource in resources %}
-                                    <div class="resource-entry mb-3">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" name="resource_titles[]" 
-                                                   value="{{ resource.title }}"
-                                                   placeholder="Resource Title">
-                                            <input type="url" class="form-control" name="resource_urls[]" 
-                                                   value="{{ resource.url }}"
-                                                   placeholder="Resource URL">
-                                            <button type="button" class="btn btn-danger remove-entry" 
-                                                    onclick="removeEntry(this)">Remove</button>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endif %}
-                            <div class="resource-entry mb-3">
+                            {% set resources = tool.resources|parse_json if tool.resources else [] %}
+                            {% for resource in resources %}
+                            <div class="resource-entry mb-2">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="resource_titles[]" 
-                                           placeholder="Resource Title">
+                                           placeholder="Resource Title" value="{{ resource.title }}">
                                     <input type="url" class="form-control" name="resource_urls[]" 
-                                           placeholder="Resource URL">
-                                    <button type="button" class="btn btn-danger remove-entry" 
-                                            onclick="removeEntry(this)">Remove</button>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-secondary mt-3" 
-                                onclick="addResource()">Add Resource</button>
-                        <small class="text-muted d-block mt-2">Add links to helpful tutorials, courses, or other learning materials</small>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label h5">Categories</label>
-                        <div class="row row-cols-1 row-cols-md-2 g-3">
-                            {% for category in categories %}
-                            <div class="col">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="categories" 
-                                           value="{{ category.id }}" id="category{{ category.id }}"
-                                           {% if category in tool.categories %}checked{% endif %}>
-                                    <label class="form-check-label" for="category{{ category.id }}">
-                                        {{ category.name }}
-                                        <small class="d-block text-muted">{{ category.description }}</small>
-                                    </label>
+                                           placeholder="Resource URL" value="{{ resource.url }}">
+                                    <button type="button" class="btn btn-danger remove-resource">Remove</button>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
+                        <button type="button" class="btn btn-secondary mt-2" id="add-resource">Add Resource</button>
                     </div>
+                    
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-                        <a href="{{ url_for('tool', tool_id=tool.id) }}" class="btn btn-secondary btn-lg">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Update Tool</button>
+                        <a href="{{ url_for('tool', tool_id=tool.id) }}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -103,25 +78,24 @@
 </div>
 
 <script>
-function addResource() {
+document.getElementById('add-resource').addEventListener('click', function() {
     const container = document.getElementById('resources-container');
-    const entry = document.createElement('div');
-    entry.className = 'resource-entry mb-3';
-    entry.innerHTML = `
-        <div class="input-group">
-            <input type="text" class="form-control" name="resource_titles[]" 
-                   placeholder="Resource Title">
-            <input type="url" class="form-control" name="resource_urls[]" 
-                   placeholder="Resource URL">
-            <button type="button" class="btn btn-danger remove-entry" 
-                    onclick="removeEntry(this)">Remove</button>
+    const resourceHtml = `
+        <div class="resource-entry mb-2">
+            <div class="input-group">
+                <input type="text" class="form-control" name="resource_titles[]" placeholder="Resource Title">
+                <input type="url" class="form-control" name="resource_urls[]" placeholder="Resource URL">
+                <button type="button" class="btn btn-danger remove-resource">Remove</button>
+            </div>
         </div>
     `;
-    container.appendChild(entry);
-}
+    container.insertAdjacentHTML('beforeend', resourceHtml);
+});
 
-function removeEntry(button) {
-    button.closest('.resource-entry').remove();
-}
+document.getElementById('resources-container').addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-resource')) {
+        e.target.closest('.resource-entry').remove();
+    }
+});
 </script>
 {% endblock %}
