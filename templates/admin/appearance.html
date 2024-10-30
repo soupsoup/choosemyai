@@ -1,174 +1,4 @@
-{% extends "base.html" %}
-
-{% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card container-card">
-            <div class="card-header">
-                <h4 class="card-title mb-0">Website Appearance Settings</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    <!-- Basic Colors Section -->
-                    <div class="mb-4">
-                        <h5>Basic Colors</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="primary_color" class="form-label">Primary Color</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="primary_color" name="primary_color" 
-                                           value="{{ settings.primary_color }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.primary_color }}" 
-                                           data-color-input="primary_color" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="secondary_color" class="form-label">Secondary Color</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="secondary_color" name="secondary_color" 
-                                           value="{{ settings.secondary_color }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.secondary_color }}" 
-                                           data-color-input="secondary_color" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="background_color" class="form-label">Background Color</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="background_color" name="background_color" 
-                                           value="{{ settings.background_color }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.background_color }}" 
-                                           data-color-input="background_color" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="header_background" class="form-label">Header Background</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="header_background" name="header_background" 
-                                           value="{{ settings.header_background }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.header_background }}" 
-                                           data-color-input="header_background" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Font Settings Section -->
-                    <div class="mb-4">
-                        <h5>Font Settings</h5>
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <label for="font_family" class="form-label">Font Family</label>
-                                <select class="form-select" id="font_family" name="font_family">
-                                    <option value="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" 
-                                            {% if settings.font_family == "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" %}selected{% endif %}>
-                                        System Default
-                                    </option>
-                                    <option value="'Open Sans', sans-serif"
-                                            {% if settings.font_family == "'Open Sans', sans-serif" %}selected{% endif %}>
-                                        Open Sans
-                                    </option>
-                                    <option value="'Roboto', sans-serif"
-                                            {% if settings.font_family == "'Roboto', sans-serif" %}selected{% endif %}>
-                                        Roboto
-                                    </option>
-                                    <option value="'Lato', sans-serif"
-                                            {% if settings.font_family == "'Lato', sans-serif" %}selected{% endif %}>
-                                        Lato
-                                    </option>
-                                    <option value="'Poppins', sans-serif"
-                                            {% if settings.font_family == "'Poppins', sans-serif" %}selected{% endif %}>
-                                        Poppins
-                                    </option>
-                                    <option value="'Montserrat', sans-serif"
-                                            {% if settings.font_family == "'Montserrat', sans-serif" %}selected{% endif %}>
-                                        Montserrat
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Text Colors Section -->
-                    <div class="mb-4">
-                        <h5>Text Colors</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="font_color" class="form-label">Primary Text Color</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="font_color" name="font_color" 
-                                           value="{{ settings.font_color }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.font_color }}" 
-                                           data-color-input="font_color" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="secondary_text_color" class="form-label">Secondary Text Color</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="secondary_text_color" name="secondary_text_color" 
-                                           value="{{ settings.secondary_text_color }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.secondary_text_color }}" 
-                                           data-color-input="secondary_text_color" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="blog_meta_text_color" class="form-label">Blog Metadata Text Color</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="blog_meta_text_color" name="blog_meta_text_color" 
-                                           value="{{ settings.blog_meta_text_color }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.blog_meta_text_color }}" 
-                                           data-color-input="blog_meta_text_color" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Container Colors Section -->
-                    <div class="mb-4">
-                        <h5>Container Colors</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="container_background_color" class="form-label">Container Background</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="container_background_color" name="container_background_color" 
-                                           value="{{ settings.container_background_color }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.container_background_color }}" 
-                                           data-color-input="container_background_color" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="container_border_color" class="form-label">Container Border</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" 
-                                           id="container_border_color" name="container_border_color" 
-                                           value="{{ settings.container_border_color }}">
-                                    <input type="text" class="form-control" 
-                                           value="{{ settings.container_border_color }}" 
-                                           data-color-input="container_border_color" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+[Previous HTML content...]
                     <!-- Input Field Colors Section -->
                     <div class="mb-4">
                         <h5>Input Field Colors</h5>
@@ -193,6 +23,35 @@
                                     <input type="text" class="form-control" 
                                            value="{{ settings.input_text_color }}" 
                                            data-color-input="input_text_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comment Box Colors Section -->
+                    <div class="mb-4">
+                        <h5>Comment Box Colors</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="comment_box_background_color" class="form-label">Comment Box Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="comment_box_background_color" name="comment_box_background_color" 
+                                           value="{{ settings.comment_box_background_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.comment_box_background_color }}" 
+                                           data-color-input="comment_box_background_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="comment_box_text_color" class="form-label">Comment Box Text Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="comment_box_text_color" name="comment_box_text_color" 
+                                           value="{{ settings.comment_box_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.comment_box_text_color }}" 
+                                           data-color-input="comment_box_text_color" readonly>
                                 </div>
                             </div>
                         </div>

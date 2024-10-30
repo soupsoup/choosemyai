@@ -21,6 +21,8 @@
     --category-item-hover-color: {{ appearance_settings.category_item_hover_color }};
     --category-item-text-color: {{ appearance_settings.category_item_text_color }};
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
+    --comment-box-background-color: {{ appearance_settings.comment_box_background_color }};
+    --comment-box-text-color: {{ appearance_settings.comment_box_text_color }};
     --font-family: {{ appearance_settings.font_family }};
 }
 
@@ -60,6 +62,17 @@ body {
     border-color: var(--primary-color) !important;
     color: var(--font-color) !important;
     box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+}
+
+/* Comment box styles */
+.comment-form textarea.form-control {
+    background-color: var(--comment-box-background-color) !important;
+    color: var(--comment-box-text-color) !important;
+}
+
+.comment-form textarea.form-control:focus {
+    background-color: var(--comment-box-background-color) !important;
+    color: var(--comment-box-text-color) !important;
 }
 
 /* Navigation styles */
@@ -167,7 +180,7 @@ input[type="color"] {
     width: 60px !important;
 }
 
-/* Small preview boxes for color settings */
+/* Preview elements */
 .color-preview {
     width: 100%;
     padding: 1rem;

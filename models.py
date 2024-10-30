@@ -147,11 +147,9 @@ class AppearanceSettings(db.Model):
     category_item_hover_color = db.Column(db.String(7), default='#373b3e')
     category_item_text_color = db.Column(db.String(7), default='#ffffff')
     category_item_hover_text_color = db.Column(db.String(7), default='#ffffff')
-    # Input field colors
-    input_background_color = db.Column(db.String(7), default='#2c3034')
-    input_text_color = db.Column(db.String(7), default='#ffffff')
-    # Blog metadata text color
-    blog_meta_text_color = db.Column(db.String(7), default='#6c757d')
+    # Comment box colors
+    comment_box_background_color = db.Column(db.String(7), default='#2c3034')
+    comment_box_text_color = db.Column(db.String(7), default='#ffffff')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod
