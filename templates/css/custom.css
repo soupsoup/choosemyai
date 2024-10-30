@@ -1,4 +1,5 @@
 :root {
+    --font-family: {{ appearance_settings.font_family }};
     --primary-color: {{ appearance_settings.primary_color }};
     --secondary-color: {{ appearance_settings.secondary_color }};
     --background-color: {{ appearance_settings.background_color }};
@@ -29,7 +30,12 @@
 body {
     background-color: var(--background-color);
     color: var(--main-text-color);
-    font-family: var(--font-family);
+    font-family: var(--font-family) !important;
+}
+
+/* Add this to ensure font is applied to all text elements */
+.card, .card-body, .form-control, .btn, .nav-link {
+    font-family: var(--font-family) !important;
 }
 
 .card, .container-card {
