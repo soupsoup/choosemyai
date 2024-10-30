@@ -22,7 +22,8 @@ def appearance():
         try:
             # Update color settings
             color_fields = [
-                'font_family',  # Make sure this is first in the list
+                'container_header_text_color',
+                'font_family',
                 'background_color', 'header_background',
                 'main_text_color', 'card_text_color', 'footer_text_color',
                 'container_background_color', 'container_border_color',

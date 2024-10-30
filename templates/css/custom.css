@@ -16,6 +16,7 @@
     --nav-link-hover-color: {{ appearance_settings.nav_link_hover_color }};
     --container-background-color: {{ appearance_settings.container_background_color }};
     --container-border-color: {{ appearance_settings.container_border_color }};
+    --container-header-text-color: {{ appearance_settings.container_header_text_color }};
     --search-box-background-color: {{ appearance_settings.search_box_background_color }};
     --search-box-border-color: {{ appearance_settings.search_box_border_color }};
     --category-item-background-color: {{ appearance_settings.category_item_background_color }};
@@ -33,7 +34,6 @@ body {
     font-family: var(--font-family) !important;
 }
 
-/* Add this to ensure font is applied to all text elements */
 .card, .card-body, .form-control, .btn, .nav-link {
     font-family: var(--font-family) !important;
 }
@@ -43,9 +43,14 @@ body {
     border: 1px solid var(--container-border-color) !important;
 }
 
-.card-header {
+.card-header, .container-card .card-header {
     background-color: var(--container-background-color) !important;
     border-bottom: 1px solid var(--container-border-color) !important;
+    color: var(--container-header-text-color) !important;
+}
+
+.card-title {
+    color: var(--container-header-text-color) !important;
 }
 
 .card-body {

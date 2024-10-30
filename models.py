@@ -140,6 +140,7 @@ class AppearanceSettings(db.Model):
     nav_link_hover_color = db.Column(db.String(7), default='#e9ecef')
     container_background_color = db.Column(db.String(7), default='#2c3034')
     container_border_color = db.Column(db.String(7), default='#373b3e')
+    container_header_text_color = db.Column(db.String(7), default='#ffffff')
     search_box_background_color = db.Column(db.String(7), default='#2c3034')
     search_box_border_color = db.Column(db.String(7), default='#373b3e')
     category_item_background_color = db.Column(db.String(7), default='#2c3034')
