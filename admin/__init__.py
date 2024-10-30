@@ -54,6 +54,76 @@ def categories():
     
     return render_template('admin/categories.html', categories=Category.query.all())
 
+@admin.route('/admin/add-category', methods=['POST'])
+@login_required
+def add_category():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    name = request.form.get('name')
+    description = request.form.get('description')
+    
+    if not name:
+        flash('Category name is required', 'danger')
+        return redirect(url_for('admin.categories'))
+    
+    try:
+        category = Category(name=name, description=description)
+        db.session.add(category)
+        db.session.commit()
+        flash('Category added successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error adding category: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.categories'))
+
+@admin.route('/admin/edit-category/<int:category_id>', methods=['POST'])
+@login_required
+def edit_category(category_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    category = Category.query.get_or_404(category_id)
+    name = request.form.get('name')
+    description = request.form.get('description')
+    
+    if not name:
+        flash('Category name is required', 'danger')
+        return redirect(url_for('admin.categories'))
+    
+    try:
+        category.name = name
+        category.description = description
+        db.session.commit()
+        flash('Category updated successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error updating category: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.categories'))
+
+@admin.route('/admin/delete-category/<int:category_id>')
+@login_required
+def delete_category(category_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    category = Category.query.get_or_404(category_id)
+    
+    try:
+        db.session.delete(category)
+        db.session.commit()
+        flash('Category deleted successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting category: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.categories'))
+
 @admin.route('/admin/manage-tools')
 @login_required
 def manage_tools():
