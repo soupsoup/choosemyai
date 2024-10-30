@@ -1,4 +1,76 @@
-[Previous HTML content...]
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card container-card mb-4">
+            <div class="card-header">
+                <h2 class="card-title">{{ tool.name }}</h2>
+            </div>
+            <div class="card-body">
+                {% if tool.image_url %}
+                <div class="mb-4">
+                    <img src="{{ tool.image_url }}" alt="{{ tool.name }}" class="img-fluid rounded">
+                </div>
+                {% endif %}
+
+                {% if tool.youtube_url %}
+                <div class="mb-4 ratio ratio-16x9">
+                    <iframe src="{{ tool.youtube_embed_url }}" 
+                            title="YouTube video" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                </div>
+                {% endif %}
+
+                <div class="description mb-4">
+                    {{ tool.description|safe }}
+                </div>
+
+                <div class="categories mb-4">
+                    {% for category in tool.categories %}
+                    <a href="{{ url_for('category', category_id=category.id) }}" 
+                       class="badge rounded-pill text-bg-secondary text-decoration-none me-1">
+                        {{ category.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+
+                <div class="tool-actions">
+                    <a href="{{ tool.url }}" class="btn btn-primary" target="_blank">
+                        Visit Tool <i class="fas fa-external-link-alt ms-1"></i>
+                    </a>
+                    {% if current_user.is_admin %}
+                    <a href="{{ url_for('edit_tool', tool_id=tool.id) }}" class="btn btn-secondary">
+                        <i class="fas fa-edit"></i> Edit Tool
+                    </a>
+                    {% endif %}
+                </div>
+
+                {% if tool.resources %}
+                <div class="resources mt-4">
+                    <h4>Additional Resources</h4>
+                    <ul class="list-group">
+                        {% for resource in tool.resources|parse_json %}
+                        <li class="list-group-item bg-transparent">
+                            <a href="{{ resource.url }}" target="_blank" class="text-decoration-none">
+                                {{ resource.title }}
+                                <i class="fas fa-external-link-alt ms-1"></i>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="card container-card">
+            <div class="card-header">
+                <h3 class="card-title">Comments</h3>
+            </div>
+            <div class="card-body">
                 {% if current_user.is_authenticated %}
                 <form action="{{ url_for('add_comment', tool_id=tool.id) }}" method="POST" class="mb-4 comment-form">
                     <div class="mb-3">
@@ -6,4 +78,57 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Add Comment</button>
                 </form>
-[Rest of the HTML content...]
+                {% endif %}
+
+                {% if comments %}
+                <div class="comments">
+                    {% for comment in comments %}
+                    <div class="comment mb-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong>{{ comment.author.username }}</strong>
+                                <small class="text-muted ms-2">
+                                    {{ comment.created_at.strftime('%B %d, %Y %H:%M') }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="comment-content mt-2">
+                            {{ comment.content|safe }}
+                        </div>
+                    </div>
+                    {% if not loop.last %}
+                    <hr>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>No comments yet. Be the first to comment!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Similar Tools Sidebar -->
+    <div class="col-md-4">
+        <div class="card container-card">
+            <div class="card-header">
+                <h4 class="card-title">Similar Tools</h4>
+            </div>
+            <div class="card-body">
+                {% if similar_tools %}
+                <div class="list-group">
+                    {% for similar_tool in similar_tools %}
+                    <a href="{{ url_for('tool', tool_id=similar_tool.id) }}" 
+                       class="list-group-item list-group-item-action bg-transparent">
+                        {{ similar_tool.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>No similar tools found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
