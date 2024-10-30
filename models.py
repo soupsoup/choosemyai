@@ -138,7 +138,6 @@ class AppearanceSettings(db.Model):
     link_hover_color = db.Column(db.String(7), default='#0a58ca')
     nav_link_color = db.Column(db.String(7), default='#ffffff')
     nav_link_hover_color = db.Column(db.String(7), default='#e9ecef')
-    # Container color settings
     container_background_color = db.Column(db.String(7), default='#2c3034')
     container_border_color = db.Column(db.String(7), default='#373b3e')
     search_box_background_color = db.Column(db.String(7), default='#2c3034')
@@ -147,9 +146,11 @@ class AppearanceSettings(db.Model):
     category_item_hover_color = db.Column(db.String(7), default='#373b3e')
     category_item_text_color = db.Column(db.String(7), default='#ffffff')
     category_item_hover_text_color = db.Column(db.String(7), default='#ffffff')
-    # Comment box colors
     comment_box_background_color = db.Column(db.String(7), default='#2c3034')
     comment_box_text_color = db.Column(db.String(7), default='#ffffff')
+    main_text_color = db.Column(db.String(7), default='#ffffff')
+    card_text_color = db.Column(db.String(7), default='#ffffff')
+    footer_text_color = db.Column(db.String(7), default='#6c757d')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod

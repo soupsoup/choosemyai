@@ -9,6 +9,48 @@
             </div>
             <div class="card-body">
                 <form method="POST">
+                    <!-- Text Colors Section -->
+                    <div class="mb-4">
+                        <h5>Text Colors</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="main_text_color" class="form-label">Main Content Text</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="main_text_color" name="main_text_color" 
+                                           value="{{ settings.main_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.main_text_color }}" 
+                                           data-color-input="main_text_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="card_text_color" class="form-label">Card Content Text</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="card_text_color" name="card_text_color" 
+                                           value="{{ settings.card_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.card_text_color }}" 
+                                           data-color-input="card_text_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="footer_text_color" class="form-label">Footer Text</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="footer_text_color" name="footer_text_color" 
+                                           value="{{ settings.footer_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.footer_text_color }}" 
+                                           data-color-input="footer_text_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Container Colors Section -->
                     <div class="mb-4">
                         <h5>Container Colors</h5>

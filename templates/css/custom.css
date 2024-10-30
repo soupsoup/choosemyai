@@ -23,13 +23,16 @@
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
     --comment-box-background-color: {{ appearance_settings.comment_box_background_color }};
     --comment-box-text-color: {{ appearance_settings.comment_box_text_color }};
+    --main-text-color: {{ appearance_settings.main_text_color }};
+    --card-text-color: {{ appearance_settings.card_text_color }};
+    --footer-text-color: {{ appearance_settings.footer_text_color }};
     --font-family: {{ appearance_settings.font_family }};
 }
 
 /* Base styles */
 body {
     background-color: var(--background-color);
-    color: var(--font-color);
+    color: var(--main-text-color);
     font-family: var(--font-family);
 }
 
@@ -37,7 +40,7 @@ body {
 .card, .container-card {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;
-    color: var(--font-color);
+    color: var(--card-text-color);
 }
 
 .card-header {
@@ -47,32 +50,21 @@ body {
 
 .card-body {
     background-color: var(--container-background-color) !important;
-    color: var(--font-color);
+    color: var(--card-text-color);
 }
 
 /* Form inputs and search styles */
-.form-control, .input-group-text, .form-select {
+.form-control, .input-group-text {
     background-color: var(--search-box-background-color) !important;
     border: 1px solid var(--search-box-border-color) !important;
-    color: var(--font-color) !important;
+    color: var(--main-text-color) !important;
 }
 
 .form-control:focus {
     background-color: var(--search-box-background-color) !important;
     border-color: var(--primary-color) !important;
-    color: var(--font-color) !important;
-    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
-}
-
-/* Comment box styles */
-.comment-form textarea.form-control {
-    background-color: var(--comment-box-background-color) !important;
-    color: var(--comment-box-text-color) !important;
-}
-
-.comment-form textarea.form-control:focus {
-    background-color: var(--comment-box-background-color) !important;
-    color: var(--comment-box-text-color) !important;
+    color: var(--main-text-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color), 0.25);
 }
 
 /* Navigation styles */
@@ -124,50 +116,28 @@ a:hover {
     color: var(--category-item-hover-text-color) !important;
 }
 
-/* List group styles */
-.list-group-item {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
-    color: var(--font-color) !important;
-}
-
-.list-group-item:hover {
-    background-color: var(--category-item-hover-color) !important;
-    color: var(--category-item-hover-text-color) !important;
-}
-
-/* Modal styles */
-.modal-content {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
-}
-
-.modal-header {
-    border-bottom-color: var(--container-border-color) !important;
-}
-
-.modal-footer {
-    border-top-color: var(--container-border-color) !important;
-}
-
-/* Alert styles */
-.alert {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
-}
-
 /* Table styles */
 .table {
-    color: var(--font-color) !important;
+    color: var(--main-text-color) !important;
 }
 
 .table th, .table td {
     border-color: var(--container-border-color) !important;
 }
 
-/* Text colors */
-.text-muted {
-    color: var(--secondary-text-color) !important;
+/* Dropdown styles */
+.dropdown-menu {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+.dropdown-item {
+    color: var(--main-text-color) !important;
+}
+
+.dropdown-item:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
 }
 
 /* Color input styling */
@@ -186,4 +156,35 @@ input[type="color"] {
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: 0.375rem;
+}
+
+/* Main content text */
+.content {
+    color: var(--main-text-color);
+}
+
+/* Card content text */
+.card-text {
+    color: var(--card-text-color);
+}
+
+/* Footer text */
+footer {
+    color: var(--footer-text-color);
+}
+
+/* Ensure text remains visible during webfont load */
+.font-loading {
+    font-display: swap;
+}
+
+/* Pre and code blocks */
+pre {
+    background-color: var(--container-background-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+    color: var(--main-text-color) !important;
+}
+
+code {
+    color: var(--main-text-color) !important;
 }
