@@ -9,6 +9,35 @@
             </div>
             <div class="card-body">
                 <form method="POST">
+                    <!-- Main Colors Section -->
+                    <div class="mb-4">
+                        <h5>Main Colors</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="background_color" class="form-label">Main Page Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="background_color" name="background_color" 
+                                           value="{{ settings.background_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.background_color }}" 
+                                           data-color-input="background_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="header_background" class="form-label">Header Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="header_background" name="header_background" 
+                                           value="{{ settings.header_background }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.header_background }}" 
+                                           data-color-input="header_background" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Text Colors Section -->
                     <div class="mb-4">
                         <h5>Text Colors</h5>

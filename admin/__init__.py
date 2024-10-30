@@ -22,6 +22,7 @@ def appearance():
         try:
             # Update color settings
             color_fields = [
+                'background_color', 'header_background',
                 'main_text_color', 'card_text_color', 'footer_text_color',
                 'container_background_color', 'container_border_color',
                 'search_box_background_color', 'search_box_border_color',
