@@ -147,6 +147,9 @@ class AppearanceSettings(db.Model):
     category_item_hover_color = db.Column(db.String(7), default='#373b3e')
     category_item_text_color = db.Column(db.String(7), default='#ffffff')
     category_item_hover_text_color = db.Column(db.String(7), default='#ffffff')
+    # Input field colors
+    input_background_color = db.Column(db.String(7), default='#2c3034')
+    input_text_color = db.Column(db.String(7), default='#ffffff')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod

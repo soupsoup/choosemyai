@@ -156,6 +156,35 @@
                         </div>
                     </div>
 
+                    <!-- Input Field Colors Section -->
+                    <div class="mb-4">
+                        <h5>Input Field Colors</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="input_background_color" class="form-label">Input Background</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="input_background_color" name="input_background_color" 
+                                           value="{{ settings.input_background_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.input_background_color }}" 
+                                           data-color-input="input_background_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="input_text_color" class="form-label">Input Text Color</label>
+                                <div class="input-group">
+                                    <input type="color" class="form-control form-control-color" 
+                                           id="input_text_color" name="input_text_color" 
+                                           value="{{ settings.input_text_color }}">
+                                    <input type="text" class="form-control" 
+                                           value="{{ settings.input_text_color }}" 
+                                           data-color-input="input_text_color" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             </div>

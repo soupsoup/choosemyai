@@ -21,6 +21,8 @@
     --category-item-hover-color: {{ appearance_settings.category_item_hover_color }};
     --category-item-text-color: {{ appearance_settings.category_item_text_color }};
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
+    --input-background-color: {{ appearance_settings.input_background_color }};
+    --input-text-color: {{ appearance_settings.input_text_color }};
     --font-family: {{ appearance_settings.font_family }};
 }
 
@@ -49,16 +51,16 @@ body {
 }
 
 /* Form inputs and search styles */
-.form-control, .input-group-text {
-    background-color: var(--search-box-background-color) !important;
-    border: 1px solid var(--search-box-border-color) !important;
-    color: var(--font-color) !important;
+.form-control, .input-group-text, .form-select {
+    background-color: var(--input-background-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+    color: var(--input-text-color) !important;
 }
 
 .form-control:focus {
-    background-color: var(--search-box-background-color) !important;
+    background-color: var(--input-background-color) !important;
     border-color: var(--primary-color) !important;
-    color: var(--font-color) !important;
+    color: var(--input-text-color) !important;
 }
 
 /* Navigation styles */
@@ -117,6 +119,21 @@ a:hover {
 
 .table th, .table td {
     border-color: var(--container-border-color) !important;
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+    background-color: var(--container-background-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+.dropdown-item {
+    color: var(--font-color) !important;
+}
+
+.dropdown-item:hover {
+    background-color: var(--category-item-hover-color) !important;
+    color: var(--category-item-hover-text-color) !important;
 }
 
 /* Color input styling */
