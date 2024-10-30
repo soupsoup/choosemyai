@@ -152,6 +152,11 @@ class AppearanceSettings(db.Model):
     main_text_color = db.Column(db.String(7), default='#ffffff')
     card_text_color = db.Column(db.String(7), default='#ffffff')
     footer_text_color = db.Column(db.String(7), default='#6c757d')
+    blog_meta_text_color = db.Column(db.String(7), default='#6c757d')
+    list_item_background_color = db.Column(db.String(7), default='#2c3034')
+    list_item_text_color = db.Column(db.String(7), default='#ffffff')
+    list_item_hover_background_color = db.Column(db.String(7), default='#373b3e')
+    list_item_hover_text_color = db.Column(db.String(7), default='#ffffff')
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @staticmethod

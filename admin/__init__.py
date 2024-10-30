@@ -22,6 +22,10 @@ def appearance():
         try:
             # Update color settings
             color_fields = [
+                'list_item_background_color',
+                'list_item_text_color',
+                'list_item_hover_background_color',
+                'list_item_hover_text_color',
                 'container_header_text_color',
                 'font_family',
                 'background_color', 'header_background',

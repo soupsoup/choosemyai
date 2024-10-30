@@ -26,6 +26,11 @@
     --main-text-color: {{ appearance_settings.main_text_color }};
     --card-text-color: {{ appearance_settings.card_text_color }};
     --footer-text-color: {{ appearance_settings.footer_text_color }};
+    --blog-meta-text-color: {{ appearance_settings.blog_meta_text_color }};
+    --list-item-background-color: {{ appearance_settings.list_item_background_color }};
+    --list-item-text-color: {{ appearance_settings.list_item_text_color }};
+    --list-item-hover-background-color: {{ appearance_settings.list_item_hover_background_color }};
+    --list-item-hover-text-color: {{ appearance_settings.list_item_hover_text_color }};
 }
 
 body {
@@ -166,6 +171,10 @@ footer {
     color: var(--footer-text-color) !important;
 }
 
+.blog-post-meta {
+    color: var(--blog-meta-text-color) !important;
+}
+
 .font-loading {
     font-display: swap;
 }
@@ -178,4 +187,15 @@ pre {
 
 code {
     color: var(--main-text-color) !important;
+}
+
+.list-group-item {
+    background-color: var(--list-item-background-color) !important;
+    color: var(--list-item-text-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+.list-group-item:hover {
+    background-color: var(--list-item-hover-background-color) !important;
+    color: var(--list-item-hover-text-color) !important;
 }
