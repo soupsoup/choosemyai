@@ -53,14 +53,15 @@ body {
 /* Form inputs and search styles */
 .form-control, .input-group-text, .form-select {
     background-color: var(--input-background-color) !important;
-    border: 1px solid var(--container-border-color) !important;
     color: var(--input-text-color) !important;
+    border: 1px solid var(--container-border-color) !important;
 }
 
 .form-control:focus {
     background-color: var(--input-background-color) !important;
-    border-color: var(--primary-color) !important;
     color: var(--input-text-color) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color), 0.25);
 }
 
 /* Navigation styles */
@@ -144,4 +145,15 @@ input[type="color"] {
 
 .form-control-color {
     width: 60px !important;
+}
+
+/* Pre and code blocks */
+pre {
+    background-color: var(--container-background-color) !important;
+    border: 1px solid var(--container-border-color) !important;
+    color: var(--font-color) !important;
+}
+
+code {
+    color: var(--font-color) !important;
 }

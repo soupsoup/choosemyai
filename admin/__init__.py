@@ -29,7 +29,8 @@ def appearance():
                 'container_background_color', 'container_border_color',
                 'search_box_background_color', 'search_box_border_color',
                 'category_item_background_color', 'category_item_hover_color',
-                'category_item_text_color', 'category_item_hover_text_color'
+                'category_item_text_color', 'category_item_hover_text_color',
+                'input_background_color', 'input_text_color'
             ]:
                 if field in request.form:
                     setattr(settings, field, request.form[field])
