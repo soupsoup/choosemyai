@@ -21,9 +21,6 @@
     --category-item-hover-color: {{ appearance_settings.category_item_hover_color }};
     --category-item-text-color: {{ appearance_settings.category_item_text_color }};
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
-    --input-background-color: {{ appearance_settings.input_background_color }};
-    --input-text-color: {{ appearance_settings.input_text_color }};
-    --blog-meta-text-color: {{ appearance_settings.blog_meta_text_color }};
     --font-family: {{ appearance_settings.font_family }};
 }
 
@@ -35,7 +32,7 @@ body {
 }
 
 /* Container styles */
-.card, .container-card, .tool-card {
+.card, .container-card {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;
     color: var(--font-color);
@@ -51,7 +48,7 @@ body {
     color: var(--font-color);
 }
 
-/* Search box and input styles */
+/* Form inputs and search styles */
 .form-control, .input-group-text, .form-select {
     background-color: var(--search-box-background-color) !important;
     border: 1px solid var(--search-box-border-color) !important;
@@ -62,7 +59,7 @@ body {
     background-color: var(--search-box-background-color) !important;
     border-color: var(--primary-color) !important;
     color: var(--font-color) !important;
-    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color), 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
 }
 
 /* Navigation styles */
@@ -114,40 +111,6 @@ a:hover {
     color: var(--category-item-hover-text-color) !important;
 }
 
-/* Table styles */
-.table {
-    color: var(--font-color) !important;
-}
-
-.table th, .table td {
-    border-color: var(--container-border-color) !important;
-}
-
-/* Dropdown styles */
-.dropdown-menu {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
-}
-
-.dropdown-item {
-    color: var(--font-color) !important;
-}
-
-.dropdown-item:hover {
-    background-color: var(--category-item-hover-color) !important;
-    color: var(--category-item-hover-text-color) !important;
-}
-
-/* Color input styling */
-input[type="color"] {
-    height: 38px;
-    padding: 2px;
-}
-
-.form-control-color {
-    width: 60px !important;
-}
-
 /* List group styles */
 .list-group-item {
     background-color: var(--container-background-color) !important;
@@ -158,22 +121,6 @@ input[type="color"] {
 .list-group-item:hover {
     background-color: var(--category-item-hover-color) !important;
     color: var(--category-item-hover-text-color) !important;
-}
-
-/* Blog post styles */
-.blog-post-meta {
-    color: var(--blog-meta-text-color) !important;
-}
-
-/* Alert styles */
-.alert {
-    background-color: var(--container-background-color) !important;
-    border-color: var(--container-border-color) !important;
-}
-
-/* Text colors */
-.text-muted {
-    color: var(--secondary-text-color) !important;
 }
 
 /* Modal styles */
@@ -190,9 +137,40 @@ input[type="color"] {
     border-top-color: var(--container-border-color) !important;
 }
 
-/* Code and pre blocks */
-pre, code {
+/* Alert styles */
+.alert {
     background-color: var(--container-background-color) !important;
-    border: 1px solid var(--container-border-color) !important;
+    border-color: var(--container-border-color) !important;
+}
+
+/* Table styles */
+.table {
     color: var(--font-color) !important;
+}
+
+.table th, .table td {
+    border-color: var(--container-border-color) !important;
+}
+
+/* Text colors */
+.text-muted {
+    color: var(--secondary-text-color) !important;
+}
+
+/* Color input styling */
+input[type="color"] {
+    height: 38px;
+    padding: 2px;
+}
+
+.form-control-color {
+    width: 60px !important;
+}
+
+/* Small preview boxes for color settings */
+.color-preview {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.375rem;
 }
