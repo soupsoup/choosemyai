@@ -7,6 +7,7 @@ import bleach
 import re
 import logging
 import json
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,6 +27,9 @@ def custom_css():
     css = render_template('css/custom.css', appearance_settings=settings)
     response = make_response(css)
     response.headers['Content-Type'] = 'text/css'
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
     return response
 
 @app.route('/')

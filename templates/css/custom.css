@@ -21,26 +21,20 @@
     --category-item-hover-color: {{ appearance_settings.category_item_hover_color }};
     --category-item-text-color: {{ appearance_settings.category_item_text_color }};
     --category-item-hover-text-color: {{ appearance_settings.category_item_hover_text_color }};
-    --comment-box-background-color: {{ appearance_settings.comment_box_background_color }};
-    --comment-box-text-color: {{ appearance_settings.comment_box_text_color }};
     --main-text-color: {{ appearance_settings.main_text_color }};
     --card-text-color: {{ appearance_settings.card_text_color }};
     --footer-text-color: {{ appearance_settings.footer_text_color }};
-    --font-family: {{ appearance_settings.font_family }};
 }
 
-/* Base styles */
 body {
     background-color: var(--background-color);
     color: var(--main-text-color);
     font-family: var(--font-family);
 }
 
-/* Container styles */
 .card, .container-card {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;
-    color: var(--card-text-color);
 }
 
 .card-header {
@@ -50,10 +44,13 @@ body {
 
 .card-body {
     background-color: var(--container-background-color) !important;
-    color: var(--card-text-color);
+    color: var(--card-text-color) !important;
 }
 
-/* Form inputs and search styles */
+.card-text {
+    color: var(--card-text-color) !important;
+}
+
 .form-control, .input-group-text {
     background-color: var(--search-box-background-color) !important;
     border: 1px solid var(--search-box-border-color) !important;
@@ -67,7 +64,6 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(var(--primary-color), 0.25);
 }
 
-/* Navigation styles */
 .navbar {
     background-color: var(--header-background) !important;
 }
@@ -80,7 +76,6 @@ body {
     color: var(--nav-link-hover-color) !important;
 }
 
-/* Button styles */
 .btn-primary {
     background-color: var(--button-background-color) !important;
     border-color: var(--button-background-color) !important;
@@ -93,7 +88,6 @@ body {
     color: var(--button-hover-text-color) !important;
 }
 
-/* Links */
 a {
     color: var(--link-color);
     text-decoration: none;
@@ -104,7 +98,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Category items */
 .badge, .category-badge {
     background-color: var(--category-item-background-color) !important;
     color: var(--category-item-text-color) !important;
@@ -116,7 +109,6 @@ a:hover {
     color: var(--category-item-hover-text-color) !important;
 }
 
-/* Table styles */
 .table {
     color: var(--main-text-color) !important;
 }
@@ -125,7 +117,6 @@ a:hover {
     border-color: var(--container-border-color) !important;
 }
 
-/* Dropdown styles */
 .dropdown-menu {
     background-color: var(--container-background-color) !important;
     border-color: var(--container-border-color) !important;
@@ -140,7 +131,6 @@ a:hover {
     color: var(--category-item-hover-text-color) !important;
 }
 
-/* Color input styling */
 input[type="color"] {
     height: 38px;
     padding: 2px;
@@ -150,7 +140,6 @@ input[type="color"] {
     width: 60px !important;
 }
 
-/* Preview elements */
 .color-preview {
     width: 100%;
     padding: 1rem;
@@ -158,27 +147,18 @@ input[type="color"] {
     border-radius: 0.375rem;
 }
 
-/* Main content text */
 .content {
     color: var(--main-text-color);
 }
 
-/* Card content text */
-.card-text {
-    color: var(--card-text-color);
-}
-
-/* Footer text */
 footer {
-    color: var(--footer-text-color);
+    color: var(--footer-text-color) !important;
 }
 
-/* Ensure text remains visible during webfont load */
 .font-loading {
     font-display: swap;
 }
 
-/* Pre and code blocks */
 pre {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;

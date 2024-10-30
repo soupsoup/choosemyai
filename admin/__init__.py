@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_required, current_user
 from app import db
 from models import AppearanceSettings, Category, Tool
+from datetime import datetime
 import json
 from io import StringIO
 import csv
@@ -19,23 +20,25 @@ def appearance():
     
     if request.method == 'POST':
         try:
-            # Update all appearance settings
-            for field in [
-                'primary_color', 'secondary_color', 'background_color', 'font_color',
-                'font_family', 'header_background', 'secondary_text_color',
-                'button_background_color', 'button_hover_background_color',
-                'button_text_color', 'button_hover_text_color', 'link_color',
-                'link_hover_color', 'nav_link_color', 'nav_link_hover_color',
+            # Update color settings
+            color_fields = [
+                'main_text_color', 'card_text_color', 'footer_text_color',
                 'container_background_color', 'container_border_color',
                 'search_box_background_color', 'search_box_border_color',
                 'category_item_background_color', 'category_item_hover_color',
-                'category_item_text_color', 'category_item_hover_text_color',
-                'comment_box_background_color', 'comment_box_text_color'
-            ]:
+                'category_item_text_color', 'category_item_hover_text_color'
+            ]
+            
+            for field in color_fields:
                 if field in request.form:
                     setattr(settings, field, request.form[field])
             
             db.session.commit()
+            
+            # Force CSS reload
+            settings.last_updated = datetime.utcnow()
+            db.session.commit()
+            
             flash('Appearance settings updated successfully!', 'success')
             return redirect(url_for('admin.appearance'))
             
@@ -140,14 +143,11 @@ def export_tools():
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
     
-    # Create CSV StringIO object
     si = StringIO()
     writer = csv.writer(si)
     
-    # Write headers
     writer.writerow(['Name', 'Description', 'URL', 'Image URL', 'YouTube URL', 'Categories', 'Resources', 'Is Approved'])
     
-    # Write tool data
     tools = Tool.query.all()
     for tool in tools:
         categories = [c.name for c in tool.categories]
@@ -166,7 +166,6 @@ def export_tools():
     output = si.getvalue()
     si.close()
     
-    # Create a memory file for the CSV
     mem = StringIO()
     mem.write(output)
     mem.seek(0)
@@ -204,12 +203,10 @@ def import_tools():
             if file.filename.endswith('.json'):
                 data = json.loads(content)
             else:
-                # Handle CSV import
                 decoded_content = content.decode('utf-8')
                 reader = csv.DictReader(StringIO(decoded_content))
                 data = list(reader)
             
-            # Process and import the tools
             for item in data:
                 tool = Tool(
                     name=item['name'],
@@ -221,7 +218,6 @@ def import_tools():
                     user_id=current_user.id
                 )
                 
-                # Handle categories
                 if 'categories' in item:
                     category_names = []
                     if isinstance(item['categories'], str):
@@ -237,7 +233,6 @@ def import_tools():
                         if category:
                             tool.categories.append(category)
                 
-                # Handle resources field
                 if 'resources' in item:
                     try:
                         if isinstance(item['resources'], str):
