@@ -150,39 +150,38 @@ def export_tools():
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
     
-    si = StringIO()
-    writer = csv.writer(si)
-    
-    writer.writerow(['Name', 'Description', 'URL', 'Image URL', 'YouTube URL', 'Categories', 'Resources', 'Is Approved'])
-    
-    tools = Tool.query.all()
-    for tool in tools:
-        categories = [c.name for c in tool.categories]
-        resources = json.loads(tool.resources) if tool.resources else []
-        writer.writerow([
-            tool.name,
-            tool.description,
-            tool.url,
-            tool.image_url or '',
-            tool.youtube_url or '',
-            ', '.join(categories),
-            json.dumps(resources),
-            'Yes' if tool.is_approved else 'No'
-        ])
-    
-    output = si.getvalue()
-    si.close()
-    
-    mem = StringIO()
-    mem.write(output)
-    mem.seek(0)
-    
-    return send_file(
-        mem,
-        mimetype='text/csv',
-        as_attachment=True,
-        download_name='tools_export.csv'
-    )
+    try:
+        si = StringIO()
+        writer = csv.writer(si)
+        
+        writer.writerow(['Name', 'Description', 'URL', 'Image URL', 'YouTube URL', 'Categories', 'Resources', 'Is Approved'])
+        
+        tools = Tool.query.all()
+        for tool in tools:
+            categories = [c.name for c in tool.categories]
+            resources = json.loads(tool.resources) if tool.resources else []
+            writer.writerow([
+                tool.name,
+                tool.description,
+                tool.url,
+                tool.image_url or '',
+                tool.youtube_url or '',
+                ', '.join(categories),
+                json.dumps(resources),
+                'Yes' if tool.is_approved else 'No'
+            ])
+        
+        output = si.getvalue()
+        si.close()
+        
+        response = make_response(output)
+        response.headers["Content-Disposition"] = "attachment; filename=tools_export.csv"
+        response.headers["Content-type"] = "text/csv"
+        return response
+        
+    except Exception as e:
+        flash(f'Error exporting tools: {str(e)}', 'danger')
+        return redirect(url_for('admin.import_tools'))
 
 @admin.route('/admin/import-tools', methods=['GET', 'POST'])
 @login_required
