@@ -1,76 +1,60 @@
 {% extends "base.html" %}
+
 {% block content %}
-<h2 class="mb-4">Moderate Tools</h2>
-{% if tools %}
-<div class="row row-cols-1 g-4">
-    {% for tool in tools %}
-    <div class="col">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ tool.name }}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                    Categories: 
-                    {% for category in tool.categories %}
-                    <span class="badge bg-secondary">{{ category.name }}</span>
-                    {% endfor %}
-                    | Submitted by: {{ tool.author.username }}
-                </h6>
-                <div class="card-text mb-3">{{ tool.description|safe }}</div>
-                
-                <!-- Media section -->
-                <div class="media-section">
-                    <!-- Image display -->
-                    {% if tool.image_url %}
-                    <div class="mb-4">
-                        <h6>Tool Image Preview:</h6>
-                        <p class="text-muted">{{ tool.image_url }}</p>
-                        <div class="border rounded p-3">
-                            <img src="{{ tool.image_url }}" 
-                                 alt="Tool image" 
-                                 class="img-fluid"
-                                 style="max-height: 400px; width: auto;">
-                        </div>
-                    </div>
-                    {% endif %}
-                    
-                    <!-- YouTube display -->
-                    {% if tool.youtube_url %}
-                    <div class="mb-4">
-                        <h6>YouTube Video Preview:</h6>
-                        <p class="text-muted">{{ tool.youtube_url }}</p>
-                        {% if tool.youtube_embed_url %}
-                        <div class="border rounded p-3">
-                            <div class="ratio ratio-16x9">
-                                <iframe src="{{ tool.youtube_embed_url }}"
-                                        title="YouTube video player"
-                                        frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowfullscreen></iframe>
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mb-4">Moderate Tools</h2>
+        
+        {% if tools %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Categories</th>
+                        <th>Submitted By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tool in tools %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('tool', tool_id=tool.id) }}" target="_blank">
+                                {{ tool.name }}
+                            </a>
+                        </td>
+                        <td>{{ tool.description|truncate(100) }}</td>
+                        <td>
+                            {% for category in tool.categories %}
+                            <span class="badge rounded-pill text-bg-secondary">{{ category.name }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>{{ tool.author.username }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='approve') }}"
+                                   class="btn btn-success btn-sm">
+                                    <i class="fas fa-check"></i> Approve
+                                </a>
+                                <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='reject') }}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to reject this tool? This action cannot be undone.')">
+                                    <i class="fas fa-times"></i> Reject
+                                </a>
                             </div>
-                        </div>
-                        {% else %}
-                        <p class="text-danger">Error: Could not generate embed URL from the provided YouTube URL</p>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-                
-                <p class="mb-3">
-                    <strong>URL:</strong> 
-                    <a href="{{ tool.url }}" target="_blank" class="text-break">{{ tool.url }}</a>
-                </p>
-                <div class="btn-group">
-                    <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='approve') }}" 
-                       class="btn btn-success">Approve</a>
-                    <a href="{{ url_for('moderate_tool', tool_id=tool.id, action='reject') }}" 
-                       class="btn btn-danger">Reject</a>
-                </div>
-            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        {% else %}
+        <div class="alert alert-info">
+            No tools pending moderation.
+        </div>
+        {% endif %}
     </div>
-    {% endfor %}
 </div>
-{% else %}
-<div class="alert alert-info">No tools pending moderation.</div>
-{% endif %}
 {% endblock %}

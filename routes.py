@@ -57,9 +57,13 @@ def index():
                 pass
         
         if sort_by == 'votes':
-            query = query.join(ToolVote, Tool.id == ToolVote.tool_id, isouter=True)\
-                    .group_by(Tool.id)\
-                    .order_by(desc(func.coalesce(func.sum(ToolVote.value), 0)))
+            subq = db.session.query(
+                ToolVote.tool_id,
+                func.sum(ToolVote.value).label('vote_count')
+            ).group_by(ToolVote.tool_id).subquery()
+            
+            query = query.outerjoin(subq, Tool.id == subq.c.tool_id)\
+                        .order_by(desc(func.coalesce(subq.c.vote_count, 0)))
         else:
             query = query.order_by(desc(Tool.created_at))
         
@@ -132,6 +136,30 @@ def moderate_tools():
     
     tools = Tool.query.filter_by(is_approved=False).order_by(Tool.created_at.desc()).all()
     return render_template('moderate_tools.html', tools=tools)
+
+@app.route('/moderate-tool/<int:tool_id>/<action>')
+@login_required
+def moderate_tool(tool_id, action):
+    if not current_user.is_moderator:
+        flash('Access denied. Moderator rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tool = Tool.query.get_or_404(tool_id)
+    
+    try:
+        if action == 'approve':
+            tool.is_approved = True
+            flash('Tool approved successfully!', 'success')
+        elif action == 'reject':
+            db.session.delete(tool)
+            flash('Tool rejected and removed successfully!', 'success')
+        
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error moderating tool: {str(e)}', 'danger')
+    
+    return redirect(url_for('moderate_tools'))
 
 @app.route('/category/<int:category_id>')
 def category(category_id):
