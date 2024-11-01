@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, jsonify, flash, s
 from flask_login import current_user, login_required
 from app import app, db
 from models import Category, Tool, Comment, ToolVote, CommentVote, AppearanceSettings, BlogPost
-from sqlalchemy import desc, func, or_
+from sqlalchemy import desc, func, or_, text
 import bleach
 import re
 import logging

@@ -3,6 +3,7 @@ from app import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
+from sqlalchemy import text
 import re
 
 # Association table for Tool-Category many-to-many relationship
@@ -51,7 +52,7 @@ class Tool(db.Model):
 
     @property
     def vote_count(self):
-        return db.session.query(db.func.sum(ToolVote.value)).filter(ToolVote.tool_id == self.id).scalar() or 0
+        return db.session.query(db.func.coalesce(db.func.sum(ToolVote.value), text('0'))).filter(ToolVote.tool_id == self.id).scalar() or 0
     
     @property
     def youtube_embed_url(self):
