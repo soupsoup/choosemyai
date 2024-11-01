@@ -21,7 +21,7 @@ ALLOWED_ATTRIBUTES = {
     '*': ['class']
 }
 
-@app.route('/static/css/custom.css')
+@app.route('/custom.css')
 def custom_css():
     settings = AppearanceSettings.get_settings()
     css = render_template('css/custom.css', appearance_settings=settings)
@@ -77,6 +77,93 @@ def index():
         flash('An error occurred while loading the page. Please try again.', 'danger')
         return render_template('index.html', tools=[], categories=[])
 
+@app.route('/moderate-tools')
+@login_required
+def moderate_tools():
+    if not current_user.is_moderator:
+        flash('Access denied. Moderator rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tools = Tool.query.filter_by(is_approved=False).order_by(Tool.created_at.desc()).all()
+    return render_template('moderate_tools.html', tools=tools)
+
+@app.route('/moderate-tool/<int:tool_id>/<action>')
+@login_required
+def moderate_tool(tool_id, action):
+    if not current_user.is_moderator:
+        flash('Access denied. Moderator rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tool = Tool.query.get_or_404(tool_id)
+    
+    try:
+        if action == 'approve':
+            tool.is_approved = True
+            flash('Tool approved successfully!', 'success')
+        elif action == 'reject':
+            db.session.delete(tool)
+            flash('Tool rejected and removed successfully!', 'success')
+        
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error moderating tool: {str(e)}', 'danger')
+    
+    return redirect(url_for('moderate_tools'))
+
+@app.route('/tool/<int:tool_id>')
+def tool(tool_id):
+    tool = Tool.query.get_or_404(tool_id)
+    if not tool.is_approved and not (current_user.is_authenticated and (current_user.is_moderator or current_user.id == tool.user_id)):
+        flash('This tool is not yet approved.', 'warning')
+        return redirect(url_for('index'))
+    
+    comments = Comment.query.filter_by(tool_id=tool_id)\
+                           .order_by(desc(Comment.created_at))\
+                           .all()
+    
+    similar_tools = Tool.query.join(Tool.categories)\
+        .filter(Tool.id != tool_id)\
+        .filter(Tool.is_approved == True)\
+        .filter(Category.id.in_([c.id for c in tool.categories]))\
+        .group_by(Tool.id)\
+        .order_by(func.random())\
+        .limit(5)\
+        .all()
+    
+    return render_template('tool.html', tool=tool, comments=comments, similar_tools=similar_tools)
+
+@app.route('/add-comment/<int:tool_id>', methods=['POST'])
+@login_required
+def add_comment(tool_id):
+    tool = Tool.query.get_or_404(tool_id)
+    content = bleach.clean(request.form.get('content') or '', tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+    
+    if not content:
+        flash('Comment cannot be empty', 'danger')
+        return redirect(url_for('tool', tool_id=tool_id))
+    
+    comment = Comment(content=content, tool_id=tool_id, user_id=current_user.id)
+    
+    try:
+        db.session.add(comment)
+        db.session.commit()
+        flash('Comment added successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error adding comment: {str(e)}', 'danger')
+    
+    return redirect(url_for('tool', tool_id=tool_id))
+
+@app.route('/category/<int:category_id>')
+def category(category_id):
+    category = Category.query.get_or_404(category_id)
+    tools = Tool.query.filter_by(is_approved=True)\
+                     .filter(Tool.categories.contains(category))\
+                     .order_by(desc(Tool.created_at))\
+                     .all()
+    return render_template('category.html', category=category, tools=tools)
+
 @app.route('/submit-tool', methods=['GET', 'POST'])
 @login_required
 def submit_tool():
@@ -126,112 +213,6 @@ def submit_tool():
     
     categories = Category.query.all()
     return render_template('submit_tool.html', categories=categories)
-
-@app.route('/moderate-tools')
-@login_required
-def moderate_tools():
-    if not current_user.is_moderator:
-        flash('Access denied. Moderator rights required.', 'danger')
-        return redirect(url_for('index'))
-    
-    tools = Tool.query.filter_by(is_approved=False).order_by(Tool.created_at.desc()).all()
-    return render_template('moderate_tools.html', tools=tools)
-
-@app.route('/moderate-tool/<int:tool_id>/<action>')
-@login_required
-def moderate_tool(tool_id, action):
-    if not current_user.is_moderator:
-        flash('Access denied. Moderator rights required.', 'danger')
-        return redirect(url_for('index'))
-    
-    tool = Tool.query.get_or_404(tool_id)
-    
-    try:
-        if action == 'approve':
-            tool.is_approved = True
-            flash('Tool approved successfully!', 'success')
-        elif action == 'reject':
-            db.session.delete(tool)
-            flash('Tool rejected and removed successfully!', 'success')
-        
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        flash(f'Error moderating tool: {str(e)}', 'danger')
-    
-    return redirect(url_for('moderate_tools'))
-
-@app.route('/category/<int:category_id>')
-def category(category_id):
-    category = Category.query.get_or_404(category_id)
-    tools = Tool.query.filter_by(is_approved=True)\
-                     .filter(Tool.categories.contains(category))\
-                     .order_by(desc(Tool.created_at))\
-                     .all()
-    return render_template('category.html', category=category, tools=tools)
-
-@app.route('/tool/<int:tool_id>')
-def tool(tool_id):
-    tool = Tool.query.get_or_404(tool_id)
-    if not tool.is_approved and not (current_user.is_authenticated and (current_user.is_moderator or current_user.id == tool.user_id)):
-        flash('This tool is not yet approved.', 'warning')
-        return redirect(url_for('index'))
-    
-    comments = Comment.query.filter_by(tool_id=tool_id)\
-                           .order_by(desc(Comment.created_at))\
-                           .all()
-    
-    similar_tools = Tool.query.join(Tool.categories)\
-        .filter(Tool.id != tool_id)\
-        .filter(Tool.is_approved == True)\
-        .filter(Category.id.in_([c.id for c in tool.categories]))\
-        .group_by(Tool.id)\
-        .order_by(func.random())\
-        .limit(5)\
-        .all()
-    
-    return render_template('tool.html', tool=tool, comments=comments, similar_tools=similar_tools)
-
-@app.route('/add-comment/<int:tool_id>', methods=['POST'])
-@login_required
-def add_comment(tool_id):
-    tool = Tool.query.get_or_404(tool_id)
-    content = bleach.clean(request.form.get('content') or '', tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
-    
-    if not content:
-        flash('Comment cannot be empty', 'danger')
-        return redirect(url_for('tool', tool_id=tool_id))
-    
-    comment = Comment(content=content, tool_id=tool_id, user_id=current_user.id)
-    
-    try:
-        db.session.add(comment)
-        db.session.commit()
-        flash('Comment added successfully!', 'success')
-    except Exception as e:
-        db.session.rollback()
-        flash(f'Error adding comment: {str(e)}', 'danger')
-    
-    return redirect(url_for('tool', tool_id=tool_id))
-
-@app.route('/remove-tool/<int:tool_id>')
-@login_required
-def remove_tool(tool_id):
-    if not current_user.is_admin:
-        flash('Access denied. Admin rights required.', 'danger')
-        return redirect(url_for('index'))
-    
-    tool = Tool.query.get_or_404(tool_id)
-    
-    try:
-        db.session.delete(tool)
-        db.session.commit()
-        flash('Tool removed successfully!', 'success')
-    except Exception as e:
-        db.session.rollback()
-        flash(f'Error removing tool: {str(e)}', 'danger')
-    
-    return redirect(url_for('index'))
 
 @app.route('/edit-tool/<int:tool_id>', methods=['GET', 'POST'])
 @login_required
@@ -285,3 +266,22 @@ def edit_tool(tool_id):
     
     categories = Category.query.all()
     return render_template('admin/edit_tool.html', tool=tool, categories=categories)
+
+@app.route('/remove-tool/<int:tool_id>')
+@login_required
+def remove_tool(tool_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    tool = Tool.query.get_or_404(tool_id)
+    
+    try:
+        db.session.delete(tool)
+        db.session.commit()
+        flash('Tool removed successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error removing tool: {str(e)}', 'danger')
+    
+    return redirect(url_for('index'))
