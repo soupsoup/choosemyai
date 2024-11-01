@@ -267,9 +267,9 @@ def edit_tool(tool_id):
     categories = Category.query.all()
     return render_template('admin/edit_tool.html', tool=tool, categories=categories)
 
-@app.route('/remove-tool/<int:tool_id>')
+@app.route('/delete-tool/<int:tool_id>')
 @login_required
-def remove_tool(tool_id):
+def delete_tool(tool_id):
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
@@ -279,9 +279,9 @@ def remove_tool(tool_id):
     try:
         db.session.delete(tool)
         db.session.commit()
-        flash('Tool removed successfully!', 'success')
+        flash('Tool deleted successfully!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error removing tool: {str(e)}', 'danger')
+        flash(f'Error deleting tool: {str(e)}', 'danger')
     
     return redirect(url_for('index'))
