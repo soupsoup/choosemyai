@@ -21,6 +21,10 @@ ALLOWED_ATTRIBUTES = {
     '*': ['class']
 }
 
+@app.route('/ads.txt')
+def ads_txt():
+    return send_from_directory('static', 'ads.txt')
+
 @app.route('/custom.css')
 def custom_css():
     settings = AppearanceSettings.get_settings()
