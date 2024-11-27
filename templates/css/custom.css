@@ -46,7 +46,6 @@ body {
 .card, .container-card {
     background-color: var(--container-background-color) !important;
     border: 1px solid var(--container-border-color) !important;
-    color: var(--container-header-text-color) !important;
 }
 
 .card-header, .container-card .card-header {
@@ -61,6 +60,12 @@ body {
 
 .card-body {
     background-color: var(--container-background-color) !important;
+    color: var(--card-text-color) !important;
+}
+
+/* Ensure proper text color inheritance for specific elements */
+.card-body h1, .card-body h2, .card-body h3, .card-body h4, .card-body h5, .card-body h6,
+.card-body p, .card-body span:not(.badge), .card-body div:not(.badge) {
     color: var(--card-text-color) !important;
 }
 
