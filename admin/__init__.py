@@ -270,3 +270,62 @@ def change_password():
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
     return render_template('admin/change_password.html')
+
+@admin.route('/admin/manage-users')
+@login_required
+def manage_users():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    users = User.query.order_by(User.username).all()
+    return render_template('admin/manage_users.html', users=users)
+
+@admin.route('/admin/edit-user-roles/<int:user_id>', methods=['POST'])
+@login_required
+def edit_user_roles(user_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    user = User.query.get_or_404(user_id)
+    
+    # Prevent self-role modification
+    if current_user.id != user.id:
+        user.is_admin = bool(request.form.get('is_admin'))
+    user.is_moderator = bool(request.form.get('is_moderator'))
+    
+    try:
+        db.session.commit()
+        flash('User roles updated successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error updating user roles: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.manage_users'))
+
+@admin.route('/admin/delete-user/<int:user_id>')
+@login_required
+def delete_user(user_id):
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    if current_user.id == user_id:
+        flash('Cannot delete your own account.', 'danger')
+        return redirect(url_for('admin.manage_users'))
+    
+    user = User.query.get_or_404(user_id)
+    if user.is_admin:
+        flash('Cannot delete admin users.', 'danger')
+        return redirect(url_for('admin.manage_users'))
+    
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        flash('User deleted successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting user: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.manage_users'))
