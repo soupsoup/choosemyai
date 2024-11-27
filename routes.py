@@ -31,9 +31,10 @@ def custom_css():
     css = render_template('css/custom.css', appearance_settings=settings)
     response = make_response(css)
     response.headers['Content-Type'] = 'text/css'
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = '0'
+    # Add timestamp to force CSS reload when settings change
+    settings_timestamp = settings.last_updated.timestamp() if settings.last_updated else ''
+    response.headers['Cache-Control'] = f'private, max-age=0, must-revalidate'
+    response.headers['ETag'] = f'"{settings_timestamp}"'
     return response
 
 @app.route('/')
