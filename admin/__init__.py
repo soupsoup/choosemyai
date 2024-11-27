@@ -343,7 +343,10 @@ def export_users():
         }
         users_data.append(user_data)
     
-    return jsonify(users_data)
+    response = make_response(json.dumps(users_data, indent=2))
+    response.headers['Content-Type'] = 'application/json'
+    response.headers['Content-Disposition'] = 'attachment; filename=users_export.json'
+    return response
 
 @admin.route('/admin/import-users', methods=['POST'])
 @login_required
