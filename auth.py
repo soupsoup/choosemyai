@@ -51,6 +51,34 @@ def register():
     
     return render_template('auth/register.html')
 
+@auth.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        if not current_user.check_password(current_password):
+            flash('Current password is incorrect.', 'danger')
+            return redirect(url_for('auth.change_password'))
+        
+        if new_password != confirm_password:
+            flash('New passwords do not match.', 'danger')
+            return redirect(url_for('auth.change_password'))
+        
+        if not new_password or len(new_password) < 6:
+            flash('Password must be at least 6 characters long.', 'danger')
+            return redirect(url_for('auth.change_password'))
+        
+        current_user.set_password(new_password)
+        db.session.commit()
+        
+        flash('Password changed successfully!', 'success')
+        return redirect(url_for('auth.login'))
+    
+    return render_template('auth/change_password.html')
+
 @auth.route('/logout')
 @login_required
 def logout():
