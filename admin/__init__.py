@@ -322,3 +322,73 @@ def delete_user(user_id):
         flash(f'Error deleting user: {str(e)}', 'danger')
     
     return redirect(url_for('admin.manage_users'))
+
+@admin.route('/admin/export-users')
+@login_required
+def export_users():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    users = User.query.all()
+    users_data = []
+    
+    for user in users:
+        user_data = {
+            'username': user.username,
+            'email': user.email,
+            'is_moderator': user.is_moderator,
+            'is_admin': user.is_admin,
+            'created_at': user.created_at.isoformat() if hasattr(user, 'created_at') else None
+        }
+        users_data.append(user_data)
+    
+    return jsonify(users_data)
+
+@admin.route('/admin/import-users', methods=['POST'])
+@login_required
+def import_users():
+    if not current_user.is_admin:
+        flash('Access denied. Admin rights required.', 'danger')
+        return redirect(url_for('index'))
+    
+    if 'file' not in request.files:
+        flash('No file selected', 'danger')
+        return redirect(url_for('admin.manage_users'))
+    
+    file = request.files['file']
+    if file.filename == '':
+        flash('No file selected', 'danger')
+        return redirect(url_for('admin.manage_users'))
+    
+    if not file.filename.endswith('.json'):
+        flash('Only JSON files are allowed', 'danger')
+        return redirect(url_for('admin.manage_users'))
+    
+    try:
+        content = file.read().decode('utf-8')
+        users_data = json.loads(content)
+        
+        if isinstance(users_data, dict):
+            users_data = [users_data]
+        
+        for user_data in users_data:
+            if User.query.filter_by(email=user_data.get('email')).first():
+                continue
+                
+            user = User()
+            user.username = user_data.get('username')
+            user.email = user_data.get('email')
+            user.is_moderator = user_data.get('is_moderator', False)
+            user.is_admin = user_data.get('is_admin', False)
+            user.set_password('temppass123')  # Set a temporary password
+            
+            db.session.add(user)
+        
+        db.session.commit()
+        flash('Users imported successfully! Default password set to "temppass123"', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error importing users: {str(e)}', 'danger')
+    
+    return redirect(url_for('admin.manage_users'))
