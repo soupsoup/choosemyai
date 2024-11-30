@@ -120,24 +120,38 @@ def add_category():
     
     return redirect(url_for('admin.categories'))
 
-@admin.route('/admin/remove-category/<int:category_id>', methods=['POST'])
+# Category deletion is now handled in admin/__init__.py
+@admin.route('/admin/edit-category/<int:category_id>', methods=['POST'])
 @login_required
-def remove_category(category_id):
+def edit_category(category_id):
     if not current_user.is_admin:
         flash('Access denied. Admin rights required.', 'danger')
         return redirect(url_for('index'))
     
     category = Category.query.get_or_404(category_id)
+    name = request.form.get('name')
+    description = request.form.get('description')
+    
+    if not name or not description:
+        flash('Both name and description are required.', 'danger')
+        return redirect(url_for('admin.categories'))
+    
+    existing_category = Category.query.filter_by(name=name).first()
+    if existing_category and existing_category.id != category_id:
+        flash('A category with this name already exists.', 'danger')
+        return redirect(url_for('admin.categories'))
     
     try:
-        db.session.delete(category)
+        category.name = name
+        category.description = description
         db.session.commit()
-        flash('Category removed successfully!', 'success')
+        flash('Category updated successfully!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error removing category: {str(e)}', 'danger')
+        flash(f'Error updating category: {str(e)}', 'danger')
     
     return redirect(url_for('admin.categories'))
+
 
 @admin.route('/admin/import-tools', methods=['GET', 'POST'])
 @login_required
