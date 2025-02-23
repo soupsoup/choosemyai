@@ -3,7 +3,9 @@ const session = require('express-session');
 const path = require('path');
 const pgSession = require('connect-pg-simple')(session);
 const expressLayouts = require('express-ejs-layouts');
+const cookieParser = require('cookie-parser');
 const { pool } = require('./db/connection');
+const { router: authRouter } = require('./routes/auth');
 
 const app = express();
 
@@ -17,6 +19,7 @@ app.set('layout', 'layout'); // This tells Express to use views/layout.ejs as th
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 
 // Session configuration
 app.use(session({
@@ -35,12 +38,14 @@ app.use(session({
 // Flash messages middleware
 app.use((req, res, next) => {
     res.locals.messages = req.session.messages || [];
-    res.locals.user = req.session.user || null;
+    res.locals.user = req.user || null;
     delete req.session.messages;
     next();
 });
 
 // Routes
+app.use(authRouter); //This line is added from edited code.
+
 app.get('/', (req, res) => {
     res.render('index', {
         title: 'AI Tools Directory',
