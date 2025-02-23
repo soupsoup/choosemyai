@@ -1,4 +1,4 @@
-modules = ["python-3.11"]
+modules = ["python-3.11", "nodejs-20"]
 
 [nix]
 channel = "stable-24_05"
@@ -13,10 +13,6 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Flask Server"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Initialize DB"
 
 [[workflows.workflow.tasks]]
@@ -27,20 +23,9 @@ args = "Update Schema"
 task = "workflow.run"
 args = "Migrate DB"
 
-[[workflows.workflow]]
-name = "Flask Server"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
 [[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python3 main.py"
-waitForPort = 5000
+task = "workflow.run"
+args = "Node Server"
 
 [[workflows.workflow]]
 name = "Initialize DB"
@@ -83,6 +68,21 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python3 migrate_appearance_settings.py"
+
+[[workflows.workflow]]
+name = "Node Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node main.js"
+waitForPort = 5000
 
 [deployment]
 run = ["sh", "-c", "python3 main.py"]
