@@ -11,4 +11,5 @@ dependencies = [
     "flask-login>=0.6.3",
     "bleach>=6.1.0",
     "werkzeug",
+    "sqlalchemy>=2.0.36",
 ]
