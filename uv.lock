@@ -304,6 +304,7 @@ dependencies = [
     { name = "flask-sqlalchemy" },
     { name = "gunicorn" },
     { name = "psycopg2-binary" },
+    { name = "serverless-wsgi" },
     { name = "sqlalchemy" },
     { name = "werkzeug" },
 ]
@@ -317,8 +318,20 @@ requires-dist = [
     { name = "flask-sqlalchemy", specifier = ">=3.1.1" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
+    { name = "serverless-wsgi", specifier = ">=3.1.0" },
     { name = "sqlalchemy", specifier = ">=2.0.36" },
     { name = "werkzeug" },
+]
+
+[[package]]
+name = "serverless-wsgi"
+version = "3.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "werkzeug" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5f/b0/9b3fb4001807cf82fda139ce7db29a32b2a19005d7c6a0cd0c74776b8b4a/serverless_wsgi-3.1.0-py2.py3-none-any.whl", hash = "sha256:c2584067e1c2b0e909f83b923d3ab3f19cc645133d53bf203ca249fd77e6baec", size = 10774 },
 ]
 
 [[package]]
