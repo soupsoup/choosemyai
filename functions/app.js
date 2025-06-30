@@ -118,4 +118,8 @@ exports.handler = async function(event, context) {
       message: 'This route is not implemented in the JavaScript version'
     }),
     headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+};
  
