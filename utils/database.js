@@ -3,15 +3,12 @@ const { sequelize, User, Category, Tool, Comment, BlogPost, ToolVote, CommentVot
 async function syncDatabase() {
   try {
     // Sync all models with database
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: true }); // Force sync for in-memory database
     console.log('✅ Database synced successfully');
     
-    // Check if we need to seed initial data
-    const userCount = await User.count();
-    if (userCount === 0) {
-      await seedInitialData();
-      console.log('✅ Initial data seeded successfully');
-    }
+    // Always seed initial data for in-memory database
+    await seedInitialData();
+    console.log('✅ Initial data seeded successfully');
   } catch (error) {
     console.error('❌ Database sync failed:', error);
     throw error;

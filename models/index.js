@@ -1,13 +1,33 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const fs = require('fs');
 
-// Database configuration
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: path.join(__dirname, '../database.sqlite'),
-  logging: false
-});
+// Database configuration for serverless compatibility
+let sequelize;
+
+if (process.env.NODE_ENV === 'production' || process.env.NETLIFY) {
+  // For serverless environments, use in-memory database
+  sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: ':memory:',
+    logging: false,
+    dialectOptions: {
+      timeout: 30000
+    }
+  });
+} else {
+  // For development, use file-based database
+  const dbPath = path.join(__dirname, '../database.sqlite');
+  sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: dbPath,
+    logging: false,
+    dialectOptions: {
+      timeout: 30000
+    }
+  });
+}
 
 // User model
 const User = sequelize.define('User', {
