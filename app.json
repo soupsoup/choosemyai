@@ -1,0 +1,31 @@
+{
+  "name": "AI Tools Directory",
+  "description": "A modern web-based AI tools directory with user management and customization",
+  "repository": "https://github.com/yourusername/ai-tools-directory",
+  "keywords": ["python", "flask", "ai-tools", "directory", "postgresql"],
+  "image": "heroku/python",
+  "addons": [
+    {
+      "plan": "heroku-postgresql:mini"
+    }
+  ],
+  "env": {
+    "FLASK_APP": {
+      "description": "Flask application entry point",
+      "value": "main.py"
+    },
+    "FLASK_ENV": {
+      "description": "Flask environment",
+      "value": "production"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "scripts": {
+    "postdeploy": "python init_db.py"
+  }
+}
