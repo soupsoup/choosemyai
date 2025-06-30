@@ -4,8 +4,7 @@
   publish = "static"
 
 [build.environment]
-  PYTHON_VERSION = "3.9"
-  PYTHON_RUNTIME = "python3.9"
+  PYTHON_VERSION = "3.8"
 
 # Temporarily comment out redirect to test Flask app function directly
 # [[redirects]]
