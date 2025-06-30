@@ -1,6 +1,6 @@
 [build]
-  command = "pip install -r requirements.txt && pip install -r netlify/functions/requirements.txt"
-  functions = "netlify/functions"
+  command = "pip install -r requirements.txt && pip install -r functions/requirements.txt"
+  functions = "functions"
   publish = "static"
 
 [build.environment]
@@ -20,7 +20,7 @@
   status = 200
 
 [functions]
-  directory = "netlify/functions"
+  directory = "functions"
 
 [dev]
   command = "python main.py"
