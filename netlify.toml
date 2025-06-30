@@ -1,5 +1,5 @@
 [build]
-  command = "pip install -r requirements.txt && pip install -r functions/requirements.txt"
+  command = "echo 'Build completed'"
   functions = "functions"
   publish = "static"
 
@@ -7,10 +7,10 @@
   PYTHON_VERSION = "3.9"
   PYTHON_RUNTIME = "python3.9"
 
-# Redirect all requests to the app function
+# Redirect all requests to the index function
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/app"
+  to = "/.netlify/functions/index"
   status = 200
 
 [functions]
