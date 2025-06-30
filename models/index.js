@@ -3,19 +3,21 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
 
+// Import memory store for serverless environments
+const memoryStore = require('./memory-store');
+
 // Database configuration for serverless compatibility
 let sequelize;
+let useMemoryStore = false;
 
 if (process.env.NODE_ENV === 'production' || process.env.NETLIFY) {
-  // For serverless environments, use in-memory database
-  sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: ':memory:',
-    logging: false,
-    dialectOptions: {
-      timeout: 30000
-    }
-  });
+  // For serverless environments, use memory store
+  useMemoryStore = true;
+  // Create a dummy sequelize instance for compatibility
+  sequelize = {
+    sync: async () => Promise.resolve(),
+    close: async () => Promise.resolve()
+  };
 } else {
   // For development, use file-based database
   const dbPath = path.join(__dirname, '../database.sqlite');
@@ -30,43 +32,101 @@ if (process.env.NODE_ENV === 'production' || process.env.NETLIFY) {
 }
 
 // User model
-const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  username: {
-    type: DataTypes.STRING(80),
-    unique: true,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING(120),
-    unique: true,
-    allowNull: false
-  },
-  password_hash: {
-    type: DataTypes.STRING(256),
-    allowNull: false
-  },
-  is_moderator: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  is_admin: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+class User {
+  static async findOne(where) {
+    if (useMemoryStore) {
+      return memoryStore.findUser(where);
+    }
+    return sequelize.models.User.findOne({ where });
   }
-}, {
-  hooks: {
-    beforeCreate: async (user) => {
-      if (user.password_hash) {
-        user.password_hash = await bcrypt.hash(user.password_hash, 10);
+
+  static async findByPk(id) {
+    if (useMemoryStore) {
+      return memoryStore.findUser({ id });
+    }
+    return sequelize.models.User.findByPk(id);
+  }
+
+  static async create(userData) {
+    if (useMemoryStore) {
+      if (userData.password_hash) {
+        userData.password_hash = await bcrypt.hash(userData.password_hash, 10);
       }
+      return memoryStore.createUser(userData);
+    }
+    return sequelize.models.User.create(userData);
+  }
+
+  static async count() {
+    if (useMemoryStore) {
+      return memoryStore.countUsers();
+    }
+    return sequelize.models.User.count();
+  }
+
+  async checkPassword(password) {
+    if (useMemoryStore) {
+      return bcrypt.compare(password, this.password_hash);
+    }
+    return bcrypt.compare(password, this.password_hash);
+  }
+
+  async setPassword(password) {
+    this.password_hash = await bcrypt.hash(password, 10);
+    if (!useMemoryStore) {
+      await this.save();
     }
   }
-});
+
+  async save() {
+    if (!useMemoryStore) {
+      return sequelize.models.User.prototype.save.call(this);
+    }
+    // For memory store, data is already saved
+    return this;
+  }
+}
+
+// Create Sequelize model for development
+if (!useMemoryStore) {
+  sequelize.define('User', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    username: {
+      type: DataTypes.STRING(80),
+      unique: true,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING(120),
+      unique: true,
+      allowNull: false
+    },
+    password_hash: {
+      type: DataTypes.STRING(256),
+      allowNull: false
+    },
+    is_moderator: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    is_admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
+  }, {
+    hooks: {
+      beforeCreate: async (user) => {
+        if (user.password_hash) {
+          user.password_hash = await bcrypt.hash(user.password_hash, 10);
+        }
+      }
+    }
+  });
+}
 
 // Category model
 const Category = sequelize.define('Category', {
