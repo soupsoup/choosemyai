@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
@@ -19,60 +19,26 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .tool-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .tool-card h3 {
-            margin-top: 0;
-            color: #333;
-        }
-        .tool-card p {
-            color: #666;
-            line-height: 1.5;
-        }
-        .categories {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
-        }
-        .category-tag {
-            background: #007bff;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
+        .status {
+            background: #d4edda;
+            color: #155724;
             padding: 15px;
             border-radius: 4px;
             margin: 20px 0;
         }
-        .nav {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
+        .links {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
         }
-        .nav a {
+        .links a {
+            display: block;
+            margin: 10px 0;
             color: #007bff;
             text-decoration: none;
         }
-        .nav a:hover {
+        .links a:hover {
             text-decoration: underline;
         }
     </style>
@@ -80,57 +46,24 @@
 <body>
     <div class="header">
         <h1>ChooseMyAI</h1>
-        <p>Discover the best AI tools for your needs</p>
-        <div class="nav">
-            <a href="/">Home</a>
-            <a href="/blog">Blog</a>
-            <a href="/auth/login">Login</a>
-            <a href="/admin">Admin</a>
-        </div>
+        <p>AI Tool Directory</p>
     </div>
 
-    <div id="content">
-        <div class="loading">Loading tools...</div>
+    <div class="status">
+        ✅ Static hosting is working!<br>
+        Timestamp: <span id="time"></span>
+    </div>
+
+    <div class="links">
+        <h3>Test Links:</h3>
+        <a href="/test.html">Simple Test Page</a>
+        <a href="/.netlify/functions/hello">Hello Function (JSON)</a>
+        <a href="/.netlify/functions/app">Main App Function</a>
+        <a href="/hello">Hello via Redirect</a>
     </div>
 
     <script>
-        async function loadTools() {
-            try {
-                const response = await fetch('/api/home');
-                const data = await response.json();
-                
-                if (data.error) {
-                    document.getElementById('content').innerHTML = `
-                        <div class="error">${data.error}</div>
-                    `;
-                    return;
-                }
-
-                const toolsHtml = data.tools.map(tool => `
-                    <div class="tool-card">
-                        <h3>${tool.name}</h3>
-                        <p>${tool.description}</p>
-                        <p><strong>Website:</strong> <a href="${tool.website}" target="_blank">${tool.website}</a></p>
-                        <p><strong>Pricing:</strong> ${tool.pricing || 'Contact for pricing'}</p>
-                    </div>
-                `).join('');
-
-                document.getElementById('content').innerHTML = `
-                    <h2>AI Tools (${data.tools.length})</h2>
-                    <div class="tools-grid">
-                        ${toolsHtml}
-                    </div>
-                `;
-            } catch (error) {
-                console.error('Error loading tools:', error);
-                document.getElementById('content').innerHTML = `
-                    <div class="error">Failed to load tools. Please try again later.</div>
-                `;
-            }
-        }
-
-        // Load tools when page loads
-        loadTools();
+        document.getElementById('time').textContent = new Date().toISOString();
     </script>
 </body>
 </html> 
