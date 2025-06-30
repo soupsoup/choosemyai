@@ -1,13 +1,7 @@
 [build]
   command = "npm install && npm run build"
   functions = "functions"
-  publish = "static"
-
-# Serve static files
-[[redirects]]
-  from = "/static/*"
-  to = "/static/:splat"
-  status = 200
+  publish = "."
 
 [build.environment]
   NODE_VERSION = "18"

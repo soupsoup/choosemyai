@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChooseMyAI - AI Tool Directory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ChooseMyAI</h1>
+        <p>Discover the best AI tools for your needs</p>
+    </div>
+
+    <div id="content">
+        <div class="loading">Loading...</div>
+    </div>
+
+    <script>
+        // Try to load from the function first
+        async function loadApp() {
+            try {
+                const response = await fetch('/.netlify/functions/app');
+                if (response.ok) {
+                    const html = await response.text();
+                    document.documentElement.innerHTML = html;
+                } else {
+                    throw new Error('Function not available');
+                }
+            } catch (error) {
+                console.error('Function failed, showing fallback:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <h3>Service Temporarily Unavailable</h3>
+                        <p>The main application is currently being deployed. Please try again in a few minutes.</p>
+                        <p><a href="/.netlify/functions/app">Try direct function access</a></p>
+                        <p><a href="/.netlify/functions/test">Test function</a></p>
+                    </div>
+                `;
+            }
+        }
+
+        loadApp();
+    </script>
+</body>
+</html> 
