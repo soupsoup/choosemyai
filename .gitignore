@@ -53,3 +53,4 @@ Thumbs.db
 replit.nix
 uv.lock
 .pythonlibs/
+node_modules

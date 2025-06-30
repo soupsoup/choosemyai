@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChooseMyAI - AI Tool Directory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .links {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .links a {
+            display: block;
+            margin: 10px 0;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ChooseMyAI</h1>
+        <p>AI Tool Directory</p>
+    </div>
+
+    <div class="status">
+        ✅ Static hosting is working!<br>
+        Timestamp: <span id="time"></span>
+    </div>
+
+    <div class="links">
+        <h3>Test Links:</h3>
+        <a href="/test.html">Simple Test Page</a>
+        <a href="/.netlify/functions/hello">Hello Function (JSON)</a>
+        <a href="/.netlify/functions/app">Main App Function</a>
+        <a href="/hello">Hello via Redirect</a>
+    </div>
+
+    <script>
+        document.getElementById('time').textContent = new Date().toISOString();
+    </script>
+</body>
+</html> 

@@ -1,25 +1,14 @@
 [build]
-  command = "echo 'Build complete'"
-  functions = "netlify/functions"
-  publish = "static"
+  publish = "out"
+  command = "npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
 
 # Main app redirects
 [[redirects]]
-  from = "/"
-  to = "/.netlify/functions/app"
-  status = 200
-
-[[redirects]]
-  from = "/hello"
-  to = "/.netlify/functions/hello"
-  status = 200
-
-[[redirects]]
   from = "/*"
-  to = "/.netlify/functions/app"
+  to = "/index.html"
   status = 200
 
 [functions]

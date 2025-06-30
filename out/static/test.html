@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+</head>
+<body>
+    <h1>Static Test Page Works!</h1>
+    <p>If you can see this, static hosting is working.</p>
+    <p>Timestamp: <span id="time"></span></p>
+    
+    <h2>Function Tests:</h2>
+    <ul>
+        <li><a href="/.netlify/functions/app">Test App Function</a></li>
+        <li><a href="/.netlify/functions/hello">Test Hello Function</a></li>
+    </ul>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toISOString();
+    </script>
+</body>
+</html> 
