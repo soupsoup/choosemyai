@@ -51,7 +51,35 @@ A modern web-based AI tools directory built with Flask, featuring user authentic
    python main.py
    ```
 
-### Deploy to Heroku
+### Deploy to Netlify
+
+1. **Push to GitHub**:
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin https://github.com/yourusername/ai-tools-directory.git
+   git push -u origin main
+   ```
+
+2. **Connect to Netlify**:
+   - Go to [netlify.com](https://netlify.com) and sign up/login
+   - Click "New site from Git"
+   - Connect your GitHub account
+   - Select your repository
+   - Netlify will automatically detect the `netlify.toml` configuration
+
+3. **Set Environment Variables**:
+   - In Netlify dashboard, go to Site settings > Environment variables
+   - Add `DATABASE_URL` with your PostgreSQL connection string
+   - Consider using [Supabase](https://supabase.com) or [Neon](https://neon.tech) for PostgreSQL hosting
+
+4. **Deploy**:
+   - Netlify will automatically build and deploy
+   - Your site will be available at `https://your-site-name.netlify.app`
+
+### Alternative: Deploy to Heroku
 
 1. Create a Heroku app:
    ```bash
