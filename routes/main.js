@@ -1,8 +1,41 @@
 const express = require('express');
 const router = express.Router();
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 const sanitizeHtml = require('sanitize-html');
 const { User, Category, Tool, Comment, ToolVote, CommentVote, AppearanceSettings } = require('../models');
+
+// Middleware functions
+const requireAuth = (req, res, next) => {
+  if (!req.session.user) {
+    req.session.returnTo = req.originalUrl;
+    return res.redirect('/auth/login');
+  }
+  next();
+};
+
+const requireModerator = (req, res, next) => {
+  if (!req.session.user) {
+    req.session.returnTo = req.originalUrl;
+    return res.redirect('/auth/login');
+  }
+  if (!req.session.user.isModerator && !req.session.user.isAdmin) {
+    req.session.flash = { type: 'danger', message: 'Access denied. Moderator privileges required.' };
+    return res.redirect('/');
+  }
+  next();
+};
+
+const requireAdmin = (req, res, next) => {
+  if (!req.session.user) {
+    req.session.returnTo = req.originalUrl;
+    return res.redirect('/auth/login');
+  }
+  if (!req.session.user.isAdmin) {
+    req.session.flash = { type: 'danger', message: 'Access denied. Admin privileges required.' };
+    return res.redirect('/');
+  }
+  next();
+};
 
 // Sanitization options
 const sanitizeOptions = {
@@ -127,7 +160,7 @@ router.get('/tool/:id', async (req, res) => {
         is_approved: true
       },
       limit: 5,
-      order: sequelize.random()
+      order: Sequelize.literal('RAND()')
     });
     
     res.render('tool', { tool, comments, similarTools });
