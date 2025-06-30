@@ -1,5 +1,5 @@
 [build]
-  command = "echo 'Build completed'"
+  command = "pip install -r requirements.txt && pip install -r functions/requirements.txt"
   functions = "functions"
   publish = "static"
 
@@ -7,10 +7,10 @@
   PYTHON_VERSION = "3.9"
   PYTHON_RUNTIME = "python3.9"
 
-# Redirect all requests to the index function
+# Redirect all requests to the Flask app function
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/index"
+  to = "/.netlify/functions/app"
   status = 200
 
 [functions]
