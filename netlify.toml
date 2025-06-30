@@ -6,10 +6,20 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# Test function redirect only
+# Main app redirects
+[[redirects]]
+  from = "/"
+  to = "/.netlify/functions/app"
+  status = 200
+
 [[redirects]]
   from = "/hello"
   to = "/.netlify/functions/hello"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/app"
   status = 200
 
 [functions]

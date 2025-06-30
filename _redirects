@@ -1,2 +1,8 @@
-# Test if functions work at all
-/hello /.netlify/functions/hello 200 
+# Redirect root to main app function
+/ /.netlify/functions/app 200
+
+# Keep hello function accessible
+/hello /.netlify/functions/hello 200
+
+# Redirect all other paths to main app function
+/* /.netlify/functions/app 200 
