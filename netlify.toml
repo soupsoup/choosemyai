@@ -8,8 +8,8 @@
 
 # Test function redirect
 [[redirects]]
-  from = "/test"
-  to = "/.netlify/functions/test"
+  from = "/hello"
+  to = "/.netlify/functions/hello"
   status = 200
 
 # Redirect all requests to the JavaScript app function
