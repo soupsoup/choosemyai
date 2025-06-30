@@ -5,6 +5,7 @@
 
 [build.environment]
   PYTHON_VERSION = "3.9"
+  PYTHON_RUNTIME = "python3.9"
 
 [[redirects]]
   from = "/api/*"
