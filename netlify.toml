@@ -1,16 +1,16 @@
 [build]
-  command = "pip install -r requirements.txt && pip install -r functions/requirements.txt"
+  command = "echo 'Build completed'"
   functions = "functions"
   publish = "static"
 
 [build.environment]
   PYTHON_VERSION = "3.8"
 
-# Temporarily comment out redirect to test Flask app function directly
-# [[redirects]]
-#   from = "/*"
-#   to = "/.netlify/functions/index"
-#   status = 200
+# Redirect all requests to the JavaScript app function
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/app"
+  status = 200
 
 [functions]
   directory = "functions"
