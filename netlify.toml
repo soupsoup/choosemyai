@@ -7,11 +7,11 @@
   PYTHON_VERSION = "3.9"
   PYTHON_RUNTIME = "python3.9"
 
-# Temporarily redirect to index function for debugging
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/index"
-  status = 200
+# Temporarily comment out redirect to test Flask app function directly
+# [[redirects]]
+#   from = "/*"
+#   to = "/.netlify/functions/index"
+#   status = 200
 
 [functions]
   directory = "functions"
