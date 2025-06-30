@@ -3,8 +3,20 @@
   functions = "functions"
   publish = "static"
 
+# Serve static files
+[[redirects]]
+  from = "/static/*"
+  to = "/static/:splat"
+  status = 200
+
 [build.environment]
   NODE_VERSION = "18"
+
+# Test function redirect
+[[redirects]]
+  from = "/test"
+  to = "/.netlify/functions/test"
+  status = 200
 
 # Redirect all requests to the JavaScript app function
 [[redirects]]
