@@ -1,2 +1,2 @@
-/hello /.netlify/functions/hello 200
-/* /.netlify/functions/app 200 
+# Test if functions work at all
+/hello /.netlify/functions/hello 200 

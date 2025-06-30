@@ -1,25 +1,19 @@
 [build]
-  command = "npm install && npm run build"
-  functions = "functions"
+  command = "echo 'No build needed'"
+  functions = "netlify/functions"
   publish = "."
 
 [build.environment]
   NODE_VERSION = "18"
 
-# Test function redirect
+# Test function redirect only
 [[redirects]]
   from = "/hello"
   to = "/.netlify/functions/hello"
   status = 200
 
-# Redirect all requests to the JavaScript app function
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/app"
-  status = 200
-
 [functions]
-  directory = "functions"
+  directory = "netlify/functions"
 
 [dev]
   command = "npm run dev"
