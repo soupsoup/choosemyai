@@ -7,11 +7,13 @@
   PYTHON_VERSION = "3.9"
   PYTHON_RUNTIME = "python3.9"
 
+# Redirect API calls to the function
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/app/:splat"
   status = 200
 
+# Redirect all other requests to the function
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/app/:splat"

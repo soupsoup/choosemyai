@@ -12,15 +12,19 @@ try:
     import serverless_wsgi
     
     def handler(event, context):
+        print(f"Function called with event: {event}")
+        print(f"Context: {context}")
         return serverless_wsgi.handle_request(app, event, context)
         
 except ImportError as e:
+    print(f"Import error: {e}")
     def handler(event, context):
         return {
             'statusCode': 500,
             'body': json.dumps({
                 'error': 'Failed to import Flask app',
-                'message': str(e)
+                'message': str(e),
+                'sys.path': sys.path
             }),
             'headers': {
                 'Content-Type': 'application/json'
