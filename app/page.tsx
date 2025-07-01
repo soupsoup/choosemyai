@@ -40,12 +40,16 @@ export default function Home() {
   const fetchTools = async () => {
     try {
       const response = await fetch('/api/tools')
-      if (!response.ok) {
-        throw new Error('Failed to fetch tools')
-      }
       const data = await response.json()
-      console.log('API Response:', data)
-      setTools(data.tools)
+      
+      console.log('API Response:', data) // Debug log
+      
+      if (!response.ok) {
+        // Handle API errors
+        throw new Error(data.error || 'Failed to fetch tools')
+      }
+      
+      setTools(data.tools || [])
       setCategories(data.categories || [])
       
       if (data.message) {
@@ -53,7 +57,7 @@ export default function Home() {
       }
     } catch (err) {
       console.error('Fetch error:', err)
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      setError(err instanceof Error ? err.message : 'An error occurred while loading AI tools')
     } finally {
       setLoading(false)
     }
@@ -132,11 +136,41 @@ export default function Home() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-              Error: {error}
+      <main className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-bold text-gray-900">Choose My AI</h1>
+              <div className="flex items-center space-x-4">
+                <button className="text-gray-600 hover:text-gray-900">Home</button>
+                <button className="text-gray-600 hover:text-gray-900">Blog</button>
+                <button className="text-gray-600 hover:text-gray-900">🌙</button>
+                <button className="text-gray-600 hover:text-gray-900">🔍</button>
+                <button className="text-gray-600 hover:text-gray-900">Log in</button>
+                <button className="bg-gray-900 text-white px-4 py-2 rounded-lg">Sign up</button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-8">
+              <div className="text-red-600 text-6xl mb-4">⚠️</div>
+              <h2 className="text-2xl font-bold text-red-800 mb-4">Service Unavailable</h2>
+              <p className="text-red-700 mb-6">{error}</p>
+              <div className="space-y-4">
+                <button 
+                  onClick={fetchTools}
+                  className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Try Again
+                </button>
+                <p className="text-sm text-red-600">
+                  If this problem persists, please contact the administrator.
+                </p>
+              </div>
             </div>
           </div>
         </div>
