@@ -5,6 +5,9 @@
 [build.environment]
   NODE_VERSION = "22.14.0"
 
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 # Main app redirects
 [[redirects]]
   from = "/*"
