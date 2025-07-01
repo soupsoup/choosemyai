@@ -44,9 +44,15 @@ export default function Home() {
         throw new Error('Failed to fetch tools')
       }
       const data = await response.json()
+      console.log('API Response:', data)
       setTools(data.tools)
       setCategories(data.categories || [])
+      
+      if (data.message) {
+        console.log('API Message:', data.message)
+      }
     } catch (err) {
+      console.error('Fetch error:', err)
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
       setLoading(false)
