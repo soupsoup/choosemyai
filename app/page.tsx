@@ -39,16 +39,21 @@ export default function Home() {
 
   const fetchTools = async () => {
     try {
+      console.log('Attempting to fetch from:', '/.netlify/functions/tools')
       const response = await fetch('/.netlify/functions/tools')
-      const data = await response.json()
+      console.log('Response status:', response.status)
+      console.log('Response headers:', response.headers)
       
+      const data = await response.json()
       console.log('API Response:', data) // Debug log
       
       if (!response.ok) {
         // Handle API errors
+        console.error('API returned error:', data)
         throw new Error(data.error || 'Failed to fetch tools')
       }
       
+      console.log('Successfully received tools:', data.tools?.length || 0)
       setTools(data.tools || [])
       setCategories(data.categories || [])
       
@@ -57,6 +62,22 @@ export default function Home() {
       }
     } catch (err) {
       console.error('Fetch error:', err)
+      // If Netlify function fails, try the Next.js API route as fallback
+      try {
+        console.log('Trying fallback API route...')
+        const fallbackResponse = await fetch('/api/tools')
+        const fallbackData = await fallbackResponse.json()
+        
+        if (fallbackResponse.ok) {
+          console.log('Fallback API worked:', fallbackData)
+          setTools(fallbackData.tools || [])
+          setCategories(fallbackData.categories || [])
+          return
+        }
+      } catch (fallbackErr) {
+        console.error('Fallback API also failed:', fallbackErr)
+      }
+      
       setError(err instanceof Error ? err.message : 'An error occurred while loading AI tools')
     } finally {
       setLoading(false)
