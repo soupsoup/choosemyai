@@ -1,5 +1,4 @@
 [build]
-  publish = "out"
   command = "npm run build"
 
 [build.environment]
@@ -10,15 +9,6 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Main app redirects
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[functions]
-  directory = "netlify/functions"
 
 [dev]
   command = "npm run dev"
