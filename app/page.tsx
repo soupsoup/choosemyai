@@ -39,7 +39,7 @@ export default function Home() {
 
   const fetchTools = async () => {
     try {
-      const response = await fetch('/api/tools')
+      const response = await fetch('/.netlify/functions/tools')
       const data = await response.json()
       
       console.log('API Response:', data) // Debug log
